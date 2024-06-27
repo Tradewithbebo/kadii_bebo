@@ -1,0 +1,126 @@
+'use client'
+
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  Box,
+  Center,
+  SimpleGrid,
+  GridItem,
+  Text,
+  Button,
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+} from '@chakra-ui/react';
+import { FcGoogle } from 'react-icons/fc';
+import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
+
+const CreateAccountSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+});
+
+export default function Createaccount() {
+  const router = useRouter();
+
+  return (
+    <Box w={'full'}>
+      <Center pb={['44px', '134px']}>
+        <Formik
+          initialValues={{ email: '' }}
+          validationSchema={CreateAccountSchema}
+          onSubmit={(values) => {
+            console.log(values);
+            router.push('/createAccount/verifyMail');
+          }}
+        >
+          {({ errors, touched, isValid,dirty }) => (
+            <Form>
+              <SimpleGrid columns={2} rowGap={'24px'} w={['335px', '400px']}>
+                <GridItem colSpan={2} mb={'16px'}>
+                  <Box>
+                    <Text fontSize={['32px', '40px']} fontWeight={'600'}>
+                      Create an account
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize={'14px'} fontWeight={'600'} color={'#666666'}>
+                      Create an account to get started
+                    </Text>
+                  </Box>
+                </GridItem>
+                <GridItem colSpan={2}>
+                  <Button w={'full'} fontSize={['16px', '16px']} fontWeight={'600'}>
+                    <FcGoogle size={'22px'} /> &nbsp;&nbsp;Continue with Google
+                  </Button>
+                </GridItem>
+                <GridItem colSpan={2}>
+                  <Text
+                    textAlign={'center'}
+                    fontSize={'14px'}
+                    fontWeight={'500'}
+                    color={'#B3B3B3'}
+                    my={'4px'}
+                  >
+                    OR
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={2}>
+                  <FormControl isInvalid={!!errors.email && touched.email}>
+                    <FormLabel fontSize={'16px'} fontWeight={'600'}>
+                      Email
+                    </FormLabel>
+                    <Field
+                      as={Input}
+                      type="email"
+                      name="email"
+                      placeholder="Email address"
+                    />
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  </FormControl>
+                </GridItem>
+                <GridItem colSpan={2} mt={'4px'}>
+                  <Button
+                    type="submit"
+                    bg="#0CBF94"
+                    fontSize={'16px'}
+                    fontWeight={'600'}
+                    w={'100%'}
+                    color={'#021D17'}
+                    isDisabled={!isValid || !dirty}
+                  >
+                    Continue
+                  </Button>
+                  <Text
+                    textAlign={'left'}
+                    fontSize={'14px'}
+                    mt={'16px'}
+                    fontWeight={'600'}
+                    cursor={'pointer'}
+                  >
+                    Already have an account?
+                    <span style={{ color: '#0CBF94' }}> Login</span>{' '}
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={2} mt={['63px', '134px']}>
+                  <Text fontSize={'12px'} fontWeight={'600'}>
+                    By continuing, you agree to our{' '}
+                    <span style={{ color: '#0CBF94', cursor: 'pointer' }}>
+                      Privacy Policy{' '}
+                    </span>{' '}
+                    and{' '}
+                    <span style={{ color: '#0CBF94', cursor: 'pointer' }}>
+                      Terms & Conditions
+                    </span>{' '}
+                  </Text>
+                </GridItem>
+              </SimpleGrid>
+            </Form>
+          )}
+        </Formik>
+      </Center>
+    </Box>
+  );
+}

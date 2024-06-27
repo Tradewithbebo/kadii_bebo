@@ -1,0 +1,54 @@
+// // server.js
+
+// const express = require('express');
+// const mongoose = require('mongoose');
+// const cron = require('node-cron');
+// const bodyParser = require('body-parser');
+
+// const app = express();
+// const PORT = process.env.PORT || 5000;
+
+// // Connect to MongoDB
+// mongoose.connect('mongodb://localhost:27017/subscriptions', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// // Define MongoDB schema
+// const subscriptionSchema = new mongoose.Schema({
+//   customerId: String,
+//   expirationDate: Date,
+// });
+
+// const Subscription = mongoose.model('Subscription', subscriptionSchema);
+
+// // Update expiration dates daily
+// cron.schedule('0 0 * * *', async () => {
+//   try {
+//     // Add 30 days to current date for expiration date
+//     const expirationDate = new Date();
+//     expirationDate.setDate(expirationDate.getDate() + 30);
+
+//     // Update expiration dates in database
+//     await Subscription.updateMany({}, { expirationDate });
+//   } catch (error) {
+//     console.error('Error updating expiration dates:', error);
+//   }
+// });
+
+// app.use(bodyParser.json());
+
+// // API endpoint to get expiration date for a customer
+// app.get('/api/subscription/:customerId', async (req, res) => {
+//   try {
+//     const { customerId } = req.params;
+//     const subscription = await Subscription.findOne({ customerId });
+//     res.json(subscription);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on port ${PORT}`);
+// });
