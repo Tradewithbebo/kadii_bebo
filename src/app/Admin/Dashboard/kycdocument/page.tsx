@@ -47,13 +47,14 @@ const GoBackButton = () => {
   const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure();
   return (
     <div>
-      <KycVerify isOpen={isModalOpen} onClose={onModalOpen} />
+      <KycVerify isOpen={isModalOpen} onClose={onModalClose} />
       <Button
-        rounded={"20px"}
+      size={'md'}
+        rounded={"5px"}
         color="#000000E5"
         fontSize={"13px"}
         bg={"#C7EED5"}
-        onClick={onModalClose}
+        onClick={onModalOpen}
       >
         Verify
       </Button>
@@ -68,7 +69,8 @@ function ButtonsReject() {
       <Kycreject isOpen={isFirstModalOpen} onClose={onFirstModalClose} />
       <Button
         onClick={onFirstModalOpen}
-        rounded={"20px"}
+        size={'md'}
+        rounded={"5px"}
         color="#DD524D"
         fontSize={"13px"}
         bg={"transparent"}

@@ -35,7 +35,7 @@ export default function KycVerify({
 //   const [close, setclose] = useState(false);
   return (
     <SimpleGrid>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"xl"}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"md"}>
         <ModalOverlay />
         <ModalContent>
          <HStack><Box pt={'14px'} pb={'16px'}  pl={'24px'}>

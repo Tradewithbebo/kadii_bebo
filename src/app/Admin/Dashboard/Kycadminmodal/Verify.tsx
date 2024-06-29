@@ -39,7 +39,7 @@ export default function Verify({
   //   const [close, setclose] = useState(false);
   return (
     <SimpleGrid>
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"md"}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"sm"}>
         <ModalOverlay />
         <ModalContent>
           <ModalBody>
@@ -56,7 +56,7 @@ export default function Verify({
               </GridItem>
               <GridItem w={"full"}>
                 <Text fontSize={'12px'} fontWeight={'500'}>
-                You have successfully accepted <span style={{fontSize:'14px', fontWeight:'700'}}>“Matthew Ola” </span> verification <Box justifyContent='center' display='flex' width="full">application</Box>
+                You have successfully accepted <span style={{fontSize:'14px', fontWeight:'700'}}>“Matthew Ola” </span> verification application
                 </Text>
               </GridItem>
               <GridItem w={"full"}>
