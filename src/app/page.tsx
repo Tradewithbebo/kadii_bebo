@@ -24,9 +24,20 @@ import Success from "./components/CreateAccount_Components/success";
 import HomepageForIncompletekyc from "./incompleteKyc/HomepageForIncompletekyc";
  import Notification from "./incompleteKyc/Notification";
 import NavbarTwo_nokyc from "./navbar/navbarTwo_nokyc";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 
 export default function Home() {
+   // eslint-disable-next-line react-hooks/rules-of-hooks
+   const router = useRouter();
+   // eslint-disable-next-line react-hooks/rules-of-hooks
+   useEffect(() => {
+     const auth = localStorage.getItem("stk-apk");
+     if (!auth) {
+       router.replace("/createAccount/Login");
+     }
+   }, [router]);
   return (
    
 <>
