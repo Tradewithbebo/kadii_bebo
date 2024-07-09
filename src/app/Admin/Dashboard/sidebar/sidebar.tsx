@@ -1,12 +1,18 @@
-import { Box, GridItem, SimpleGrid, Text, List, ListIcon } from '@chakra-ui/react';
+'use client'
+
+import { Box, GridItem, SimpleGrid, Text, List, ListIcon, Button } from '@chakra-ui/react';
 import React from 'react'
 import menuItems, { dashboard, settings } from './menuItems'
 import Menulink, { Menulinkdasboard, Settings } from './menulink'
+import { useRouter } from 'next/navigation';
+import { MdLogout } from 'react-icons/md';
 // import { settings } from './menuItems';
 
-export default function sidebar() {
+export default function 
+Sidebar() {
+  const router=useRouter()
   return (
-   <SimpleGrid  position="sticky" top="40px" pt={'56px'} column={1} pl={'40px'}>
+   <SimpleGrid  position="sticky" top="40px" pt={'56px'} column={1} pl={'40px'} >
     <GridItem>
         <Menulinkdasboard items={dashboard.list}/>
 
@@ -18,9 +24,13 @@ export default function sidebar() {
         </GridItem>
     ))}
    <GridItem mt={'40px'}>
-{ settings.list.map((set)=>(
+{ settings.list.map((set,index)=>(
         <Settings items={set}  key={set.title}/>))}
-
+        
+<Button  variant={''} color={'#3F3F46'} fontWeight={'500'} fontSize={'13px'} onClick={ () => {
+  localStorage.removeItem("stk-apk");
+  router.push("/Admin/Login");}
+}><MdLogout/>&nbsp;&nbsp;&nbsp;Logout</Button>
     </GridItem>
    </SimpleGrid>
   )

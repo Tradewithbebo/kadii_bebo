@@ -1,5 +1,7 @@
+'use client'
 import Veryfymail from "@/app/components/CreateAccount_Components/VerifyMail";
 import VerifyMail from "@/app/components/CreateAccount_Components/VerifyMail";
+import Navbar from "@/app/navbar/navbar";
 import {
   Box,
   Center,
@@ -14,10 +16,15 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 
 export default function Verifymail() {
+  const [step, setStep] = useState(1);
   return (
+   <>
+    <Navbar setStep={setStep}/>
     <Veryfymail/>
+    </>
+   
   );
 }

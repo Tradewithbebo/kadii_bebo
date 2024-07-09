@@ -13,7 +13,7 @@ import { BsExclamationCircle } from "react-icons/bs";
 import ModalKyc from "../incompleteKyc/modalKyc";
 
 export default function NavbarTwo_nokyc() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const{ isOpen:isOpentwo, onOpen:onOpentwo, onClose:onClosetwo } = useDisclosure()
   return (
    <Box  >
      <Flex  px={["20px","72px"]}
@@ -63,7 +63,8 @@ export default function NavbarTwo_nokyc() {
       </Box>
     </Flex>
     <SimpleGrid display={{ base:"block", md:"none" }} 
-    onClick={onOpen}
+    ml={'5px'}
+    onClick={onOpentwo}
       w={"380px"}
       bg={"#FEF6E7"}
       py={"16px"}
@@ -74,7 +75,7 @@ export default function NavbarTwo_nokyc() {
       // ml={'-45px'}
     >
       <Center>
-        <GridItem colSpan={[1, 3]} display={{ base: "block", md: "none" }}>
+        <GridItem colSpan={[1, 3]} display={{ base: "block", md: "none" }} >
           <Box>
             <HStack gap={"10px"}>
               <Box
@@ -121,7 +122,7 @@ export default function NavbarTwo_nokyc() {
         </GridItem>
       </Center>
     </SimpleGrid>
-    <Box > <ModalKyc isOpen={isOpen} onClose={onClose}/></Box>
+    <Box > <ModalKyc isOpentwo={isOpentwo} onClosetwo={onClosetwo}/></Box>
    </Box>
    
   );

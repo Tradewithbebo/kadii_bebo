@@ -72,13 +72,13 @@ const menuItems = [
         list: 
          [  {
           title: "Settings",
-          path: "/dashboard/revenue",
+          path: "/Admin/Dashboard/Settings/Profile",
           icon: <MdSettings />,
         },
         {
-          title: "Logout",
-          path: "/dashboard/reports",
-          icon: <MdLogout/>,
+          title: "",
+          path: "",
+          icon: "",
         },]
      
   }

@@ -29,6 +29,7 @@ import { BuyCrypto, SellCrypto } from "./crypto_two";
 // import { BuyCrypto, SellCrypto } from "../components/transactionbox/crypto";
 
 export default function HomePageBody() {
+  
   const [Buy, setBuy] = useState(true);
   const [Sell, setSell] = useState(false);
   const handleTogglesell = () => {
@@ -60,7 +61,7 @@ export default function HomePageBody() {
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
           pt={"40px"}
-          pb={"205px"}
+          pb={["","205px"]}
         >
           <Center>
             <VStack>
@@ -113,6 +114,10 @@ export default function HomePageBody() {
                 </Button>
               </GridItem>
               </SimpleGrid>
+              <Box display={{ base: "", md: "none" }}  >
+                {" "}
+                <Footer />
+              </Box>
             </VStack>
           </Center>
         </Box>

@@ -41,7 +41,7 @@ export function SellCrypto() {
    <Notification/>
       <GridItem colSpan={[1,3]} textAlign={'center'} mb={'16px'}>
         <Box>
-          <Text fontWeight={"600"}  fontSize={['11px',"16px"]}>
+          <Text fontWeight={"600"}  fontSize={['16px',"16px"]}>
           Sell crypto
           </Text>
         </Box>
@@ -164,6 +164,7 @@ export function SellCrypto() {
               fontWeight={"600"}
               w={"100%"}
               color={'#021D17'}
+             cursor={'not-allowed'}
              
             >
        Get wallet address
@@ -312,6 +313,8 @@ export function BuyCrypto() {
               fontWeight={"600"}
               w={"100%"}
               color={'#021D17'}
+              cursor={'not-allowed'}
+            
              
             >
         Get bank account details

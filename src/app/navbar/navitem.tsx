@@ -19,10 +19,15 @@ import { AiOutlineSwaps, FaFolderMinuss, IoIosSettingss } from "./navicons";
 
 
 const navItems = [
+    // {
+    //   title: " Buy/Sell",
+    //  path:'/',
+    //  icon:<AiOutlineSwaps path={'/'}/>
+    // },
     {
       title: " Buy/Sell",
-     path:'/',
-     icon:<AiOutlineSwaps path={'/'}/>
+     path:'/HomeincompleteKyc',
+     icon:<AiOutlineSwaps path={'/HomeincompleteKyc'}/>
     },
     {
       title: " Transactions",

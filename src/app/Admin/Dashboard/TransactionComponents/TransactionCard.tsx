@@ -65,6 +65,7 @@ export default function TransactionCard() {
                 color={'#71717A'}
                 key={index}
                 border={'1px'}
+                size={'xs'}
               >
                 {month}
               </Button>

@@ -68,6 +68,7 @@ export function Bardtwo() {
 
   return (
     <SimpleGrid pb={'19px'}>
+      
       <Card
       border="1px" borderColor="gray.200" borderRadius="md"
         cursor="pointer"

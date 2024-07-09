@@ -68,7 +68,7 @@ export  function Settings({ items }: { items: MenuItem }) {
   return (
     <Link
       href={items.path}
-      mb="16px"
+      mb="5px"
       p={pathname ? "5px" : ""}
       rounded={pathname ? "5px" : ""}
       display="Flex"
