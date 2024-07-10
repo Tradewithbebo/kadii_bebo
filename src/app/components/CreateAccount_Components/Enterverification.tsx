@@ -8,12 +8,11 @@ import {
   GridItem,
   HStack,
   Link,
-  PinInput,
-  PinInputField,
+  Input,
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { Formik, useField, Form, FieldArray, Field } from "formik";
+import { Formik, Field, Form, FieldArray, FieldProps } from "formik";
 import * as Yup from "yup";
 import Resendmailforgotpass from "./Resendmailforgotpass";
 
@@ -28,37 +27,6 @@ const CreatePasswordSchema = Yup.object().shape({
     .length(6, "Must be exactly 6 characters"),
 });
 
-interface CustomPinInputFieldProps {
-  name: string;
-}
-
-const CustomPinInputField: React.FC<CustomPinInputFieldProps> = ({
-  name,
-  ...props
-}) => {
-  const [field, meta] = useField(name);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (/^[a-zA-Z0-9]?$/.test(value)) {
-      field.onChange(e);
-    }
-  };
-
-  return (
-    <PinInputField
-      {...field}
-      {...props}
-      value={field.value || ""}
-      onChange={handleInputChange}
-      borderColor={meta.error && meta.touched ? "red.500" : "gray.200"}
-      _focus={{
-        borderColor: meta.error && meta.touched ? "red.500" : "blue.500",
-      }}
-    />
-  );
-};
-
 export default function EnterVerification({
   setStep,
   setPin,
@@ -67,14 +35,16 @@ export default function EnterVerification({
   setPin: any;
 }) {
   const [initialEmail, setInitialEmail] = useState<string | null>(null);
+
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
     if (storedEmail) {
       setInitialEmail(storedEmail);
     }
   }, []);
+
   return (
-    <Box w={"full"}  pb={["192px", "374px"]}>
+    <Box w={"full"} pb={["192px", "374px"]}>
       <Center>
         <Formik
           initialValues={{ pin: ["", "", "", "", "", ""] }}
@@ -86,20 +56,14 @@ export default function EnterVerification({
         >
           {({ errors, touched, setFieldValue, isValid, dirty, values }) => (
             <Form>
-              
               <SimpleGrid
                 columns={6}
                 w={["335px", "400px"]}
                 columnGap={["8px", "8px"]}
-               
                 px={["10px", "0px"]}
               >
                 <GridItem colSpan={6}>
-                  <Text
-                    fontSize={["30px", "39px"]}
-                    fontWeight={"600"}
-                    mb={"24px"}
-                  >
+                  <Text fontSize={["30px", "39px"]} fontWeight={"600"} mb={"24px"}>
                     Enter verification code
                   </Text>
                 </GridItem>
@@ -111,45 +75,51 @@ export default function EnterVerification({
                 </GridItem>
                 <GridItem colSpan={6} mb={"40px"}>
                   <Link _hover={{ outline: "none" }}>
-                    <Text
-                      fontSize={["13px", "14px"]}
-                      fontWeight={"600"}
-                      color={"#0CBF94"}
-                    >
+                    <Text fontSize={["13px", "14px"]} fontWeight={"600"} color={"#0CBF94"}>
                       Not my email
                     </Text>
                   </Link>
                 </GridItem>
 
                 <GridItem colSpan={6} width={"full"}>
-                  <FieldArray name="pin">
-                    {({ form }) => (
-                      <HStack gap={["8px", "22px"]}>
-                        <PinInput
-                          placeholder=""
-                          size="lg"
-                          value={form.values.pin.join("")}
-                          onChange={(value) => {
-                            const pins = value.split("");
-                            pins.forEach((pin, index) =>
-                              setFieldValue(`pin[${index}]`, pin)
-                            );
-                          }}
-                        >
-                          {form.values.pin.map(
-                            (_: any, index: React.Key | null | undefined) => (
-                              <CustomPinInputField
-                                key={index}
-                                name={`pin[${index}]`}
-                              />
-                            )
-                          )}
-                        </PinInput>
-                      </HStack>
-                    )}
-                  </FieldArray>
+                  <HStack gap={["8px", "20px"]}>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <Field key={index} name={`pin[${index}]`}>
+                        {({ field }: FieldProps) => (
+                          <Input
+                            {...field}
+                            type="text"
+                            maxLength={1}
+                            value={field.value || ""}
+                            onChange={(e) => {
+                              const { value } = e.target;
+                              const pinArray = values.pin.slice();
+                              pinArray[index] = value;
+                              setFieldValue("pin", pinArray);
+                            }}
+                            size="lg"
+                            width="50px"
+                            height="50px"
+                            textAlign="center"
+                            borderColor={
+                              errors.pin && touched.pin && errors.pin[index]
+                                ? "red.500"
+                                : "gray.200"
+                            }
+                            _focus={{
+                              borderColor:
+                                errors.pin && touched.pin && errors.pin[index]
+                                  ? "red.500"
+                                  : "blue.500",
+                            }}
+                          />
+                        )}
+                      </Field>
+                    ))}
+                  </HStack>
+                  
                 </GridItem>
-                <GridItem colSpan={6} mb={"16px"} mt={'16px'}>
+                <GridItem colSpan={6} mb={"16px"} mt={"16px"}>
                   <Button
                     type="submit"
                     w={"full"}
@@ -171,8 +141,8 @@ export default function EnterVerification({
           )}
         </Formik>
       </Center>
-      <Box ml={'45px'}>
-        <Resendmailforgotpass/>
+      <Box ml={"45px"}>
+        <Resendmailforgotpass />
       </Box>
     </Box>
   );

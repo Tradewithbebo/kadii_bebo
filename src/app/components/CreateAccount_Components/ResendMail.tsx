@@ -101,7 +101,7 @@ export default function ResendMail() {
                 bg="transpirent"
                 width={["40%", "50%"]}
                 // isLoading={loading}
-                variant={"unstyled"}
+                variant={["unstyled","unstyled"]}
                 // mt={"16px"}
                 fontSize={["13px", "14px"]}
                 fontWeight={"600"}

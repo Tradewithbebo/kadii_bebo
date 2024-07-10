@@ -79,7 +79,7 @@ export default function Resendmailforgotpass() {
                 type="submit"
                 bg="transpirent"
                 width={["40%", "50%"]}
-                variant={"unstyled"}
+                variant={["unstyled","unstyled"]}
                 // isLoading={loading}
                 _hover={{ bg: "" }}
                 mt={"16px"}
