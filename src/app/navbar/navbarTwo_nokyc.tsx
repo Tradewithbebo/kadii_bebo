@@ -63,7 +63,7 @@ export default function NavbarTwo_nokyc() {
       </Box>
     </Flex>
     <SimpleGrid display={{ base:"block", md:"none" }} 
-    ml={'8px'}
+    ml={'12px'}
     onClick={onOpentwo}
       w={"380px"}
       bg={"#FEF6E7"}
