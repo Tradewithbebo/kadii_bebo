@@ -63,6 +63,7 @@ export default function VerifyMail() {
   }, []);
 
   const handleSubmit = async (values: any) => {
+    console.log('values',values)
     setLoading(true);
     try {
       const res = await AxiosPost(url, values);
@@ -98,6 +99,7 @@ export default function VerifyMail() {
           enableReinitialize
           onSubmit={(values) => {
             if (initialEmail !== null) handleSubmit(values);
+            
           }}
         >
           {({ errors, touched, setFieldValue, values, isValid, dirty }) => (

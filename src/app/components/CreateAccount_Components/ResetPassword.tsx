@@ -46,7 +46,7 @@ export default function Resetaccount({Pin}:{Pin:any}) {
 
   const handleSubmit = async (values: any) => {
     if (values) {
-      // console.log(values)
+      console.log(values)
       setLoading(true);
       try {
         const res = await AxiosPost(url, values);
@@ -86,6 +86,7 @@ export default function Resetaccount({Pin}:{Pin:any}) {
       <Center pb={['254px', '385px']}>
         <Formik
           initialValues={{token:Pin, newPassword:'',confirmPassword:'' }}
+          enableReinitialize
           validationSchema={ResetPasswordSchema}
           onSubmit={(values) => {
             handleSubmit(values)

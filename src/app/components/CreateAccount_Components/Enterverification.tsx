@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import {
@@ -12,7 +12,7 @@ import {
   SimpleGrid,
   Text,
 } from "@chakra-ui/react";
-import { Formik, Field, Form, FieldArray, FieldProps } from "formik";
+import { Formik, Field, Form, FieldProps } from "formik";
 import * as Yup from "yup";
 import Resendmailforgotpass from "./Resendmailforgotpass";
 
@@ -50,7 +50,7 @@ export default function EnterVerification({
           initialValues={{ pin: ["", "", "", "", "", ""] }}
           validationSchema={CreatePasswordSchema}
           onSubmit={(values) => {
-            setPin(values);
+            setPin(values.pin.join('')); // Convert array to string
             setStep(2);
           }}
         >
@@ -93,31 +93,25 @@ export default function EnterVerification({
                             value={field.value || ""}
                             onChange={(e) => {
                               const { value } = e.target;
-                              const pinArray = values.pin.slice();
-                              pinArray[index] = value;
-                              setFieldValue("pin", pinArray);
+                              if (/^[a-zA-Z0-9]?$/.test(value)) {
+                                const pinArray = values.pin.slice();
+                                pinArray[index] = value;
+                                setFieldValue("pin", pinArray);
+                              }
                             }}
                             size="lg"
                             width="50px"
                             height="50px"
                             textAlign="center"
-                            borderColor={
-                              errors.pin && touched.pin && errors.pin[index]
-                                ? "red.500"
-                                : "gray.200"
-                            }
+                            borderColor={errors.pin && touched.pin && errors.pin[index] ? "red.500" : "gray.200"}
                             _focus={{
-                              borderColor:
-                                errors.pin && touched.pin && errors.pin[index]
-                                  ? "red.500"
-                                  : "blue.500",
+                              borderColor: errors.pin && touched.pin && errors.pin[index] ? "red.500" : "blue.500",
                             }}
                           />
                         )}
                       </Field>
                     ))}
                   </HStack>
-                  
                 </GridItem>
                 <GridItem colSpan={6} mb={"16px"} mt={"16px"}>
                   <Button
