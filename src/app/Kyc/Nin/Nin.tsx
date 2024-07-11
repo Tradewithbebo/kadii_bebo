@@ -17,7 +17,6 @@ import * as Yup from 'yup';
 
 // Yup validation schema
 const NinSchema = Yup.object().shape({
-  verificationType: Yup.string().required('Verification type is required'),
   bvn: Yup.string()
     .matches(/^\d+$/, 'Must be a number')
     .min(6, 'Must be exactly 6 digits')
@@ -33,7 +32,6 @@ export default function Nin() {
       >
         <Formik
           initialValues={{
-            verificationType: '',
             bvn: '',
           }}
           validationSchema={NinSchema}
