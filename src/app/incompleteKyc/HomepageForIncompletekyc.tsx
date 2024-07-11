@@ -61,7 +61,7 @@ export default function HomePageBody() {
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
           pt={"40px"}
-          pb={["","205px"]}
+          pb={["30px","205px"]}
         >
           <Center>
             <VStack>

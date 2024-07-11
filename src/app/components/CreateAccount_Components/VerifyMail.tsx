@@ -63,10 +63,14 @@ export default function VerifyMail() {
   }, []);
 
   const handleSubmit = async (values: any) => {
-    console.log('values',values)
+    const code = values.pin.join("");
+    const email =values.email
+    const payload = { email,code};
+    console.log('payload', payload);
+
     setLoading(true);
     try {
-      const res = await AxiosPost(url, values);
+      const res = await AxiosPost(url, payload);
       setLoading(false);
       if (res) {
         router.push("/createAccount/Login");
@@ -99,7 +103,6 @@ export default function VerifyMail() {
           enableReinitialize
           onSubmit={(values) => {
             if (initialEmail !== null) handleSubmit(values);
-            
           }}
         >
           {({ errors, touched, setFieldValue, values, isValid, dirty }) => (
