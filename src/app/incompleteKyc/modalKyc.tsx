@@ -47,7 +47,7 @@ export default function ModalKyc({ isOpentwo, onClosetwo }:{ isOpentwo:any, onCl
                 <Text fontWeight={'600'} fontSize={'25px'}>Incomplete KYC</Text>
               </GridItem>
               <GridItem mt={'18px'} display={'flex'} colSpan={1} justifyContent={'center'} color={'#666666'}>
-                <Text fontWeight={'600'} fontSize={'15px'}>Complete your KYC to start transacting</Text>
+                <Text fontWeight={'600'} fontSize={['10px','15px']}>Complete your KYC to start transacting</Text>
               </GridItem>
               <GridItem w={'full'} colSpan={1} mt={'40px'}>
                 <Button w={'100%'} bg={'#0CBF94'} onClick={handleopen}>Complete KYC</Button>
