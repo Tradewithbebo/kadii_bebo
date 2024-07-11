@@ -9,14 +9,14 @@ import HomePageBody from "./components/homePageBody";
 
 export default function Home() {
    
-  //  const router = useRouter();
+   const router = useRouter();
 
-  //  useEffect(() => {
-  //    const auth = localStorage.getItem("stk-apk");
-  //    if (!auth) {
-  //      router.replace("/createAccount/Login");
-  //    }
-  //  }, [router]);
+   useEffect(() => {
+     const auth = localStorage.getItem("stk-apk");
+     if (!auth) {
+       router.replace("/createAccount/Login");
+     }
+   }, [router]);
   return (
    
 <>
