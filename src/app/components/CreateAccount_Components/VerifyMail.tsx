@@ -55,7 +55,7 @@ export default function VerifyMail() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast();
-  const url = "auth/verify-email";
+  const url ="auth/verify-email";
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");

@@ -13,8 +13,9 @@ import {
   Text,
   Button,
   HStack,
+  useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
@@ -27,6 +28,9 @@ import SelectassetUSDT from "./SelectassetUSDT";
 // import Testing from './testing';
 import { IoIosArrowBack } from "react-icons/io";
 import ConfirmBuyOrder from "./ConfirmBuyOrder";
+import SendMoney from "./SendMoney";
+import { AxiosAuthPost, AxiosPost } from "@/app/axios/axios";
+import { useRouter } from "next/navigation";
 
 export default function GeneralFormPage({
   isOpen,
@@ -36,7 +40,22 @@ export default function GeneralFormPage({
   onClose: any;
 }) {
   const [Value, setValue] = useState("");
+  const [Currentprice, setCurrentprice] = useState("");
   const [Currency, setCurrency] = useState(true);
+  const [network, setNetwork] = useState("");
+  const [walletaddress, setWalletaddress] = useState("");
+  const [asset, setasset] = useState("");
+  const [USDT, setUSDT] = useState("");
+  const [naira, setnaira] = useState("");
+  const [toprice, settoprice] = useState("");
+  const [Symbols, setSymbols] = useState("");
+  const [Name, setName] = useState("");
+  const [Conversion, setConversion] = useState<number | null>(null); // Allow null for initial state
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const toast = useToast();
+  const url = "orders/buy";
   const handleclick = () => {
     {
       Currency ? setCurrency(false) : setCurrency(true);
@@ -44,45 +63,88 @@ export default function GeneralFormPage({
   };
   const Backward = () => {
     setStep((cur: number) => cur - 1);
+    step == 1
+      ? setNetwork("")
+      : step == 2
+      ? setnaira("")
+      : step == 2
+      ? setUSDT("")
+      : "";
   };
 
-  // const handleValueChange = (selectedOption: any, setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void) => {
-  //   setFieldValue("Network", selectedOption ? selectedOption.value : "");
-  //   setValue(selectedOption);
-  // };
+  const handleProceed = async (values: any) => {
+    if (values) {
+      setLoading(true);
+      try {
+        const res = await AxiosAuthPost(url, values);
+        setLoading(false);
+        if (res) {
+        }
+      } catch (err: any) {
+        setLoading(false);
+        let message = "Check your Network and try again.";
+        if (err.response && err.response.data && err.response.data.message) {
+          message = err.response.data.message;
+        }
+        setErrorMessage(message);
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    }
+    // setStep(4);
+  };
+  const handleProceeding = () => {
+    setStep((cur: number) => cur + 1);
+  };
+  // const [scrollBehavior, setScrollBehavior] = React.useState("inside");
+  useEffect(() => {
+    // console.log('Currentprice:',Currentprice)
+    updateNetworkOptions();
+  });
+  const updateNetworkOptions = () => {
+    // console.log('Currentprice:',toprice)
+    const currentPrice = parseFloat(toprice);
+    // console.log('Currentprice:',Currentprice)
+    if (Currency) {
+      const nairaValue = parseFloat(naira);
+      // console.log('naira:',nairaValue)
+      const value = nairaValue / currentPrice;
+      // console.log('Currentprice:',value)
+      const formattedValue = parseFloat(value.toFixed(13));
+      setConversion(formattedValue);
+    } else {
+      console.log("USDTValue:", USDT);
+      const USDTValue = parseFloat(USDT);
+      console.log("USDTValue:", USDTValue);
+      console.log("Currentprice:", currentPrice);
+      const value = USDTValue / currentPrice;
+      console.log("Currentprice:", currentPrice);
+      // const formattedValue = parseFloat(value.toFixed(3));
+      setConversion(value);
+    }
+  };
 
   const initialValues = {
-    Walletaddress: "",
-    Network: "",
-    // asset: '',
+    amountNaira: parseFloat(naira),
+    amountBlockchain: Conversion,
+    blockchain: Symbols,
+    address: walletaddress,
   };
-  const initialValues2 = {
-    asset: "",
-    naira: "",
-    USDT: "",
-  };
-  const initialValues3 = {
-    asset: "",
-  };
-  const validationSchema = Yup.object().shape({
-    Walletaddress: Yup.string().required("Wallet address is required"),
-    Network: Yup.string().required("Network is required"),
-  });
-  const validationSchema2 = Yup.object().shape({
-    asset: Yup.string().required("Wallet address is required"),
-    naira: Yup.number().required("naira is required it cann't be a letter "),
-    // USDT: Yup.string().required("USDT is required"),
-  });
-  const validationSchema3 = Yup.object().shape({
-    asset: Yup.string().required("Wallet address is required"),
-    // naira: Yup.string().required("naira is required"),
-    USDT: Yup.number().required("USDT is required and it cann't be a letter"),
-  });
-  const [step, setStep] = useState(1);
-  // const handleProceed = () => {
-  //     setStep((cur: number) => cur + 1);
-  //   };
 
+  // const validationSchema = Yup.object().shape({
+  //   Walletaddress: Yup.string().required("Wallet address is required"),
+  //   Network: Yup.string().required("Network is required"),
+  //   asset: Yup.string().required("Wallet address is required"),
+  //   naira: Yup.number().required("naira is required it cann't be a letter "),
+  //   // USDT: Yup.number().required("USDT is required and it cann't be a letter"),
+  // });
+  const [step, setStep] = useState(1);
   return (
     <Drawer
       isOpen={isOpen}
@@ -91,7 +153,7 @@ export default function GeneralFormPage({
       size={["sm", "sm"]}
     >
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent overflowY="auto">
         <HStack>
           <Box
             cursor={"pointer"}
@@ -106,79 +168,114 @@ export default function GeneralFormPage({
           <DrawerCloseButton />
         </HStack>
         <Box p={4}>
-          <Formik
-            initialValues={
-              step === 1
-                ? initialValues
-                : step === 2
-                ? initialValues2
-                : initialValues3
-            }
-            validationSchema={
-              step === 1
-                ? validationSchema
-                : step === 2
-                ? Currency
-                  ? validationSchema2
-                  : validationSchema3
-                : ""
-            }
-            onSubmit={async (values, actions) => {
-              console.log(values);
-              actions.resetForm();
-              setValue("");
-            }}
-          >
-            {({
-              errors,
-              touched,
-              handleSubmit,
-              setFieldValue,
-              isValid,
-              dirty,
-            }) => (
-              <Form onSubmit={handleSubmit}>
-                {step === 1 && (
-                  <InputReceiverDetails
-                    setStep={setStep}
-                    isValid={isValid}
-                    errors={errors}
-                    setFieldValue={setFieldValue}
-                    dirty={dirty}
-                    touched={touched}
-                  />
-                )}
-                {step === 2 &&
-                  (Currency ? (
-                    <Selectassetnaira
-                      setStep={setStep}
-                      isValid={isValid}
-                      errors={errors}
-                      setFieldValue={setFieldValue}
-                      dirty={dirty}
-                      touched={touched}
-                      BUY={"Buy in naira"}
-                      handleclick={handleclick}
-                    />
-                  ) : (
-                    <SelectassetUSDT
-                      setStep={setStep}
-                      isValid={isValid}
-                      errors={errors}
-                      setFieldValue={setFieldValue}
-                      dirty={dirty}
-                      touched={touched}
-                      BUY={"Buy in crypto"}
-                      handleclick={handleclick}
-                    />
-                  )
-                  )}
-                  {step === 3 && <ConfirmBuyOrder setStep={setStep}/>}
-              </Form>
-            )}
-          </Formik>
+          {step === 1 && (
+            <InputReceiverDetails
+              setStep={setStep}
+              setNetwork={setNetwork}
+              setWalletaddress={setWalletaddress}
+              setName={setName}
+              Network={network}
+              settoprice={settoprice}
+              setSymbol={setSymbols}
+            />
+          )}
+          {step === 2 &&
+            (Currency ? (
+              <Selectassetnaira
+                setStep={setStep}
+                BUY={"Buy in Crypto"}
+                handleclick={handleclick}
+                setasset={setasset}
+                setnaira={setnaira}
+                Name={Name}
+                setCurrentprice={setCurrentprice}
+              />
+            ) : (
+              <SelectassetUSDT
+                setStep={setStep}
+                BUY={"Buy in Naira"}
+                handleclick={handleclick}
+                setasset={setasset}
+                setUSDT={setUSDT}
+                Name={Name}
+                setCurrentprice={setCurrentprice}
+              />
+            ))}
+          {step === 3 && (
+            <>
+              <ConfirmBuyOrder
+                setStep={setStep}
+                Amount={naira}
+                conversion={Conversion}
+                currency={Currency ? "₦" : "USDT"}
+                crypto={Name}
+                loading={loading}
+              />
+              <Box justifyContent={"center"}>
+                <Formik
+                  initialValues={initialValues}
+                  // validationSchema={validationSchema}
+                  enableReinitialize
+                  onSubmit={handleProceed}
+                >
+                  <Form>
+                    <FormControl mb="4" display={"none"}>
+                      <FormLabel htmlFor="amountNaira">
+                        Amount in Naira
+                      </FormLabel>
+                      <Field name="amountNaira" as={Input} type="number" />
+                      {/* <ErrorMessage name="amountNaira" component={FormErrorMessage} /> */}
+                    </FormControl>
+
+                    <FormControl mb="4" display={"none"}>
+                      <FormLabel htmlFor="amountBlockchain">
+                        Amount in Blockchain
+                      </FormLabel>
+                      <Field name="amountBlockchain" as={Input} type="number" />
+                      {/* <ErrorMessage name="amountBlockchain" component={FormErrorMessage} /> */}
+                    </FormControl>
+
+                    <FormControl mb="4" display={"none"}>
+                      <FormLabel htmlFor="blockchain">Blockchain</FormLabel>
+                      <Field name="blockchain" as={Input} />
+                      {/* <ErrorMessage name="blockchain" component={FormErrorMessage} /> */}
+                    </FormControl>
+
+                    <FormControl mb="4" display={"none"}>
+                      <FormLabel htmlFor="address">Wallet Address</FormLabel>
+                      <Field name="address" as={Input} />
+                    </FormControl>
+                    <Press loading={loading} />
+                    {/* <Button type="submit"  colorScheme="teal">
+                          Submit
+                      </Button> */}
+                  </Form>
+                </Formik>
+              </Box>
+            </>
+          )}
+          {step === 4 && <SendMoney setStep={setStep} />}
         </Box>
       </DrawerContent>
     </Drawer>
   );
 }
+
+export const Press = ({ loading }: { loading: any }) => {
+  return (
+    <Box w={"full"} justifyContent={"center"} display={"flex"} mt={"-30px"}>
+      <Button
+        type="submit"
+        w={"90%"}
+        bg={"#0CBF94"}
+        fontSize={"16px"}
+        fontWeight={"600"}
+        color={"#021D17"}
+        isLoading={loading}
+        // onClick={handleProceed}>
+      >
+        Proceed
+      </Button>
+    </Box>
+  );
+};

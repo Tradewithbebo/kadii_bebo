@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://beboapi.onrender.com/' || 'http://localhost:3000/';
+const baseUrl = 'https://beboapi.onrender.com/';
 
 interface Auth {
   authToken: string;
@@ -48,11 +48,12 @@ export async function AxiosPost(url: string, dataObject: any) {
 
 export async function AxiosAuthPost(url: string, dataObject: any) {
   const authConfig = getAuthConfig();
-
+  console.log('authConfig:',authConfig)
   try {
     const res = await axios.post(`${baseUrl}${url}`, dataObject, authConfig);
     return res.data;
   } catch (err) {
+    // console.log('error:',err)
     throw err;
   }
 }
