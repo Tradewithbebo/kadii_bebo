@@ -50,7 +50,8 @@ export default function GeneralFormPage({
   const [toprice, settoprice] = useState("");
   const [Symbols, setSymbols] = useState("");
   const [Name, setName] = useState("");
-  const [Conversion, setConversion] = useState<number | null>(null); // Allow null for initial state
+  const [Conversion, setConversion] = useState<number | null>(null);
+  const [Conversion2, setConversion2] = useState<number | null>(null); // Allow null for initial state
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -123,16 +124,16 @@ export default function GeneralFormPage({
       const USDTValue = parseFloat(USDT);
       console.log("USDTValue:", USDTValue);
       console.log("Currentprice:", currentPrice);
-      const value = USDTValue / currentPrice;
+      const value = USDTValue * currentPrice;
       console.log("Currentprice:", currentPrice);
-      // const formattedValue = parseFloat(value.toFixed(3));
-      setConversion(value);
+      const formattedValue = parseFloat(value.toFixed(20));
+      setConversion2(formattedValue);
     }
   };
 
   const initialValues = {
-    amountNaira: parseFloat(naira),
-    amountBlockchain: Conversion,
+    amountNaira: Currency ? parseFloat(naira) : Conversion2,
+    amountBlockchain: Currency ? Conversion : parseFloat(USDT),
     blockchain: Symbols,
     address: walletaddress,
   };
@@ -199,17 +200,20 @@ export default function GeneralFormPage({
                 setUSDT={setUSDT}
                 Name={Name}
                 setCurrentprice={setCurrentprice}
+                sybl={Symbols}
               />
             ))}
           {step === 3 && (
             <>
               <ConfirmBuyOrder
                 setStep={setStep}
-                Amount={naira}
-                conversion={Conversion}
-                currency={Currency ? "₦" : "USDT"}
+                Amount={Currency ? naira : USDT}
+                conversion={Currency ? Conversion : Conversion2}
+                currency={Currency ? "₦" : Symbols}
                 crypto={Name}
                 loading={loading}
+                sybl={Name}
+                nn={Currency}
               />
               <Box justifyContent={"center"}>
                 <Formik

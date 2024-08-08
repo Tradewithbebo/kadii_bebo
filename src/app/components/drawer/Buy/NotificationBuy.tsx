@@ -145,13 +145,11 @@ export function MarketRate({
     }
   };
 
-
   // useEffect(() => {
   //   const hiddenButton = document.getElementById("hiddenSubmitButton");
   //   if (hiddenButton) hiddenButton.click();
-    
-  // }, []);
 
+  // }, []);
 
   return (
     <>
@@ -227,7 +225,6 @@ export function MarketRate({
                             >
                               {item.name == Name ? item.current_price : ""}
                             </Button>
-                           
                           </Box>
                         ) : (
                           ""
@@ -248,11 +245,13 @@ export function ConfirmBuy({
   conversion,
   currency,
   crypto,
+  nn
 }: {
   Amount: any;
   conversion: any;
   currency: any;
-  crypto:any;
+  crypto: any;
+  nn:any
 }) {
   // const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -277,10 +276,82 @@ export function ConfirmBuy({
             </Text>
           </GridItem>
           <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
-            
+          {nn? <Text fontWeight={"600"} fontSize={"16px"} color="#666666">
+              You will receive {conversion} worth of
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  width: "full",
+                }}
+              >
+                {" "}
+                {crypto}
+              </span>
+            </Text> :<Text fontWeight={"600"} fontSize={"16px"} color="#666666">
+              You will pay {conversion} naira for
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  width: "full",
+                }}
+              >
+              {Amount} {crypto}
+              </span>
+            </Text> }
+          </GridItem>
+        </SimpleGrid>
+      </Box>
+    </>
+  );
+}
+export function ConfirmBuy2({
+  Amount,
+  conversion,
+  currency,
+  crypto,
+}: {
+  Amount: any;
+  conversion: any;
+  currency: any;
+  crypto: any;
+}) {
+  // const { isOpen, onOpen, onClose } = useDisclosure()
+
+  return (
+    <>
+      <Box>
+        <SimpleGrid
+          w={"auto"}
+          bg={"#F8F8F8"}
+          p={"16px"}
+          rounded={"10px"}
+          rowGap={"16px"}
+          border={"1px"}
+          borderColor="gray.200"
+          // boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1) "
+          mb={"12px"}
+          // ml={'-45px'}
+        >
+          <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
+            <Text fontWeight={"600"} fontSize={"24px"} color={"#021D17"}>
+              {currency} {Amount}
+            </Text>
+          </GridItem>
+          <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
             <Text fontWeight={"600"} fontSize={"16px"} color="#666666">
-              You will receive {conversion} worth of <span style={{justifyContent:"center",display:'flex',width:"full"} }> {crypto}</span>
-              
+              You will receive {conversion} worth of{" "}
+              <span
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  width: "full",
+                }}
+              >
+                {" "}
+                {crypto}
+              </span>
             </Text>
           </GridItem>
         </SimpleGrid>

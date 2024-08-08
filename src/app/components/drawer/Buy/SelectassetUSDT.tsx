@@ -37,7 +37,8 @@ export default function SelectUSDT({
   setasset,
   setUSDT,
   Name,
-  setCurrentprice
+  setCurrentprice,
+  sybl
 }: {
   setStep: any;
   BUY: any;
@@ -45,7 +46,8 @@ export default function SelectUSDT({
   setasset: any;
   setUSDT: any;
   Name:any;
-  setCurrentprice:any
+  setCurrentprice:any;
+  sybl:any
 }) {
   const [Value, setValue] = useState(null);
 
@@ -124,7 +126,7 @@ export default function SelectUSDT({
                     Total amount
                   </FormLabel>
                   <InputGroup>
-                    <InputLeftAddon>USDT</InputLeftAddon>
+                    <InputLeftAddon>{sybl}</InputLeftAddon>
                     <Field
                       as={Input}
                       type="text"

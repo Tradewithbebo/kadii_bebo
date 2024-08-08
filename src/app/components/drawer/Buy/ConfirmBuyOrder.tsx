@@ -17,14 +17,16 @@ export default function ConfirmBuyOrder({
   currency,
   setStep,
   crypto,
-  loading
+  loading,sybl,nn
 }: {
   Amount: any;
   conversion: any;
   currency: any;
   setStep: any;
   crypto: any;
-  loading:any
+  loading:any;
+  sybl:any
+  nn:any
 }) {
   // const handleProceed = () => {
   //   setStep(4);
@@ -39,7 +41,7 @@ export default function ConfirmBuyOrder({
         </GridItem>
         <GridItem colSpan={1} mt={"18px"}>
           <Text fontWeight="600" fontSize="15px" color="#666666">
-            Confirm amount of USDT you want to buy
+            Confirm amount of {sybl} you want to buy
           </Text>
         </GridItem>
 
@@ -48,8 +50,7 @@ export default function ConfirmBuyOrder({
             Amount={Amount}
             conversion={conversion}
             currency={currency}
-            crypto={crypto}
-          />
+            crypto={crypto} nn={nn}          />
         </GridItem>
         <GridItem colSpan={1} mt={"28px"}>
         {/* <Press loading={loading}/> */}
