@@ -31,7 +31,7 @@ export default function SuccessBuy() {
             Transaction successfully  initiated
             </Text>
             </GridItem>
-            <GridItem colSpan={1} mt={"4px"}>
+            {/* <GridItem colSpan={1} mt={"4px"}>
             <Button
               bg="#0CBF94"
               fontSize={"16px"}
@@ -44,7 +44,7 @@ export default function SuccessBuy() {
             >
              <MdHome size={'80%'}  color={'white'}/>
             </Button>
-          </GridItem>
+          </GridItem> */}
     </SimpleGrid>
    </Center>
    </Box>
