@@ -67,7 +67,7 @@ export default function LoginComponent() {
               "stk-apk",
               JSON.stringify({ authToken: res.data.accessToken })
             );
-            router.push("/HomeincompleteKyc");
+            router.push("/");
           }
         }
       } catch (err: any) {

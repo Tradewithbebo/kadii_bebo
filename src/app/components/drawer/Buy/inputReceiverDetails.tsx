@@ -137,7 +137,7 @@ export default function InputReceiverDetails({
                 </Text>
               </GridItem>
               <GridItem colSpan={1} mt={"18px"}>
-                <Text fontWeight="600" fontSize="15px" color="#666666">
+                <Text fontWeight="600" fontSize={['11',"15px"]} color="#666666">
                   Input details of where you want your crypto sent to
                 </Text>
               </GridItem>

@@ -119,7 +119,7 @@ export default function GeneralFormPage({
   const resetInputs = () => {
     setValue("");
     setCurrentprice("");
-    setCurrency(true);
+    // setCurrency(true);
     setNetwork("");
     setWalletaddress("");
     setasset("");
@@ -130,6 +130,7 @@ export default function GeneralFormPage({
     setName("");
     setConversion(null);
     setConversion2(null);
+    setStep(1)
   };
   
   const handleProceeding = () => {
