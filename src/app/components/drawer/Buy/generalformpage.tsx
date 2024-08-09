@@ -71,7 +71,7 @@ export default function GeneralFormPage({
       ? setnaira("")
       : step == 2
       ? setUSDT("")
-      :step ==4?( router.push("/"),setUSDT(""),setnaira(""),setNetwork("")):""
+      :""
   };
 
   const handleProceed = async (values: any) => {
@@ -80,20 +80,19 @@ export default function GeneralFormPage({
       try {
         const res = await AxiosAuthPost(url, values);
         setLoading(false);
-        // setStep(4);
         if (res && res.data) {
-          // console.log('res', res);
-          
-          const checkoutUrl = res.data.checkout_url; // Extract the checkout URL from the response
+          const checkoutUrl = res.data.checkout_url;
           if (checkoutUrl) {
             // Set the step to 4
             setStep(4);
   
-            // Delay opening the new window to allow the step 4 page to be seen
+            // Close the modal and reset inputs after 2000ms
             setTimeout(() => {
-              window.open(checkoutUrl, "_blank");
-            }, 2000); // Adjust the delay time as needed (e.g., 1000ms = 1 second)
-          }  else {
+              onClose(); // Close the modal
+              resetInputs(); // Reset all inputs
+              window.open(checkoutUrl, "_blank"); // Open the new window
+            }, 2000); // Adjust the delay time as needed
+          } else {
             throw new Error("Checkout URL not found in response.");
           }
         }
@@ -114,8 +113,25 @@ export default function GeneralFormPage({
         });
       }
     }
-
   };
+  
+  // Function to reset all input fields
+  const resetInputs = () => {
+    setValue("");
+    setCurrentprice("");
+    setCurrency(true);
+    setNetwork("");
+    setWalletaddress("");
+    setasset("");
+    setUSDT("");
+    setnaira("");
+    settoprice("");
+    setSymbols("");
+    setName("");
+    setConversion(null);
+    setConversion2(null);
+  };
+  
   const handleProceeding = () => {
     setStep((cur: number) => cur + 1);
   };
