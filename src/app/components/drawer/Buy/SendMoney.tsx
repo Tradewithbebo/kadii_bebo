@@ -6,7 +6,7 @@ import { IoCopyOutline } from "react-icons/io5";
 
 export default function SendMoney({ setStep }: { setStep: any }) {
   const handleProceed = () => {
-    setStep(5);
+    // setStep(5);
   };
   const toast = useToast()
   const [ Wallet,setWallet]=useState('0xy83929ruhdi23uhbd92bf9g2bjbfbfvxtyuv...')

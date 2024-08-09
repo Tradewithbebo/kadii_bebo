@@ -104,7 +104,7 @@ export default function InputReceiverDetails({
         updateNetworkOptions(res.data);
         setLoading(false);
         setErrorMessage(''); // Clear error message on success
-        return true; // Indicate success
+        return true; 
       }
     } catch (err: any) {
       setLoading(false);

@@ -46,7 +46,7 @@ export default function SemiNav({
             </Box>
             <Text
               fontWeight={"600"}
-              fontSize={['10px',"15px"]}
+              fontSize={{base:'10px',lg:"15px",md:"12px"}}
               color={Buy ? "#021D17" : "#666666"}
             >
               Sell crypto
@@ -69,7 +69,7 @@ export default function SemiNav({
             </Box>
             <Text
               fontWeight={"600"}
-              fontSize={['11px',"15px"]}
+              fontSize={{base:'10px',lg:"15px",md:"12px"}}
               color={Sell ? "#021D17" : "#666666"}
             >
               Buy crypto

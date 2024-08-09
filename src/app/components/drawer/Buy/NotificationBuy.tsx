@@ -276,7 +276,7 @@ export function ConfirmBuy({
             </Text>
           </GridItem>
           <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
-          {nn? <Text fontWeight={"600"} fontSize={"16px"} color="#666666">
+          {nn? <Text fontWeight={"600"} fontSize={['10px',"16px"]} color="#666666">
               You will receive {conversion} worth of
               <span
                 style={{
@@ -288,7 +288,7 @@ export function ConfirmBuy({
                 {" "}
                 {crypto}
               </span>
-            </Text> :<Text fontWeight={"600"} fontSize={"16px"} color="#666666">
+            </Text> :<Text fontWeight={"600"} fontSize={['10px',"16px"]} color="#666666">
               You will pay {conversion} naira for
               <span
                 style={{

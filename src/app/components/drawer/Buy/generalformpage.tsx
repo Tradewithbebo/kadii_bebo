@@ -31,6 +31,7 @@ import ConfirmBuyOrder from "./ConfirmBuyOrder";
 import SendMoney from "./SendMoney";
 import { AxiosAuthPost, AxiosPost } from "@/app/axios/axios";
 import { useRouter } from "next/navigation";
+import SuccessBuy from "./success";
 
 export default function GeneralFormPage({
   isOpen,
@@ -70,7 +71,7 @@ export default function GeneralFormPage({
       ? setnaira("")
       : step == 2
       ? setUSDT("")
-      : "";
+      :step ==4?( router.push("/"),setUSDT(""),setnaira(""),setNetwork("")):""
   };
 
   const handleProceed = async (values: any) => {
@@ -79,7 +80,22 @@ export default function GeneralFormPage({
       try {
         const res = await AxiosAuthPost(url, values);
         setLoading(false);
-        if (res) {
+        // setStep(4);
+        if (res && res.data) {
+          // console.log('res', res);
+          
+          const checkoutUrl = res.data.checkout_url; // Extract the checkout URL from the response
+          if (checkoutUrl) {
+            // Set the step to 4
+            setStep(4);
+  
+            // Delay opening the new window to allow the step 4 page to be seen
+            setTimeout(() => {
+              window.open(checkoutUrl, "_blank");
+            }, 2000); // Adjust the delay time as needed (e.g., 1000ms = 1 second)
+          }  else {
+            throw new Error("Checkout URL not found in response.");
+          }
         }
       } catch (err: any) {
         setLoading(false);
@@ -98,7 +114,7 @@ export default function GeneralFormPage({
         });
       }
     }
-    // setStep(4);
+
   };
   const handleProceeding = () => {
     setStep((cur: number) => cur + 1);
@@ -258,7 +274,8 @@ export default function GeneralFormPage({
               </Box>
             </>
           )}
-          {step === 4 && <SendMoney setStep={setStep} />}
+          {/* {step === 4 && <SendMoney setStep={setStep} />} */}
+          {step === 4 && <SuccessBuy />}
         </Box>
       </DrawerContent>
     </Drawer>

@@ -1,21 +1,26 @@
 import { Box, Button, Center, GridItem, SimpleGrid,Text,Image } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation'
 import React from 'react'
+import { Fade } from 'react-awesome-reveal'
+import { MdHome } from 'react-icons/md'
 
-export default function Success() {
+export default function SuccessBuy() {
+    const Router=useRouter()
   return (
-   <Box w={'full'}>
+   <Box w={'full'} pt={'70px'}>
    <Center w={'full'}>
-   <SimpleGrid pb={'488px'}
+   <SimpleGrid 
    width={['335px','400px']}
    columns={1}
    >
-        <GridItem mb={'15px'} colSpan={1} >
-       <Center> <Box  height='49px'
+        <Fade direction="up" triggerOnce={true}> <GridItem mb={'15px'} colSpan={1} >
+       <Box w={'full'} display={'flex'} justifyContent={'Center'}>
+       <Box  height='49px'
     width='51px' >
   <Image src='/image/success.svg'
     alt='Bebo' />
-</Box></Center>
-        </GridItem>
+</Box></Box>
+        </GridItem></Fade>
         <GridItem mb={'24px'} textAlign={'center'} colSpan={1}>
             <Text color={'#021D17'} fontWeight={'600'} fontSize={["32px",'40px']}> 
             Success
@@ -23,7 +28,7 @@ export default function Success() {
             </GridItem>
             <GridItem mb={'40px'} textAlign={'center'} colSpan={1}>
             <Text color={'#666666'} fontWeight={'600'} fontSize={["16px",'18px']} >
-            Password successfully updated
+            Transaction successfully  initiated
             </Text>
             </GridItem>
             <GridItem colSpan={1} mt={"4px"}>
@@ -33,9 +38,11 @@ export default function Success() {
               fontWeight={"600"}
               w={"100%"}
               color={'#021D17'}
-             
+             onClick={()=>{
+                Router.push('/')
+             }}
             >
-              Continue{" "}
+             <MdHome size={'80%'}  color={'white'}/>
             </Button>
           </GridItem>
     </SimpleGrid>
