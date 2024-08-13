@@ -15,10 +15,11 @@ export default function Kyc({ isOpenone, onCloseone }:{ isOpenone:any, onCloseon
       isOpen={isOpenone}
       placement='right'
       onClose={onCloseone}
+     
       size={['sm', 'sm']}
     >
       <DrawerOverlay />
-      <DrawerContent>
+      <DrawerContent   overflowY="auto">
         <DrawerCloseButton />
         <Box pt={['30px', '0px']}>
           <Kkyc />

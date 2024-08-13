@@ -28,7 +28,7 @@ import NavLink from "../navbar/navLink";
 import { BuyCrypto, SellCrypto } from "./crypto_two";
 // import { BuyCrypto, SellCrypto } from "../components/transactionbox/crypto";
 
-export default function HomePageBody({Not_Started}:{Not_Started:any}) {
+export default function HomePageBody() {
   
   const [Buy, setBuy] = useState(true);
   const [Sell, setSell] = useState(false);
@@ -89,8 +89,8 @@ export default function HomePageBody({Not_Started}:{Not_Started:any}) {
                     pb={"51px"}
                     pt={"40px"}
                   >
-                   { Buy?<SellCrypto Not_Started={Not_Started} />:
-                    <BuyCrypto Not_Started={Not_Started} />}
+                   { Buy?<SellCrypto />:
+                    <BuyCrypto />}
                   </Box>
                 </Box>
               </Box>

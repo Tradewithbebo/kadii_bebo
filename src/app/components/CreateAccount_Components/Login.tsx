@@ -52,6 +52,7 @@ export default function LoginComponent() {
   const handleSubmit = async (values: any) => {
     if (values) {
       setLoading(true);
+      
       try {
         const res = await AxiosPost(url, values);
         setLoading(false);
@@ -68,11 +69,10 @@ export default function LoginComponent() {
               JSON.stringify({ authToken: res.data.accessToken })
             );
             const kycs = res.data.user.kycStatus;
-            console.log('kyc',kyc)
-            // setKyc('NOT-STARTED')
-            // const encodedKyc = encodeURIComponent(kyc); 
-            if(kycs==='PENDING'|| kyc==='NOT-STARTED'){router.push(`/HomeincompleteKyc?kyc=${kycs}`)}
-            else{       router.push("/");}
+            // console.log('kyc',kyc)
+           
+            if( kyc==='NOT-STARTED'){router.push('/HomeincompleteKyc')}
+            else{  router.push("/");}
      
           }
         }

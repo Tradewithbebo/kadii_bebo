@@ -68,6 +68,23 @@ export async function AxiosAuthPost(url: string, dataObject: any) {
     throw err;
   }
 }
+export async function AxiosAuthPostfile(url: string, dataObject: any, p0: { headers: { 'Content-Type': string; }; }) {
+  const token = getAuthToken(); // Ensure this function is defined and working
+  const authConfig = {
+    headers: {
+      "Content-Type": "multipart/form-data", // Automatically handled by axios
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.post(`${baseUrl}${url}`, dataObject, authConfig);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+}
+
 
 export async function AxiosAuthPut(url: string, dataObject: any) {
   const authConfig = getAuthConfig();

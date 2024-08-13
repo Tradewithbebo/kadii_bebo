@@ -18,7 +18,7 @@ import { IoDocumentOutline } from "react-icons/io5";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import { AxiosAuthPost } from "@/app/axios/axios";
+import { AxiosAuthPost, AxiosAuthPostfile } from "@/app/axios/axios";
 
 // Yup validation schema
 const BvnSchema = Yup.object().shape({
@@ -56,11 +56,22 @@ export default function Bvn() {
 
   const handleProceed = async (values: any) => {
     if (values) {
-      console.log('value:',values)
       setLoading(true);
       try {
-        
-        const res = await AxiosAuthPost(url, values);
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append("documentType", values.documentType);
+        formData.append("documentNumber", values.documentNumber);
+        if (values.document) {
+          formData.append("document", values.document);
+        }
+
+        const res = await AxiosAuthPostfile(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
         setLoading(false);
         if (res && res.data) {
           Router.push("/createAccount/Login");
@@ -83,13 +94,14 @@ export default function Bvn() {
       }
     }
   };
+
   const Router = useRouter();
   return (
     <Box w={"full"}>
       <Center pb={["127px", "235px"]}>
         <Formik
           initialValues={{
-            documentType:'NIN',
+            documentType: "NIN",
             documentNumber: "",
             document: null,
           }}
@@ -100,13 +112,13 @@ export default function Bvn() {
           {({ setFieldValue, errors, touched, isValid, dirty }) => (
             <Form>
               <SimpleGrid columns={2} rowGap={"24px"} w={["335px", "400px"]}>
-              <Box >
-                <Field
-                      as={Input}
-                      type="text"
-                      name="documentType"
-                      placeholder="1245678904"
-                    />
+                <Box>
+                  <Field
+                    as={Input}
+                    type="text"
+                    name="documentType"
+                    placeholder="1245678904"
+                  />
                 </Box>
                 <GridItem colSpan={2}>
                   <FormControl
@@ -140,13 +152,12 @@ export default function Bvn() {
                         const file = event.currentTarget.files?.[0];
                         if (file) {
                           console.log("Selected file:", file);
-                          setFieldValue("document", file);
+                          setFieldValue("document", file); // This will update Formik's state
                           setSelectedFile(file);
                         }
                       }}
                       style={{ display: "none" }}
                       id="file-upload"
-                      name="document" 
                     />
 
                     <FormLabel
