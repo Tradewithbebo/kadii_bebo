@@ -19,33 +19,32 @@ export default function SemiNav({
       </Box>
       <Center>
         <Grid
-          templateColumns="repeat(2, 1fr)"
+          templateColumns={{ base: "repeat(2, 1fr)" }}
           gap={2}
-          height={"35px"}
-          width={"244px"}
+          height={{ base: "auto", md: "35px" }}
+          width={{ base: "100%", sm: "300px", md: "350px", lg: "400px" }}
           bg={"#F0F0F0"}
           rounded={"6px"}
-          px={"5px"}
+          px={{ base: "10px", md: "5px" }}
+          py={{ base: "10px", md: "0px" }}
         >
           <GridItem
-            as={Box}
             cursor={"pointer"}
             onClick={handleToggleBuy}
             bg={Buy ? "#DADADA" : "transparent"}
             rounded={"3px"}
-            p={"5px"}
-            py={"3px"}
-            pl={"12px"}
+            p={{ base: "10px", md: "5px" }}
             display={"flex"}
             alignItems={"center"}
             gap={"4px"}
+            justifyContent={"center"}
           >
             <Box height="18px" width="18px">
               <Image src="/image/send.png" alt="Bebo" />
             </Box>
             <Text
               fontWeight={"600"}
-              fontSize={{ base: '10px', lg: "15px", md: "12px" }}
+              fontSize={{ base: "12px", lg: "15px" }}
               color={Buy ? "#021D17" : "#666666"}
             >
               Sell crypto
@@ -53,23 +52,22 @@ export default function SemiNav({
           </GridItem>
 
           <GridItem
-            as={Box}
             cursor={"pointer"}
             onClick={handleTogglesell}
             bg={Sell ? "#DADADA" : "transparent"}
             rounded={"3px"}
-            p={"5px"}
-            py={"3px"}
+            p={{ base: "10px", md: "5px" }}
             display={"flex"}
             alignItems={"center"}
             gap={"4px"}
+            justifyContent={"center"}
           >
             <Box height="18px" width="18px">
               <Image src="/image/Buy.png" alt="Bebo" />
             </Box>
             <Text
               fontWeight={"600"}
-              fontSize={{ base: '10px', lg: "15px", md: "12px" }}
+              fontSize={{ base: "12px", lg: "15px" }}
               color={Sell ? "#021D17" : "#666666"}
             >
               Buy crypto
