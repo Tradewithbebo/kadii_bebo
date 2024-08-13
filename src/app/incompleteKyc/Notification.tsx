@@ -6,31 +6,37 @@ import {
   SimpleGrid,
   Text,
   VStack,
-  useDisclosure
+  useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { BsExclamationCircle } from "react-icons/bs";
 import { SlArrowRight } from "react-icons/sl";
 import ModalKyc from "./modalKyc";
 
-export default function Notification() {
-  const { isOpen: isOpentwo, onOpen: onOpentwo, onClose: onClosetwo } = useDisclosure();
+export default function Notification({Not_Started}:{Not_Started:any}) {
+  const {
+    isOpen: isOpentwo,
+    onOpen: onOpentwo,
+    onClose: onClosetwo,
+  } = useDisclosure();
 
   return (
     <>
-      <Box display={{ base: "none", md: "block" }} onClick={onOpentwo} cursor={'pointer'}>
+      <Box onClick={onOpentwo} cursor={"pointer"}>
         <SimpleGrid
-          w={"528px"}
+          w={["auto", "400px"]}
           bg={"#FEF6E7"}
-          py={"16px"}
+          p={"16px"}
           rounded={"10px"}
-          border={"solid #FEF6E7"}
-          boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1) "
-          mb={'12px'}
-          ml={'-45px'}
+          border={"1px"}
+          // bgColor={}
+          borderColor={"#FBE2B7"}
+          // boxShadow="0px 4px 6px rgba(0, 0, 0, 0.1) "
+          mb={"12px"}
+          // ml={'-45px'}}
         >
           <Center>
-            <GridItem colSpan={[1, 3]} display={{ base: "none", md: "block" }}>
+            <GridItem colSpan={[1, 3]}>
               <Box>
                 <HStack gap={"10px"}>
                   <Box
@@ -52,15 +58,30 @@ export default function Notification() {
                       </Box>
                     </Box>
                   </Box>
-                  <Box display="flex" flexDirection={"column"} ml={"10px"} gap={"12px"}>
+                  <Box
+                    display="flex"
+                    flexDirection={"column"}
+                    ml={"10px"}
+                    gap={"12px"}
+                  >
                     <Box>
-                      <Text fontWeight={"600"} fontSize={"14px"} color={"#021D17"}>
+                      <Text
+                        fontWeight={"600"}
+                        fontSize={"14px"}
+                        color={"#021D17"}
+                      >
                         Complete your KYC
                       </Text>
                     </Box>
                     <HStack>
-                      <Text fontWeight={"500"} fontSize={"12px"} color={"#808080"}>
-                        To make transactions you need to have successfully completed your KYC.
+                      <Text
+                        fontWeight={"500"}
+                        fontSize={"12px"}
+                        color={"#808080"}
+                      >
+                        {Not_Started
+                          ? "To make transactions you need to have successfully completed your KYC."
+                          : "kyc verification in progress logout and login after 10 munites of submiting credentials"}
                       </Text>
                       <SlArrowRight size={"12px"} />
                     </HStack>

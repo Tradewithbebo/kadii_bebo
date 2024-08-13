@@ -20,7 +20,7 @@ export default function Home() {
   return (
    
 <>
-{/* <Notification/> */}
+
 <NavbarTwo/>
 <HomePageBody/>
 </>

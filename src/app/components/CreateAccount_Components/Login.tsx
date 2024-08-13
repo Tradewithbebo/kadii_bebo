@@ -48,7 +48,7 @@ export default function LoginComponent() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const url = "auth/login";
-
+  const [kyc, setKyc] = useState<string | null>(null);
   const handleSubmit = async (values: any) => {
     if (values) {
       setLoading(true);
@@ -67,7 +67,12 @@ export default function LoginComponent() {
               "stk-apk",
               JSON.stringify({ authToken: res.data.accessToken })
             );
-            router.push("/");
+            const kyc = res.data.user.kycStatus;
+            console.log('kyc',kyc)
+            setKyc('PENDING')
+            if(kyc==='PENDING'|| kyc==='NOT-STARTED'){router.push(`/HomeincompleteKyc?kyc=${kyc}`)}
+            else{       router.push("/");}
+     
           }
         }
       } catch (err: any) {

@@ -26,7 +26,7 @@ import { MenuItems } from "../components/transactionbox/menuitem";
 import Notification from "./Notification";
 
 
-export function SellCrypto() {
+export function SellCrypto({Not_Started}:{Not_Started:any}) {
   const [selectedCrypto, setSelectedCrypto] = useState('USDT');
   const handleCryptoSelect = (crypto: string) => {
     setSelectedCrypto(crypto); // Update the selected crypto in state
@@ -38,7 +38,7 @@ export function SellCrypto() {
     px={['19px','119px']}
     w={['335px','668px']}
     columns={[1,3]}>
-   <Notification/>
+   <Notification Not_Started={Not_Started}/>
       <GridItem colSpan={[1,3]} textAlign={'center'} mb={'16px'}>
         <Box>
           <Text fontWeight={"600"}  fontSize={['16px',"16px"]}>
@@ -175,7 +175,7 @@ export function SellCrypto() {
 }
 
 
-export function BuyCrypto() {
+export function BuyCrypto({Not_Started}:{Not_Started:any}) {
   const [selectedCrypto, setSelectedCrypto] = useState('USDT');
   const handleCryptoSelect = (crypto: string) => {
     setSelectedCrypto(crypto); // Update the selected crypto in state
@@ -187,7 +187,7 @@ export function BuyCrypto() {
     px={['19px','119px']}
     w={['335px','668px']}
     columns={[1,3]}>
-         <Notification/>
+         <Notification Not_Started={Not_Started}/>
       <GridItem colSpan={[1,3]} textAlign={'center'} mb={'16px'}>
         <Box>
           <Text fontWeight={"600"} fontSize={"16px"}>
