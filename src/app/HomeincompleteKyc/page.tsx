@@ -20,7 +20,9 @@ export default function page() {
   }, [router]);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const searchParams = useSearchParams(); 
-  const kyc = searchParams.get('kyc');
+  const encodedKyc = searchParams.get('kycs');
+  const kyc=encodedKyc
+ 
   return (
     <><NavbarTwo/>
 <HomePageBody Not_Started={kyc}/></>

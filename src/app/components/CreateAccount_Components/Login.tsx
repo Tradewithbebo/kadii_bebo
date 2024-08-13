@@ -67,10 +67,11 @@ export default function LoginComponent() {
               "stk-apk",
               JSON.stringify({ authToken: res.data.accessToken })
             );
-            const kyc = res.data.user.kycStatus;
+            const kycs = res.data.user.kycStatus;
             console.log('kyc',kyc)
-            setKyc('PENDING')
-            if(kyc==='PENDING'|| kyc==='NOT-STARTED'){router.push(`/HomeincompleteKyc?kyc=${kyc}`)}
+            // setKyc('NOT-STARTED')
+            // const encodedKyc = encodeURIComponent(kyc); 
+            if(kycs==='PENDING'|| kyc==='NOT-STARTED'){router.push(`/HomeincompleteKyc?kyc=${kycs}`)}
             else{       router.push("/");}
      
           }

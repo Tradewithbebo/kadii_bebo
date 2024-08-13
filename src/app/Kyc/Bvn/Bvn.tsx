@@ -1,5 +1,5 @@
-'use client'
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 import {
   FormControl,
   FormLabel,
@@ -13,114 +13,124 @@ import {
   Text,
   HStack,
   useToast,
-} from '@chakra-ui/react';
-import { IoDocumentOutline } from 'react-icons/io5';
-import { Formik, Field, Form } from 'formik';
-import * as Yup from 'yup';
-import { useRouter } from 'next/navigation';
-import { AxiosAuthPost } from '@/app/axios/axios';
-
-
-
-
-export default function Bvn() {
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  
-const [loading, setLoading] = useState(false);
-const [errorMessage, setErrorMessage] = useState("");
-const toast = useToast();
-const url = "/kyc";
-
-const handleProceed = async (values: any) => {
-  if (values) {
-    setLoading(true);
-    try {
-      const res = await AxiosAuthPost(url, values);
-      setLoading(false);
-      if (res && res.data) {
-        const checkoutUrl = res.data.checkout_url;
-        
-    }} catch (err: any) {
-      setLoading(false);
-      let message = "Check your Network and try again.";
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      setErrorMessage(message);
-      toast({
-        title: "Error",
-        description: message,
-        status: "error",
-        duration: 2000,
-        isClosable: true,
-        position: "bottom-left",
-      });
-    }
-  }
-};
+} from "@chakra-ui/react";
+import { IoDocumentOutline } from "react-icons/io5";
+import { Formik, Field, Form } from "formik";
+import * as Yup from "yup";
+import { useRouter } from "next/navigation";
+import { AxiosAuthPost } from "@/app/axios/axios";
 
 // Yup validation schema
 const BvnSchema = Yup.object().shape({
-nationalIdNumber: Yup.string()
-  .matches(/^\d+$/, 'Must be a number')
-  .min(10, 'Must be exactly 10 digits')
-  .max(10, 'Must be exactly 10 digits')
-  .required('National ID number is required'),
-nationalIdFile: Yup.mixed()
-  .required('A file is required')
-  .test(
-    'fileSize',
-    'File size is too large',
-    value => !value || (value && (value as File).size <= 5242880) // 5MB
-  )
-  .test(
-    'fileFormat',
-    'Unsupported Format',
-    value => !value || (value && ['application/pdf', 'application/msword'].includes((value as File).type))
-  ),
+  documentNumber: Yup.string()
+    .matches(/^\d+$/, "Must be a number")
+    .min(10, "Must be exactly 10 digits")
+    .max(10, "Must be exactly 10 digits")
+    .required("National ID number is required"),
+  document: Yup.mixed()
+    .required("A file is required")
+    .test(
+      "fileSize",
+      "File size is too large",
+      (value) => !value || (value && (value as File).size <= 5242880) // 5MB
+    )
+    .test(
+      "fileFormat",
+      "Unsupported Format",
+      (value) =>
+        !value ||
+        (value &&
+          ["application/pdf", "application/msword"].includes(
+            (value as File).type
+          ))
+    ),
 });
- const Router=useRouter()
+
+export default function Bvn() {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const toast = useToast();
+  const url = "kyc";
+
+  const handleProceed = async (values: any) => {
+    if (values) {
+      console.log('value:',values)
+      setLoading(true);
+      try {
+        
+        const res = await AxiosAuthPost(url, values);
+        setLoading(false);
+        if (res && res.data) {
+          Router.push("/createAccount/Login");
+        }
+      } catch (err: any) {
+        setLoading(false);
+        let message = "Check your Network and try again.";
+        if (err.response && err.response.data && err.response.data.message) {
+          message = err.response.data.message;
+        }
+        setErrorMessage(message);
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    }
+  };
+  const Router = useRouter();
   return (
-    <Box w={'full'}>
-      <Center  pb={['127px', '235px']}
-      >
+    <Box w={"full"}>
+      <Center pb={["127px", "235px"]}>
         <Formik
           initialValues={{
-            nationalIdNumber: '',
-            nationalIdFile: null,
+            documentType:'NIN',
+            documentNumber: "",
+            document: null,
           }}
+          enableReinitialize
           validationSchema={BvnSchema}
-          onSubmit={(values) => {
-            console.log(values);
-            alert('Form submitted successfully!');
-            Router.push('/createAccount/Login')
-            // Handle form submission
-          }}
+          onSubmit={handleProceed}
         >
           {({ setFieldValue, errors, touched, isValid, dirty }) => (
             <Form>
-              <SimpleGrid columns={2} rowGap={'24px'} w={['335px', '400px']}>
+              <SimpleGrid columns={2} rowGap={"24px"} w={["335px", "400px"]}>
+              <Box >
+                <Field
+                      as={Input}
+                      type="text"
+                      name="documentType"
+                      placeholder="1245678904"
+                    />
+                </Box>
                 <GridItem colSpan={2}>
                   <FormControl
-                    isInvalid={!!errors.nationalIdNumber && touched.nationalIdNumber}
+                    isInvalid={
+                      !!errors.documentNumber && touched.documentNumber
+                    }
                   >
-                    <FormLabel fontSize={'16px'} fontWeight={'600'}>
+                    <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Enter national ID number
                     </FormLabel>
                     <Field
                       as={Input}
                       type="text"
-                      name="nationalIdNumber"
+                      name="documentNumber"
                       placeholder="1245678904"
                     />
-                    <FormErrorMessage>{errors.nationalIdNumber}</FormErrorMessage>
+                    <FormErrorMessage>{errors.documentNumber}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={2} pt={'28px'}>
+                <GridItem colSpan={2} pt={"28px"}>
                   <FormControl
-                    isInvalid={!!errors.nationalIdFile && touched.nationalIdFile}
+                    isInvalid={!!errors.document && touched.document}
                   >
-                    <FormLabel fontSize={'16px'} fontWeight={'600'}>
+                    <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Upload picture of National ID number
                     </FormLabel>
                     <Input
@@ -128,45 +138,54 @@ nationalIdFile: Yup.mixed()
                       accept=".pdf, .docx"
                       onChange={(event) => {
                         const file = event.currentTarget.files?.[0];
-                        setFieldValue('nationalIdFile', file);
-                        setSelectedFile(file || null);
+                        if (file) {
+                          console.log("Selected file:", file);
+                          setFieldValue("document", file);
+                          setSelectedFile(file);
+                        }
                       }}
-                      style={{ display: 'none' }}
+                      style={{ display: "none" }}
                       id="file-upload"
+                      name="document" 
                     />
+
                     <FormLabel
                       htmlFor="file-upload"
-                      w={'full'}
-                      fontSize={'16px'}
-                      fontWeight={'600'}
-                      border={'2px dashed #CCCCCC'}
-                      rounded={'8px'}
-                      py={'8px'}
-                      textAlign={'center'}
-                      cursor={'pointer'}
+                      w={"full"}
+                      fontSize={"16px"}
+                      fontWeight={"600"}
+                      border={"2px dashed #CCCCCC"}
+                      rounded={"8px"}
+                      py={"8px"}
+                      textAlign={"center"}
+                      cursor={"pointer"}
                     >
-                      <HStack justifyContent={'center'}>
-                        <IoDocumentOutline color={'#0CBF94'} />
-                        <Text color={'#0CBF94'} fontSize={'16px'} fontWeight={'600'}>
-                          {selectedFile ? selectedFile.name : 'my nin . jpeg'}
+                      <HStack justifyContent={"center"}>
+                        <IoDocumentOutline color={"#0CBF94"} />
+                        <Text
+                          color={"#0CBF94"}
+                          fontSize={"16px"}
+                          fontWeight={"600"}
+                        >
+                          {selectedFile ? selectedFile.name : "my nin . jpeg"}
                         </Text>
                       </HStack>
                     </FormLabel>
                     {selectedFile ? (
                       <Text mt={2}>File selected: {selectedFile.name}</Text>
                     ) : (
-                      <FormErrorMessage>{errors.nationalIdFile}</FormErrorMessage>
+                      <FormErrorMessage>{errors.document}</FormErrorMessage>
                     )}
                   </FormControl>
                 </GridItem>
-                <GridItem colSpan={2} mt={'4px'}>
+                <GridItem colSpan={2} mt={"4px"}>
                   <Button
                     type="submit"
                     bg="#0CBF94"
-                    fontSize={'16px'}
-                    fontWeight={'600'}
-                    w={'100%'}
-                    color={'#021D17'}
+                    fontSize={"16px"}
+                    fontWeight={"600"}
+                    w={"100%"}
+                    color={"#021D17"}
                     isDisabled={!isValid || !dirty}
                   >
                     Continue
