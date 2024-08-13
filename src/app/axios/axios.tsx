@@ -41,7 +41,13 @@ export async function AxiosPost(url: string, dataObject: any) {
       },
     });
     return res.data;
-  } catch (err) {
+  } catch (err:any) {
+    if (err.response && err.response.status === 401) {
+      // Token is expired or invalid
+      localStorage.removeItem("stk-apk");
+      // console.error("Token expired. Please log in again.");
+      
+    }
     throw err;
   }
 }
@@ -52,8 +58,13 @@ export async function AxiosAuthPost(url: string, dataObject: any) {
   try {
     const res = await axios.post(`${baseUrl}${url}`, dataObject, authConfig);
     return res.data;
-  } catch (err) {
-    // console.log('error:',err)
+  } catch (err:any) {
+    if (err.response && err.response.status === 401) {
+      // Token is expired or invalid
+      localStorage.removeItem("stk-apk");
+      // console.error("Token expired. Please log in again.");
+      
+    }
     throw err;
   }
 }
@@ -64,7 +75,14 @@ export async function AxiosAuthPut(url: string, dataObject: any) {
   try {
     const res = await axios.put(`${baseUrl}${url}`, dataObject, authConfig);
     return res.data;
-  } catch (err) {
+    
+  } catch (err:any) {
+    if (err.response && err.response.status === 401) {
+      // Token is expired or invalid
+      localStorage.removeItem("stk-apk");
+      // console.error("Token expired. Please log in again.");
+      
+    }
     throw err;
   }
 }
@@ -86,7 +104,13 @@ export async function AxiosDelete(url: string, dataObject?: any) {
     try {
       const res = await axios.delete(`${baseUrl}${url}`, authConfig);
       return res.data;
-    } catch (err) {
+    }catch (err:any) {
+      if (err.response && err.response.status === 401) {
+        // Token is expired or invalid
+        localStorage.removeItem("stk-apk");
+        // console.error("Token expired. Please log in again.");
+        
+      }
       throw err;
     }
   }
@@ -101,7 +125,13 @@ export async function AxiosMultiDelete(url: string, dataObject: any) {
       ...authConfig,
     });
     return res.data;
-  } catch (err) {
+  } catch (err:any) {
+    if (err.response && err.response.status === 401) {
+      // Token is expired or invalid
+      localStorage.removeItem("stk-apk");
+      // console.error("Token expired. Please log in again.");
+      
+    }
     throw err;
   }
 }
@@ -146,7 +176,13 @@ export async function AxiosGet(url: string) {
   try {
     const res = await axios.get(`${baseUrl}${url}`, authConfig);
     return res.data;
-  } catch (err) {
+  } catch (err:any) {
+    if (err.response && err.response.status === 401) {
+      // Token is expired or invalid
+      localStorage.removeItem("stk-apk");
+      // console.error("Token expired. Please log in again.");
+      
+    }
     throw err;
   }
 }
