@@ -12,35 +12,73 @@ import {
   Button,
   Text,
   HStack,
+  useToast,
 } from '@chakra-ui/react';
 import { IoDocumentOutline } from 'react-icons/io5';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
+import { AxiosAuthPost } from '@/app/axios/axios';
 
-// Yup validation schema
-const BvnSchema = Yup.object().shape({
-  nationalIdNumber: Yup.string()
-    .matches(/^\d+$/, 'Must be a number')
-    .min(10, 'Must be exactly 10 digits')
-    .max(10, 'Must be exactly 10 digits')
-    .required('National ID number is required'),
-  nationalIdFile: Yup.mixed()
-    .required('A file is required')
-    .test(
-      'fileSize',
-      'File size is too large',
-      value => !value || (value && (value as File).size <= 5242880) // 5MB
-    )
-    .test(
-      'fileFormat',
-      'Unsupported Format',
-      value => !value || (value && ['application/pdf', 'application/msword'].includes((value as File).type))
-    ),
-});
+
+
 
 export default function Bvn() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  
+const [loading, setLoading] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+const toast = useToast();
+const url = "/kyc";
+
+const handleProceed = async (values: any) => {
+  if (values) {
+    setLoading(true);
+    try {
+      const res = await AxiosAuthPost(url, values);
+      setLoading(false);
+      if (res && res.data) {
+        const checkoutUrl = res.data.checkout_url;
+        
+    }} catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  }
+};
+
+// Yup validation schema
+const BvnSchema = Yup.object().shape({
+nationalIdNumber: Yup.string()
+  .matches(/^\d+$/, 'Must be a number')
+  .min(10, 'Must be exactly 10 digits')
+  .max(10, 'Must be exactly 10 digits')
+  .required('National ID number is required'),
+nationalIdFile: Yup.mixed()
+  .required('A file is required')
+  .test(
+    'fileSize',
+    'File size is too large',
+    value => !value || (value && (value as File).size <= 5242880) // 5MB
+  )
+  .test(
+    'fileFormat',
+    'Unsupported Format',
+    value => !value || (value && ['application/pdf', 'application/msword'].includes((value as File).type))
+  ),
+});
  const Router=useRouter()
   return (
     <Box w={'full'}>
