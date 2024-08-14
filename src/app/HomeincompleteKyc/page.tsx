@@ -18,7 +18,7 @@ export default function page() {
     }
   }, [router]);
   return (
-    <><NavbarTwo_nokyc/>
+    <><NavbarTwo/>
 <HomePageBody/></>
   )
 }
