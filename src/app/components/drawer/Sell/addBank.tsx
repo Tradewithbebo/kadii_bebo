@@ -34,9 +34,13 @@ import bankName from './listBanks';
 import Select from "react-select";
 
 
-export default function AddBank() {
-    const { isOpen, onOpen, onClose } = useDisclosure()
-    // const btnRef = React.useRef()
+export default function AddBank({
+  isOpen,
+  onClose,
+}: {
+  isOpen: any;
+  onClose: any;
+}) {
     const  [message,setmessage]=useState('')
     const [Value, setValue] = useState('');
     const handleValueChange = (Value: any, values: any) => {
@@ -54,9 +58,9 @@ export default function AddBank() {
   
     return (
       <>
-        <Button  colorScheme='teal' onClick={onOpen}>
+        {/* <Button  colorScheme='teal' onClick={sellOnopen}>
           Open
-        </Button>
+        </Button> */}
         <Formik
         initialValues={initialValues}
         // validationSchema={addUserSchema}
@@ -71,6 +75,7 @@ export default function AddBank() {
           isOpen={isOpen}
           placement='right'
           onClose={onClose}
+          size={["sm", "sm"]}
         //   finalFocusRef={btnRef}
         >
           <DrawerOverlay />
@@ -142,7 +147,7 @@ export default function AddBank() {
                 </FormControl>
           </GridItem>
           <GridItem colSpan={2}>
-            <Button bg={'#0AA07C'} w={'full'} color={'#021D17'} fontSize={"16px"} fontWeight={"600"}>
+            <Button   bg="#0CBF94"w={'full'} color={'#021D17'} fontSize={"16px"} fontWeight={"600"}>
             Save bank account
             </Button>
           </GridItem>

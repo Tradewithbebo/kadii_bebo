@@ -20,7 +20,7 @@ export default function Notification() {
     <>
       <Box  onClick={onOpentwo} cursor={'pointer'}>
         <SimpleGrid
-         w={["auto","400px"]}
+        width={["100%", "100%", "full"]} 
          bg={"#FEF6E7"}
          p={"16px"}
          rounded={"10px"}

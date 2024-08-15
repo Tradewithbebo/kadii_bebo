@@ -6,7 +6,7 @@ import navItemsM from './navItemMobile'
 
 export default function Footer() {
   return (
-    <HStack gap={'80px'}  justifyContent={'center'} display={'flex'} py={'15px'} >
+    <HStack gap={['80px','130px','']}  justifyContent={'center'} display={'flex'} py={['15px']} >
     {navItemsM.map((item) => (
       <NavLinkMobile  key={item.title} items={item} />
     ))}

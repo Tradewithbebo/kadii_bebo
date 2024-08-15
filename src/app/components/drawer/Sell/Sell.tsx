@@ -26,15 +26,19 @@ import { FaPlus } from "react-icons/fa6";
 
 import React from "react";
 
-export default function Sell() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+export default function Sell({
+  isOpen,
+  onClose,
+}: {
+  isOpen: any;
+  onClose: any;
+}) {
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   // const btnRef = React.useRef()
 
   return (
     <>
-      <Button colorScheme="teal" onClick={onOpen}>
-        Open
-      </Button>
+      
       <Drawer
         isOpen={isOpen}
         placement="right"

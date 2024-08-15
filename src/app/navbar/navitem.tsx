@@ -26,8 +26,8 @@ const navItems = [
     // },
     {
       title: " Buy/Sell",
-     path:'/HomeincompleteKyc',
-     icon:<AiOutlineSwaps path={'/HomeincompleteKyc'}/>
+     path:'/',
+     icon:<AiOutlineSwaps path={'/'}/>
     },
     {
       title: " Transactions",

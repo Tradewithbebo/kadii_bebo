@@ -71,7 +71,7 @@ export default function LoginComponent() {
             const kycs = res.data.user.kycStatus;
             // console.log('kyc',kyc)
            
-            if( kyc==='NOT-STARTED'){router.push('/HomeincompleteKyc')}
+            if( kycs==='NOT-STARTED'){router.push('/HomeincompleteKyc')}
             else{  router.push("/");}
      
           }

@@ -19,6 +19,7 @@ import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
 import { AxiosAuthPost, AxiosAuthPostfile } from "@/app/axios/axios";
+import { Console } from "console";
 
 // Yup validation schema
 const BvnSchema = Yup.object().shape({
@@ -74,6 +75,8 @@ export default function Bvn() {
 
         setLoading(false);
         if (res && res.data) {
+         console.log( res.data);
+          
           Router.push("/createAccount/Login");
         }
       } catch (err: any) {
