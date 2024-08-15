@@ -75,7 +75,7 @@ export default function Bvn() {
 
         setLoading(false);
         if (res && res.data) {
-         console.log( res.data);
+        //  console.log( res.data);
           
           Router.push("/createAccount/Login");
         }
@@ -115,7 +115,7 @@ export default function Bvn() {
           {({ setFieldValue, errors, touched, isValid, dirty }) => (
             <Form>
               <SimpleGrid columns={2} rowGap={"24px"} w={["335px", "400px"]}>
-                <Box>
+                <Box display={'none'}> 
                   <Field
                     as={Input}
                     type="text"
@@ -154,7 +154,7 @@ export default function Bvn() {
                       onChange={(event) => {
                         const file = event.currentTarget.files?.[0];
                         if (file) {
-                          console.log("Selected file:", file);
+                          // console.log("Selected file:", file);
                           setFieldValue("document", file); // This will update Formik's state
                           setSelectedFile(file);
                         }

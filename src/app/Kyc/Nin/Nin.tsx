@@ -1,5 +1,5 @@
 'use client'
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FormControl,
   FormLabel,
@@ -11,9 +11,12 @@ import {
   Button,
   Text,
   Center,
+  useToast,
 } from '@chakra-ui/react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
+import { AxiosPost } from '@/app/axios/axios';
+import { useRouter } from 'next/navigation';
 
 // Yup validation schema
 const NinSchema = Yup.object().shape({
@@ -24,7 +27,52 @@ const NinSchema = Yup.object().shape({
     .required('BVN is required'),
 });
 
+
 export default function Nin() {
+  const [loading, setLoading] = useState(false);
+const [errorMessage, setErrorMessage] = useState("");
+const toast = useToast();
+const url = "kyc";
+const Router = useRouter();
+
+const handleProceed = async (values: any) => {
+  if (values) {
+    setLoading(true);
+    try {
+      // Create a new FormData object
+      const formData = new FormData();
+      formData.append("documentType", values.documentType);
+      formData.append("documentNumber", values.documentNumber);
+      if (values.document) {
+        formData.append("document", values.document);
+      }
+
+      const res = await AxiosPost(url, values);
+        setLoading(false);
+      setLoading(false);
+      if (res && res.data) {
+      //  console.log( res.data);/
+        
+        Router.push("/createAccount/Login");
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  }
+};
   return (
     <Box w={'full'}>
       <Center  
@@ -32,19 +80,23 @@ export default function Nin() {
       >
         <Formik
           initialValues={{
+            documentType: "BVN",
             bvn: '',
           }}
           validationSchema={NinSchema}
-          onSubmit={(values) => {
-            console.log(values);
-            alert('Form submitted successfully!');
-            // Handle form submission
-          }}
+          onSubmit={handleProceed}
         >
           {({ errors, touched, isValid, dirty }) => (
             <Form>
               <SimpleGrid columns={1} rowGap={'24px'} w={['335px', '400px']}>
-               
+              <Box display={'none'}> 
+                  <Field
+                    as={Input}
+                    type="text"
+                    name="documentType"
+                    placeholder="1245678904"
+                  />
+                </Box>
                 <GridItem colSpan={1}>
                   <FormControl isInvalid={!!errors.bvn && touched.bvn}>
                     <FormLabel fontSize={'16px'} fontWeight={'600'}>

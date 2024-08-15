@@ -390,7 +390,7 @@ export function BuyCrypto() {
                 <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
                   <HStack gap={"8px"}>
                     <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-                      <Image src="/image/crypto.png" alt="Bebo" />
+                    <Image src={selectedimage} alt="Bebo" />
                     </Box>
                     <Box>
                       <Text
