@@ -12,18 +12,20 @@ import {
   Text,
   Center,
   useToast,
+  HStack,
 } from '@chakra-ui/react';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import { AxiosPost } from '@/app/axios/axios';
+import { AxiosAuthPost, AxiosAuthPostfile, AxiosPost } from '@/app/axios/axios';
 import { useRouter } from 'next/navigation';
+import { IoDocumentOutline } from 'react-icons/io5';
 
 // Yup validation schema
 const NinSchema = Yup.object().shape({
   bvn: Yup.string()
     .matches(/^\d+$/, 'Must be a number')
-    .min(6, 'Must be exactly 6 digits')
-    .max(6, 'Must be exactly 6 digits')
+    // .min(6, 'Must be exactly 6 digits')
+    // .max(6, 'Must be exactly 6 digits')
     .required('BVN is required'),
 });
 
@@ -34,6 +36,7 @@ const [errorMessage, setErrorMessage] = useState("");
 const toast = useToast();
 const url = "kyc";
 const Router = useRouter();
+const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
 const handleProceed = async (values: any) => {
   if (values) {
@@ -47,11 +50,15 @@ const handleProceed = async (values: any) => {
         formData.append("document", values.document);
       }
 
-      const res = await AxiosPost(url, values);
-        setLoading(false);
+      const res = await AxiosAuthPostfile(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
       setLoading(false);
       if (res && res.data) {
-      //  console.log( res.data);/
+      //  console.log( res.data);
         
         Router.push("/createAccount/Login");
       }
@@ -82,13 +89,59 @@ const handleProceed = async (values: any) => {
           initialValues={{
             documentType: "BVN",
             bvn: '',
+            document: '',
           }}
           validationSchema={NinSchema}
           onSubmit={handleProceed}
+          enableReinitialize
         >
-          {({ errors, touched, isValid, dirty }) => (
+          {({ setFieldValue,errors, touched, isValid, dirty }) => (
             <Form>
               <SimpleGrid columns={1} rowGap={'24px'} w={['335px', '400px']}>
+              <GridItem colSpan={2} pt={"28px" } display={'none'}>
+                  <FormControl
+                    isInvalid={!!errors.document && touched.document}
+                  >
+                    <FormLabel fontSize={"16px"} fontWeight={"600"}>
+                      Upload picture of National ID number
+                    </FormLabel>
+                    <Input
+                      type="file"
+                      accept=".pdf, .docx"
+                       name='document'
+                      id="document"
+                      isDisabled
+                    />
+
+                    <FormLabel
+                      htmlFor="file-upload"
+                      w={"full"}
+                      fontSize={"16px"}
+                      fontWeight={"600"}
+                      border={"2px dashed #CCCCCC"}
+                      rounded={"8px"}
+                      py={"8px"}
+                      textAlign={"center"}
+                      cursor={"pointer"}
+                    >
+                      <HStack justifyContent={"center"}>
+                        <IoDocumentOutline color={"#0CBF94"} />
+                        <Text
+                          color={"#0CBF94"}
+                          fontSize={"16px"}
+                          fontWeight={"600"}
+                        >
+                          {selectedFile ? selectedFile.name : "my nin . jpeg"}
+                        </Text>
+                      </HStack>
+                    </FormLabel>
+                    {selectedFile ? (
+                      <Text mt={2}>File selected: {selectedFile.name}</Text>
+                    ) : (
+                      <FormErrorMessage>{errors.document}</FormErrorMessage>
+                    )}
+                  </FormControl>
+                </GridItem>
               <Box display={'none'}> 
                   <Field
                     as={Input}
@@ -120,6 +173,7 @@ const handleProceed = async (values: any) => {
                     w={'100%'}
                     color={'#021D17'}
                     isDisabled={!isValid || !dirty}
+                    isLoading={loading}
                   >
                     Continue
                   </Button>

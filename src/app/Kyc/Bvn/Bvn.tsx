@@ -201,6 +201,7 @@ export default function Bvn() {
                     w={"100%"}
                     color={"#021D17"}
                     isDisabled={!isValid || !dirty}
+                    isLoading={loading}
                   >
                     Continue
                   </Button>

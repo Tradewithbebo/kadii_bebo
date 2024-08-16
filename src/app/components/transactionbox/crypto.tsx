@@ -271,6 +271,7 @@ export function SellCrypto() {
       <GridItem w={"full"} colSpan={[1, 3]}>
         <ButtonForsell onOpen={onOpen} />
       </GridItem>
+      {/* <Add/> */}
     </SimpleGrid>
   );
 }
