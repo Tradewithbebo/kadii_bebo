@@ -321,7 +321,7 @@ export default function page() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["360px","360px", "692px"]}>
+              <SimpleGrid column={1}  w={["365px", "365px", "724px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
                   <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
                     <Text
