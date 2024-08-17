@@ -34,7 +34,7 @@ export default function page() {
         <NavbarTwo />
       </Box>
 
-      <Box p={"10px"} w={"full"} height="100vh" overflow="hidden">
+      <Box p={"10px"} height="" w={"full"}>
         <Box
           //   w="1409px"
           overflow={"hidden"}
@@ -46,8 +46,9 @@ export default function page() {
           backgroundSize="cover" // Ensures the image covers the entire box
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
-          pt={["100px", "100px", "80px"]}
+          pt={["100px", "100px", "150px"]}
           pb={["30px", "100px"]}
+          // w={'full'}
         >
           <Box
             w={"full"}
@@ -160,7 +161,7 @@ export default function page() {
                       w={["350px", "350px", "700px"]}
                       spacingY={["20px", "20px", "25px"]}
                       columns={[1, 1, 3]}
-                      maxHeight={['300px','300px',"170px"]} // Set the maximum height
+                      // maxHeight="400px" // Set the maximum height
                       overflowY="auto" // Enable vertical scrolling
                     >
                       {/* list */}
@@ -321,7 +322,7 @@ export default function page() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1}  w={["365px", "365px", "724px"]}>
+              <SimpleGrid column={1} w={["360px", "692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
                   <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
                     <Text

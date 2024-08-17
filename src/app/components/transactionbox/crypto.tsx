@@ -16,6 +16,7 @@ import {
   GridItem,
   Center,
   useDisclosure,
+  Fade,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { BsChevronDown, BsExclamationCircle } from "react-icons/bs";
@@ -37,13 +38,14 @@ export function SellCrypto() {
     setSelectedCrypto(crypto);
     setselectedimage (image)
     setRate(rates)// Update the selected crypto in state
+    onClose()
   };
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { onOpen } = useDisclosure();
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
   
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
+  const { isOpen:opentwo, onToggle:toggle, onClose } = useDisclosure()
   
   const url = 'wallet/assets';
   type NetworkOption = {
@@ -98,11 +100,11 @@ export function SellCrypto() {
   return (
     <SimpleGrid
       px={["10px", "19px", "119px"]}
-      w={["335px", "335px", "668px"]}
-      spacingY={["10px", "10px", "20px"]}
+      w={["335px", "450px", "668px"]}
+      spacingY={["5px", "5px", "20px"]}
       columns={[1, 1, 3]}
     >
-      <GridItem colSpan={[1, 3]} textAlign={"center"} mb={["10px", "16px"]}>
+      <GridItem colSpan={[1, 1,3]} textAlign={"center"} mb={["10px", "16px"]}>
         <Box>
           <Text fontWeight={"600"} fontSize={["14px", "16px", "18px"]}>
             Sell crypto
@@ -111,7 +113,7 @@ export function SellCrypto() {
       </GridItem>
 
       <GridItem
-        colSpan={[1, 3]}
+        colSpan={[1,1, 3]}
         display="flex"
         justifyContent="center"
         alignItems="center"
@@ -122,7 +124,7 @@ export function SellCrypto() {
       </GridItem>
 
       {/* second part */}
-      <GridItem colSpan={1} mt={["15px", "32px"]} w={"full"}>
+      <GridItem colSpan={[1,1,1]} mt={["15px", "32px"]} w={"full"}>
         <HStack>
           <Box>
             <Text
@@ -134,56 +136,74 @@ export function SellCrypto() {
             </Text>
           </Box>
 
-          <Menu>
-            <MenuButton w={"100%"}>
-              <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
-                <HStack gap={"8px"}>
-                  <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-                    <Image src={selectedimage} alt="Bebo" />
-                  </Box>
-                  <Box>
-                    <Text
-                      fontWeight={"600"}
-                      fontSize={["11px", "16px"]}
-                      mt={"10px"}
-                      mb={"10px"}
-                    >
-                      {selectedCrypto}
-                    </Text>
-                  </Box>
-                </HStack>
-                <Box ml={["60px", "120px", "0px"]}>
-                  <BsChevronDown size={"14px"} />
-                </Box>
+          <Box w={"100%"}>
+      <Button w={"100%"} onClick={toggle}>
+        <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
+          <HStack gap={"8px"}>
+            <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
+              <Image src={selectedimage} alt="Crypto" />
+            </Box>
+            <Box>
+              <Text
+                fontWeight={"600"}
+                fontSize={["11px", "16px"]}
+                mt={"10px"}
+                mb={"10px"}
+              >
+                {selectedCrypto}
+              </Text>
+            </Box>
+          </HStack>
+          <Box ml={["60px", "120px", "0px"]}>
+            <BsChevronDown size={"14px"} />
+          </Box>
+        </HStack>
+      </Button>
+
+      <Fade in={opentwo}>
+        <VStack
+          mt="4"
+          bg="white"
+          rounded="md"
+          shadow="md"
+          w="xs"
+          zIndex={1000}
+          position="absolute"
+          spacing={0}
+        >
+          {networkOptions.map((item) => (
+            <Box
+              key={item.name}
+              w="100%"
+              px="16px"
+              py="8px"
+              cursor="pointer"
+              _hover={{ bg: "gray.100" }}
+              onClick={() =>
+                handleCryptoSelect(item.name, item.image, item.current_price)
+              }
+            >
+              <HStack w="100%">
+                {item.image && (
+                  <Image
+                    boxSize="20px"
+                    borderRadius="full"
+                    src={item.image}
+                    alt={item.name}
+                    mr="12px"
+                  />
+                )}
+                <Text>{item.name}</Text>
               </HStack>
-            </MenuButton>
-
-            <MenuList>
-  {networkOptions.map((item) => (
-    <MenuItem
-      key={item.title}
-      minH="10px"
-      onClick={() => handleCryptoSelect(item.name,item.image,item.current_price)}
-    >
-      {item.image && (
-        <Image
-          boxSize="20px"
-          borderRadius="full"
-          src={item.image}
-          alt={item.title}
-          mr="12px"
-        />
-      )}
-      <Text>{item.name}</Text>
-    </MenuItem>
-  ))}
-</MenuList>
-
-          </Menu>
+            </Box>
+          ))}
+        </VStack>
+      </Fade>
+    </Box>
         </HStack>
       </GridItem>
       <GridItem
-        colSpan={1}
+        colSpan={[1,1,1]}
         mt={["14px", "32px"]}
         display={{ base: "none", md: "block" }}
       >
@@ -197,10 +217,10 @@ export function SellCrypto() {
           />
         </Box>
       </GridItem>
-      <GridItem colSpan={1} mt={["15px", "32px"]} mb={["40px", "0px"]}>
+      <GridItem colSpan={[1,1,1]} mt={["15px","15px", "32px"]} mb={["40px","40px", "0px"]}>
         <HStack
           gap={["20px", "10px"]}
-          justifyContent={["flex-start", "flex-end"]}
+          justifyContent={["flex-start","flex-start", "flex-end"]}
         >
           <Box>
             <Text
@@ -225,7 +245,7 @@ export function SellCrypto() {
       </GridItem>
 
       {/* third part */}
-      <GridItem colSpan={[1, 3]} display={{ base: "none", md: "block" }}>
+      <GridItem colSpan={[1,1,3]} display={{ base: "none", md: "block" }}>
         <Box
           mb={["20px", "40px"]}
           mt={["20px", "40px"]}
@@ -268,16 +288,16 @@ export function SellCrypto() {
       </GridItem>
 
       {/* fourth part */}
-      <GridItem w={"full"} colSpan={[1, 3]}>
+      <GridItem w={"full"} colSpan={[1,1, 3]}>
         <ButtonForsell onOpen={onOpen} />
       </GridItem>
-      {/* <Add/> */}
     </SimpleGrid>
   );
 }
 
 export function BuyCrypto() {
   const [selectedCrypto, setSelectedCrypto] = useState("BTC");
+  const { isOpen:opentwo, onToggle:toggle, onClose:close } = useDisclosure()
   // const handleCryptoSelect = (crypto: string) => {
   //   setSelectedCrypto(crypto); // Update the selected crypto in state
   // };
@@ -290,6 +310,7 @@ export function BuyCrypto() {
     setSelectedCrypto(crypto);
     setselectedimage (image)
     setRate(rates)// Update the selected crypto in state
+    close()
   };
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
@@ -351,11 +372,11 @@ export function BuyCrypto() {
     <>
       <SimpleGrid
         px={["10px", "19px", "119px"]}
-        w={["335px", "335px", "668px"]}
+        w={["335px", "540px", "668px"]}
         columns={[1, 1, 3]}
-        spacingY={["10px", "10px", "20px"]}
+        spacingY={["5px", "5px", "20px"]}
       >
-        <GridItem colSpan={[1, 3]} textAlign={"center"} mb={["10px", "16px"]}>
+        <GridItem colSpan={[1,1, 3]} textAlign={"center"} mb={["10px", "16px"]}>
           <Box>
             <Text fontWeight={"600"} fontSize={["14px", "16px"]}>
               Buy crypto
@@ -363,7 +384,7 @@ export function BuyCrypto() {
           </Box>
         </GridItem>
         <GridItem
-          colSpan={[1, 3]}
+          colSpan={[1,1, 3]}
           display="flex"
           justifyContent="center"
           alignItems="center"
@@ -374,65 +395,84 @@ export function BuyCrypto() {
         </GridItem>
 
         {/* second part */}
-        <GridItem colSpan={1} mt={["15px", "32px"]} w={"full"}>
-          <HStack>
+        <GridItem colSpan={[1,1,1]} mt={["15px", "32px"]} w={"full"}>
+        <HStack>
+          <Box>
+            <Text
+              fontWeight={"600"}
+              fontSize={["11px", "16px"]}
+              color={"#808080"}
+            >
+              Crypto:
+            </Text>
+          </Box>
+
+          <Box w={"100%"}>
+      <Button w={"100%"} onClick={toggle}>
+        <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
+          <HStack gap={"8px"}>
+            <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
+              <Image src={selectedimage} alt="Crypto" />
+            </Box>
             <Box>
               <Text
                 fontWeight={"600"}
                 fontSize={["11px", "16px"]}
-                color={"#808080"}
+                mt={"10px"}
+                mb={"10px"}
               >
-                Crypto:
+                {selectedCrypto}
               </Text>
             </Box>
-
-            <Menu>
-              <MenuButton w={"100%"}>
-                <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
-                  <HStack gap={"8px"}>
-                    <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-                    <Image src={selectedimage} alt="Bebo" />
-                    </Box>
-                    <Box>
-                      <Text
-                        fontWeight={"600"}
-                        fontSize={["11px", "16px"]}
-                        mt={"10px"}
-                        mb={"10px"}
-                      >
-                        {selectedCrypto}
-                      </Text>
-                    </Box>
-                  </HStack>
-                  <Box ml={["60px", "120px", "0px"]}>
-                    <BsChevronDown size={"14px"} />
-                  </Box>
-                </HStack>
-              </MenuButton>
-
-              <MenuList>
-              {networkOptions.map((item) => (
-    <MenuItem
-      key={item.title}
-      minH="10px"
-      onClick={() => handleCryptoSelect(item.name,item.image,item.current_price)}
-    >
-      {item.image && (
-        <Image
-          boxSize="20px"
-          borderRadius="full"
-          src={item.image}
-          alt={item.title}
-          mr="12px"
-        />
-      )}
-      <Text>{item.name}</Text>
-    </MenuItem>
-  ))}
-              </MenuList>
-            </Menu>
           </HStack>
-        </GridItem>
+          <Box ml={["60px", "120px", "0px"]}>
+            <BsChevronDown size={"14px"} />
+          </Box>
+        </HStack>
+      </Button>
+
+      <Fade in={opentwo}>
+        <VStack
+          mt="4"
+          bg="white"
+          rounded="md"
+          shadow="md"
+          w="xs"
+          zIndex={1000}
+          position="absolute"
+          spacing={0}
+        >
+          {networkOptions.map((item) => (
+            <Box
+              key={item.name}
+              w="100%"
+              px="16px"
+              py="8px"
+              cursor="pointer"
+              _hover={{ bg: "gray.100" }}
+              onClick={() =>
+                handleCryptoSelect(item.name, item.image, item.current_price)
+              }
+            >
+              <HStack w="100%">
+                {item.image && (
+                  <Image
+                    boxSize="20px"
+                    borderRadius="full"
+                    src={item.image}
+                    alt={item.name}
+                    mr="12px"
+                  />
+                )}
+                <Text>{item.name}</Text>
+              </HStack>
+            </Box>
+          ))}
+        </VStack>
+      </Fade>
+    </Box>
+        </HStack>
+      </GridItem>
         <GridItem
           colSpan={1}
           mt={["14px", "32px"]}
@@ -448,10 +488,10 @@ export function BuyCrypto() {
             />
           </Box>
         </GridItem>
-        <GridItem colSpan={1} mt={["15px", "32px"]} mb={["40px", "0px"]}>
+        <GridItem colSpan={[1,1,1]} mt={["15px","15px", "32px"]} mb={["40px","40px", "0px"]}>
           <HStack
-            gap={["20px", "10px"]}
-            justifyContent={["flex-start", "flex-end"]}
+            gap={["20px","20px", "10px"]}
+            justifyContent={["flex-start","flex-start", "flex-end"]}
           >
             <Box>
               <Text
@@ -476,7 +516,7 @@ export function BuyCrypto() {
         </GridItem>
 
         {/* third part */}
-        <GridItem colSpan={[1, 3]} display={{ base: "none", md: "block" }}>
+        <GridItem colSpan={[1,1, 3]} display={{ base: "none", md: "block" }}>
           <Box
             mb={["20px", "40px"]}
             mt={["20px", "40px"]}
@@ -516,7 +556,7 @@ export function BuyCrypto() {
         </GridItem>
 
         {/* fourth part */}
-        <GridItem w={"full"} colSpan={[1, 3]}>
+        <GridItem w={"full"} colSpan={[1,1, 3]}>
           <ButtonForBuy onOpen={onOpen} />
         </GridItem>
       </SimpleGrid>

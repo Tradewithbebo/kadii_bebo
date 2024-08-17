@@ -57,7 +57,7 @@ export default function HomePageBody() {
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
           pt={"40px"}
-          pb={["0px", "205px"]}
+          pb={["40px","80px", "205px"]}
         >
           <Center>
             <VStack>
@@ -89,7 +89,7 @@ export default function HomePageBody() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["350px", "692px"]}>
+              <SimpleGrid column={1} w={["350px",'465px',"692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
                   <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
                     <Text

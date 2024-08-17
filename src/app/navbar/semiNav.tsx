@@ -22,7 +22,7 @@ export default function SemiNav({
           templateColumns={{ base: "repeat(2, 1fr)" }}
           gap={2}
           height={{ base: "auto", md: "35px" }}
-          width={{ base: "100%", sm: "300px", md: "350px", lg: "400px" }}
+          width={{ base: "300px", sm: "300px", md: "350px", lg: "400px" }}
           bg={"#F0F0F0"}
           rounded={"6px"}
           px={{ base: "10px", md: "5px" }}
