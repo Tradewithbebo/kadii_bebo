@@ -44,7 +44,7 @@ export default function HomePageBody() {
         handleToggleBuy={handleToggleBuy}
         handleTogglesell={handleTogglesell}
       />
-      <Box p={"10px"} height="full" w={"full"}>
+      <Box p={"10px"} height="full">
         <Box
           //   w="1409px"
           overflow={"hidden"}
