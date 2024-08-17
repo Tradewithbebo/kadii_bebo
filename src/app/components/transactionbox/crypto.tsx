@@ -29,7 +29,7 @@ import GeneralFormPage from "../drawer/Buy/generalformpage";
 import { AxiosGet } from "@/app/axios/axios";
 
 export function SellCrypto() {
-  const [selectedCrypto, setSelectedCrypto] = useState("BTC");
+  const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
   const [selectedimage, setselectedimage] = useState("/image/crypto.png");
   const [BTCrate, setBTCRate] = useState("");
   const [rate, setRate] = useState('');
@@ -166,7 +166,7 @@ export function SellCrypto() {
           bg="white"
           rounded="md"
           shadow="md"
-          w="xs"
+          w={['250px','300px',"xs"]}
           zIndex={1000}
           position="absolute"
           spacing={0}
@@ -296,7 +296,7 @@ export function SellCrypto() {
 }
 
 export function BuyCrypto() {
-  const [selectedCrypto, setSelectedCrypto] = useState("BTC");
+  const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
   const { isOpen:opentwo, onToggle:toggle, onClose:close } = useDisclosure()
   // const handleCryptoSelect = (crypto: string) => {
   //   setSelectedCrypto(crypto); // Update the selected crypto in state
@@ -372,7 +372,7 @@ export function BuyCrypto() {
     <>
       <SimpleGrid
         px={["10px", "19px", "119px"]}
-        w={["335px", "540px", "668px"]}
+        w={["335px", "450px", "668px"]}
         columns={[1, 1, 3]}
         spacingY={["5px", "5px", "20px"]}
       >
@@ -437,7 +437,7 @@ export function BuyCrypto() {
           bg="white"
           rounded="md"
           shadow="md"
-          w="xs"
+          w={['250px','300px',"xs"]}
           zIndex={1000}
           position="absolute"
           spacing={0}

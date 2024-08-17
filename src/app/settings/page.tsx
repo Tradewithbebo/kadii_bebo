@@ -46,7 +46,7 @@ export default function page() {
           backgroundSize="cover" // Ensures the image covers the entire box
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
-          pt={["100px", "100px", "150px"]}
+          pt={["100px", "100px", "100px"]}
           pb={["30px", "100px"]}
           // w={'full'}
         >
@@ -93,7 +93,7 @@ export default function page() {
                     {/* profile display */}
                     <SimpleGrid
                       px={["10px", "19px", "24px"]}
-                      w={["350px", "350px", "700px"]}
+                      w={["335px", "450px", "668px"]}
                       spacingY={["10px", "10px", "20px"]}
                       columns={[1, 1, 3]}
                       pb={"15px"}
@@ -158,7 +158,7 @@ export default function page() {
                     </SimpleGrid>
                     <SimpleGrid
                       px={["10px", "19px", "24px"]}
-                      w={["350px", "350px", "700px"]}
+                      w={["335px", "450px", "668px"]}
                       spacingY={["20px", "20px", "25px"]}
                       columns={[1, 1, 3]}
                       // maxHeight="400px" // Set the maximum height
@@ -322,7 +322,7 @@ export default function page() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["360px", "692px"]}>
+              <SimpleGrid column={1} w={["350px",'465px',"692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
                   <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
                     <Text
