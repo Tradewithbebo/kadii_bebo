@@ -34,13 +34,7 @@ import bankName from './listBanks';
 import Select from "react-select";
 
 
-export default function AddBank({
-  isOpen,
-  onClose,
-}: {
-  isOpen: any;
-  onClose: any;
-}) {
+export default function AddBank() {
     const  [message,setmessage]=useState('')
     const [Value, setValue] = useState('');
     const handleValueChange = (Value: any, values: any) => {
@@ -70,28 +64,19 @@ export default function AddBank({
          
         }}>
         {({ handleSubmit, errors, touched, values, handleChange, isValid }) => (
-          <form onSubmit={handleSubmit}>
-        <Drawer
-          isOpen={isOpen}
-          placement='right'
-          onClose={onClose}
-          size={["sm", "sm"]}
-        //   finalFocusRef={btnRef}
-        >
-          <DrawerOverlay />
-          <DrawerContent>
-            <DrawerCloseButton />
-            <DrawerHeader >  <VStack gap={'14px'} mb={'12px'}>
-        <Box > <Text fontSize={"28px"} fontWeight={"600"} mr={'58px'} >
-        Add bank details
-          </Text></Box>
-          <Box><Text color={"#666666"} fontSize={"13px"} fontWeight={"600"} ml={'-18px'} >
-          Add your preferred bank for instant payout
-          </Text></Box>
-         </VStack></DrawerHeader>
-  
-            <DrawerBody>
-            <SimpleGrid column={2} rowGap={'28px'}>
+          <form onSubmit={handleSubmit}> 
+          <Box p={4}>
+          <SimpleGrid column={2} rowGap={'28px'}>
+         <GridItem colSpan={2}>
+                <Text fontWeight="600" fontSize="25px">
+                Add bank details
+                </Text>
+              </GridItem>
+              <GridItem colSpan={2} mt={"-10px"}>
+                <Text fontWeight="600" fontSize={['11px',"15px"]} color="#666666">
+                Add your preferred bank for instant payout
+                </Text>
+              </GridItem>
             <GridItem colSpan={2}>
             <FormControl  isInvalid={!!errors.Bank && touched.Bank}>
                   <Field
@@ -153,10 +138,11 @@ export default function AddBank({
           </GridItem>
          
             </SimpleGrid>
+
+          </Box>
+       
       
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
+    
         </form>
         )}
       </Formik>

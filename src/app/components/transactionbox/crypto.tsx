@@ -27,6 +27,7 @@ import {ButtonForBuy, ButtonForsell} from "./ButtonForBuy";
 import InputReceiverDetails from "../drawer/Buy/inputReceiverDetails";
 import GeneralFormPage from "../drawer/Buy/generalformpage";
 import { AxiosGet } from "@/app/axios/axios";
+import Generalsell from "../drawer/Sell/Generalsell";
 
 export function SellCrypto() {
   const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
@@ -45,6 +46,7 @@ export function SellCrypto() {
   
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const { isOpen:sellisopen, onOpen:sellonopen, onClose:Sellonclose } = useDisclosure();
   const { isOpen:opentwo, onToggle:toggle, onClose } = useDisclosure()
   
   const url = 'wallet/assets';
@@ -104,6 +106,7 @@ export function SellCrypto() {
       spacingY={["5px", "5px", "20px"]}
       columns={[1, 1, 3]}
     >
+      <Generalsell isOpen={sellisopen} onClose={Sellonclose} onOpen={sellonopen}/>
       <GridItem colSpan={[1, 1,3]} textAlign={"center"} mb={["10px", "16px"]}>
         <Box>
           <Text fontWeight={"600"} fontSize={["14px", "16px", "18px"]}>
@@ -214,6 +217,7 @@ export function SellCrypto() {
             mr={"24px"}
             ml={"24px"}
             color={"#F0F0F0"}
+            size={'xl'}
           />
         </Box>
       </GridItem>
@@ -289,7 +293,7 @@ export function SellCrypto() {
 
       {/* fourth part */}
       <GridItem w={"full"} colSpan={[1,1, 3]}>
-        <ButtonForsell onOpen={onOpen} />
+        <ButtonForsell onOpen={sellonopen} />
       </GridItem>
     </SimpleGrid>
   );

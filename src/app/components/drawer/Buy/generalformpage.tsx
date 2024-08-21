@@ -155,10 +155,10 @@ export default function GeneralFormPage({
     } else {
       console.log("USDTValue:", USDT);
       const USDTValue = parseFloat(USDT);
-      console.log("USDTValue:", USDTValue);
-      console.log("Currentprice:", currentPrice);
+      // console.log("USDTValue:", USDTValue);
+      // console.log("Currentprice:", currentPrice);
       const value = USDTValue * currentPrice;
-      console.log("Currentprice:", currentPrice);
+      // console.log("Currentprice:", currentPrice);
       const formattedValue = parseFloat(value.toFixed(20));
       setConversion2(formattedValue);
     }
