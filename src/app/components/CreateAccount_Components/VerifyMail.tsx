@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Box,
@@ -56,6 +56,7 @@ export default function VerifyMail() {
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast();
   const url ="auth/verify-email";
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
@@ -147,6 +148,9 @@ export default function VerifyMail() {
                           <Input
                             {...field}
                             type="text"
+                            ref={(el) => {
+                              inputRefs.current[index] = el;
+                            }}
                             maxLength={1}
                             value={field.value || ""}
                             onChange={(e) => {
@@ -155,6 +159,14 @@ export default function VerifyMail() {
                                 const pinArray = values.pin.slice();
                                 pinArray[index] = value;
                                 setFieldValue("pin", pinArray);
+                                if (value && index < 5) {
+                                  inputRefs.current[index + 1]?.focus();
+                                }
+                                if (value === "" && index > 0) {
+                                  pinArray[index] = value;
+                                  setFieldValue("pin", pinArray);
+                                  inputRefs.current[index - 1]?.focus();
+                                }
                               }
                             }}
                             size="lg"
