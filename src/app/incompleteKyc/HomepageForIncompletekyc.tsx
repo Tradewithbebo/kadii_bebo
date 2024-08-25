@@ -95,24 +95,25 @@ export default function HomePageBody() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1}
-              w={['360px','692px']}
-               >
-              <GridItem colSpan={1} w={'full'} mb={['36px','0px']}>
-                <Button
-                  bg={"#FFFFFF"}
-                  w={'100%'}
-                  py={"18px"}
-                  boxShadow="xs"
-                >
-                  <Text color={"#021D17"} fontWeight={"600"} fontSize={"16px"}>
-                    Need help? &nbsp;
-                  </Text>
-                  <Text color={"#0CBF94"} fontWeight={"600"} fontSize={"16px"}>
-                    Contact support
-                  </Text>
-                </Button>
-              </GridItem>
+              <SimpleGrid column={1} w={["350px",'465px',"692px"]}>
+                <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
+                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
+                    <Text
+                      color={"#021D17"}
+                      fontWeight={"600"}
+                      fontSize={"16px"}
+                    >
+                      Need help? &nbsp;
+                    </Text>
+                    <Text
+                      color={"#0CBF94"}
+                      fontWeight={"600"}
+                      fontSize={"16px"}
+                    >
+                      Contact support
+                    </Text>
+                  </Button>
+                </GridItem>
               </SimpleGrid>
               <Box
         display={{ base: "block", md: "none" }}

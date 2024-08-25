@@ -55,7 +55,7 @@ export default function VerifyMail() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast();
-  const url ="auth/verify-email";
+  const url = "auth/verify-email";
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
   useEffect(() => {
@@ -65,9 +65,9 @@ export default function VerifyMail() {
 
   const handleSubmit = async (values: any) => {
     const code = values.pin.join("");
-    const email =values.email
-    const payload = { email,code};
-    console.log('payload', payload);
+    const email = values.email;
+    const payload = { email, code };
+    console.log("payload", payload);
 
     setLoading(true);
     try {
@@ -83,7 +83,11 @@ export default function VerifyMail() {
       if (err.response && err.response.data && err.response.data.message) {
         message = err.response.data.message;
       }
-      setErrorMessage(message = err.response.data.message ? 'Invalid verification code' : message);
+      setErrorMessage(
+        (message = err.response.data.message
+          ? "Invalid verification code"
+          : message)
+      );
       toast({
         title: "Error",
         description: message,
@@ -108,9 +112,17 @@ export default function VerifyMail() {
         >
           {({ errors, touched, setFieldValue, values, isValid, dirty }) => (
             <Form id="verifyMailForm">
-              <SimpleGrid columns={6} w={["335px", "400px"]} columnGap={["8px", "8px"]}>
+              <SimpleGrid
+                columns={6}
+                w={["335px", "400px"]}
+                columnGap={["8px", "8px"]}
+              >
                 <GridItem colSpan={6}>
-                  <Text fontSize={["32px", "40px"]} fontWeight={"600"} mb={"24px"}>
+                  <Text
+                    fontSize={["32px", "40px"]}
+                    fontWeight={"600"}
+                    mb={"24px"}
+                  >
                     Verify your email
                   </Text>
                 </GridItem>
@@ -132,10 +144,19 @@ export default function VerifyMail() {
                 </GridItem>
                 <GridItem colSpan={6} mb={"40px"}>
                   <Link _hover={{ outline: "none" }}>
-                    <Text fontSize={["13px", "14px"]} fontWeight={"600"} color={"#0CBF94"} />
+                    <Text
+                      fontSize={["13px", "14px"]}
+                      fontWeight={"600"}
+                      color={"#0CBF94"}
+                    />
                   </Link>
                   {errorMessage && (
-                    <Text pt={'10px'} color="red.500" fontSize="sm" fontWeight="400">
+                    <Text
+                      pt={"10px"}
+                      color="red.500"
+                      fontSize="sm"
+                      fontWeight="400"
+                    >
                       {errorMessage}
                     </Text>
                   )}
@@ -173,9 +194,16 @@ export default function VerifyMail() {
                             width="50px"
                             height="50px"
                             textAlign="center"
-                            borderColor={errors.pin && touched.pin && errors.pin[index] ? "red.500" : "gray.200"}
+                            borderColor={
+                              errors.pin && touched.pin && errors.pin[index]
+                                ? "red.500"
+                                : "gray.200"
+                            }
                             _focus={{
-                              borderColor: errors.pin && touched.pin && errors.pin[index] ? "red.500" : "blue.500",
+                              borderColor:
+                                errors.pin && touched.pin && errors.pin[index]
+                                  ? "red.500"
+                                  : "blue.500",
                             }}
                           />
                         )}
@@ -190,19 +218,24 @@ export default function VerifyMail() {
                     display={"none"}
                     colorScheme="teal"
                     size="xm"
-                    mt={'4px'}
+                    mt={"4px"}
                     isDisabled={!isValid || !dirty}
                   >
                     Submit
                   </Button>
                 </GridItem>
               </SimpleGrid>
-              <Box position={'absolute'}> <AutoSubmitToken /></Box>
+              <Box position={"absolute"}>
+                {" "}
+                <AutoSubmitToken />
+              </Box>
             </Form>
           )}
         </Formik>
       </Center>
-      <Box ml={['30px', '45px']}><ResendMail /></Box>
+      <Box ml={["30px", "45px"]}>
+        <ResendMail />
+      </Box>
     </Box>
   );
 }

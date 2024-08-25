@@ -179,7 +179,7 @@ export default function GeneralFormPage({
   //   naira: Yup.number().required("naira is required it cann't be a letter "),
   //   // USDT: Yup.number().required("USDT is required and it cann't be a letter"),
   // });
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   return (
     <Drawer
       isOpen={isOpen}
@@ -301,10 +301,7 @@ export default function GeneralFormPage({
               currentcurrency={Symbols}
             />
           )}
-          {step === 5 && (
-            <SuccessBuy
-            />
-          )}
+          {step === 5 && <SuccessBuy />}
         </Box>
       </DrawerContent>
     </Drawer>
