@@ -32,8 +32,8 @@ const navItemsM = [
     },
     {
       title: "  Settings",
-      path:    '',
-      icon:<IoIosSettingssM path={undefined} />
+      path:    '/settings',
+      icon:<IoIosSettingssM path={'/settings'} />
      
     },
   ];

@@ -64,7 +64,7 @@ export function SellCrypto() {
       const res = await AxiosGet(url);
       setLoading(false);
       if (res) {
-        console.log(res.data); 
+        // console.log(res.data); 
      
         const btcData = res.data.find((crypto: any) => crypto.name === "Bitcoin");
       
@@ -338,7 +338,7 @@ export function BuyCrypto() {
       const res = await AxiosGet(url);
       setLoading(false);
       if (res) {
-        console.log(res.data); 
+        // console.log(res.data); 
      
         const btcData = res.data.find((crypto: any) => crypto.name === "Bitcoin");
       

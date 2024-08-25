@@ -29,7 +29,7 @@ import { FaPlus } from "react-icons/fa6";
 
 import React, { ReactNode } from "react";
 
-export default function SellAddBank({ Setstep}: { Setstep: any }) {
+export default function SellAddBank({ Setstep }: { Setstep: any }) {
   const existingBank = [
     { name: "Ademola Lookman", account_number: "3088908714", Bank: "Gtb" },
     { name: "Ademola Lookman", account_number: "3088908714", Bank: "Gtb" },
@@ -54,19 +54,19 @@ export default function SellAddBank({ Setstep}: { Setstep: any }) {
         <GridItem
           colSpan={1}
           overflowY="scroll"
-          maxH={'200px'}
+          maxH={"200px"}
           mt={"18px"}
           sx={{
             "::-webkit-scrollbar": { display: "none" },
-            "-ms-overflow-style": "none", 
-            "scrollbar-width": "none", 
+            "-ms-overflow-style": "none",
+            "scrollbar-width": "none",
           }}
         >
           <SimpleGrid
-          onClick={()=>{
-            Setstep(3)
-          }}
-          mb={'8px'}
+            onClick={() => {
+              Setstep(3);
+            }}
+            mb={"8px"}
             columns={6}
             w={"full"}
             gap={"40px"}
@@ -75,7 +75,7 @@ export default function SellAddBank({ Setstep}: { Setstep: any }) {
             bgColor={"#f3f4f6"}
             borderColor={"#e5e7eb"}
             borderRadius={"10px"}
-            cursor={'pointer'}
+            cursor={"pointer"}
           >
             <GridItem
               colSpan={6}
@@ -88,42 +88,37 @@ export default function SellAddBank({ Setstep}: { Setstep: any }) {
               </Text>
             </GridItem>
             <GridItem
-              colSpan={1}
+              colSpan={4}
               display={"flex"}
               w={"full"}
-              justifyContent={"start"}
+              // justifyContent={"start"}
             >
-              <Text fontWeight={"400"} fontSize={"14px"}>
-                0163478963
-              </Text>
+              <Box flexGrow={3}>
+                <Text fontWeight={"400"} fontSize={"14px"}>
+                  0163478963
+                </Text>
+              </Box>
+              <Box >
+                <Divider
+                  orientation="vertical"
+                  color={"#d4d4d8"}
+                  variant={"solid"}
+                  border={"1px"}
+                 mr={['15px','15px','15px',]}
+                />
+              </Box>
+              <Box flexGrow={2}>
+                <Text fontWeight={"400"} fontSize={"14px"}>
+                  GTbank
+                </Text>
+              </Box>
             </GridItem>
-            <GridItem
-              colSpan={1}
-              display={"flex"}
-              w={"full"}
-              justifyContent={"end"}
-              ml={"6px"}
-            >
-              <Divider
-                orientation="vertical"
-                color={"#d4d4d8"}
-                variant={"solid"}
-                border={"1px"}
-              />
-            </GridItem>
-            <GridItem
-              colSpan={1}
-              display={"flex"}
-              w={"full"}
-              justifyContent={"end"}
-            >
-              <Text fontWeight={"400"} fontSize={"14px"}>
-                GTbank
-              </Text>
-            </GridItem>
-            
           </SimpleGrid>
           <SimpleGrid
+            onClick={() => {
+              Setstep(3);
+            }}
+            mb={"8px"}
             columns={6}
             w={"full"}
             gap={"40px"}
@@ -132,6 +127,7 @@ export default function SellAddBank({ Setstep}: { Setstep: any }) {
             bgColor={"#f3f4f6"}
             borderColor={"#e5e7eb"}
             borderRadius={"10px"}
+            cursor={"pointer"}
           >
             <GridItem
               colSpan={6}
@@ -144,38 +140,30 @@ export default function SellAddBank({ Setstep}: { Setstep: any }) {
               </Text>
             </GridItem>
             <GridItem
-              colSpan={1}
+              colSpan={4}
               display={"flex"}
               w={"full"}
-              justifyContent={"start"}
+              // justifyContent={"start"}
             >
-              <Text fontWeight={"400"} fontSize={"14px"}>
-                0163478963
-              </Text>
-            </GridItem>
-            <GridItem
-              colSpan={1}
-              display={"flex"}
-              w={"full"}
-              justifyContent={"end"}
-              ml={"6px"}
-            >
-              <Divider
-                orientation="vertical"
-                color={"#d4d4d8"}
-                variant={"solid"}
-                border={"1px"}
-              />
-            </GridItem>
-            <GridItem
-              colSpan={1}
-              display={"flex"}
-              w={"full"}
-              justifyContent={"end"}
-            >
-              <Text fontWeight={"400"} fontSize={"14px"}>
-                GTbank
-              </Text>
+              <Box flexGrow={3}>
+                <Text fontWeight={"400"} fontSize={"14px"}>
+                  0163478963
+                </Text>
+              </Box>
+              <Box >
+                <Divider
+                  orientation="vertical"
+                  color={"#d4d4d8"}
+                  variant={"solid"}
+                  border={"1px"}
+                 mr={['15px','15px','15px',]}
+                />
+              </Box>
+              <Box flexGrow={2}>
+                <Text fontWeight={"400"} fontSize={"14px"}>
+                  GTbank
+                </Text>
+              </Box>
             </GridItem>
           </SimpleGrid>
         </GridItem>

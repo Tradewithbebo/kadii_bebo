@@ -243,14 +243,14 @@ export default function LoginComponent() {
           )}
         </Formik>
       </Center>
-      <Button
+      {/* <Button
         onClick={() => {
           localStorage.removeItem("stk-apk");
           router.push("/createAccount/Login");
         }}
       >
         Logout
-      </Button>
+      </Button> */}
     </Box>
   );
 }

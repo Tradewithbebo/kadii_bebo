@@ -71,31 +71,31 @@ export default function GeneralFormPage({
       ? setnaira("")
       : step == 2
       ? setUSDT("")
-      :""
+      : "";
   };
 
   const handleProceed = async (values: any) => {
     if (values) {
       setLoading(true);
       try {
-        const res = await AxiosAuthPost(url, values);
+        // const res = await AxiosAuthPost(url, values);
         setLoading(false);
-        if (res && res.data) {
-          const checkoutUrl = res.data.checkout_url;
-          if (checkoutUrl) {
-            // Set the step to 4
-            setStep(4);
-  
-            // Close the modal and reset inputs after 2000ms
-            setTimeout(() => {
-              onClose(); // Close the modal
-              resetInputs(); // Reset all inputs
-              window.open(checkoutUrl, "_blank"); // Open the new window
-            }, 2000); // Adjust the delay time as needed
-          } else {
-            throw new Error("Checkout URL not found in response.");
-          }
-        }
+        // if (res && res.data) {
+        //   const checkoutUrl = res.data.checkout_url;
+        //   if (checkoutUrl) {
+        // Set the step to 4
+        setStep(4);
+
+        // Close the modal and reset inputs after 2000ms
+        // setTimeout(() => {
+        //   onClose(); // Close the modal
+        //   resetInputs(); // Reset all inputs
+        //   window.open(checkoutUrl, "_blank"); // Open the new window
+        //   // }, 2000); // Adjust the delay time as needed
+        // } else {
+        //   throw new Error("Checkout URL not found in response.");
+        // }
+        // }
       } catch (err: any) {
         setLoading(false);
         let message = "Check your Network and try again.";
@@ -114,7 +114,7 @@ export default function GeneralFormPage({
       }
     }
   };
-  
+
   // Function to reset all input fields
   const resetInputs = () => {
     setValue("");
@@ -130,9 +130,9 @@ export default function GeneralFormPage({
     setName("");
     setConversion(null);
     setConversion2(null);
-    setStep(1)
+    setStep(4);
   };
-  
+
   const handleProceeding = () => {
     setStep((cur: number) => cur + 1);
   };
@@ -169,6 +169,7 @@ export default function GeneralFormPage({
     amountBlockchain: Currency ? Conversion : parseFloat(USDT),
     blockchain: Symbols,
     address: walletaddress,
+    transactionType: "buy",
   };
 
   // const validationSchema = Yup.object().shape({
@@ -178,7 +179,7 @@ export default function GeneralFormPage({
   //   naira: Yup.number().required("naira is required it cann't be a letter "),
   //   // USDT: Yup.number().required("USDT is required and it cann't be a letter"),
   // });
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   return (
     <Drawer
       isOpen={isOpen}
@@ -292,7 +293,18 @@ export default function GeneralFormPage({
             </>
           )}
           {/* {step === 4 && <SendMoney setStep={setStep} />} */}
-          {step === 4 && <SuccessBuy />}
+          {step === 4 && (
+            <SendMoney
+              setStep={setStep}
+              amountUsdt={Currency ? Conversion : USDT}
+              amountNaira={Currency ? naira : Conversion2}
+              currentcurrency={Symbols}
+            />
+          )}
+          {step === 5 && (
+            <SuccessBuy
+            />
+          )}
         </Box>
       </DrawerContent>
     </Drawer>
