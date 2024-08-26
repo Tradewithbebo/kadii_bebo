@@ -41,7 +41,7 @@ export default function CreateAccount({ setStep, setEmail }:{setStep:any, setEma
                   </Box>
                 </GridItem>
                 <GridItem colSpan={2}>
-                  <Button w={"full"} fontSize={["16px", "16px"]} fontWeight={"600"}>
+                  <Button w={"full"} fontSize={["16px", "16px"]} fontWeight={"600"}   h={['50px','50px','44px']}>
                     <FcGoogle size={"22px"} /> &nbsp;&nbsp;Continue with Google
                   </Button>
                 </GridItem>
@@ -55,12 +55,12 @@ export default function CreateAccount({ setStep, setEmail }:{setStep:any, setEma
                     <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Email
                     </FormLabel>
-                    <Field as={Input} type="email" name="email" placeholder="Email address" />
+                    <Field  as={Input} type="email" name="email" placeholder="Email address"   h={['50px','50px','44px']} />
                     <FormErrorMessage>{errors.email}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
                 <GridItem colSpan={2} mt={"4px"}>
-                  <Button type="submit" bg="#0CBF94" fontSize={"16px"} isDisabled={!isValid || !dirty}fontWeight={"600"} w={"100%"} color={"#021D17"}>
+                  <Button   h={['50px','50px','44px']} type="submit" bg="#0CBF94" fontSize={"16px"} isDisabled={!isValid || !dirty}fontWeight={"600"} w={"100%"} color={"#021D17"}>
                     Continue
                   </Button>
                  <Link href={"/createAccount/Login"}> <Text textAlign={"left"} fontSize={"14px"} mt={"16px"} fontWeight={"600"} cursor={"pointer"}>

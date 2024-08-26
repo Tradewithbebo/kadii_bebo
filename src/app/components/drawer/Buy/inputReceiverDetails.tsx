@@ -153,6 +153,7 @@ export default function InputReceiverDetails({
                     {({ field }: FieldProps) => (
                       <Select
                         {...field}
+                        
                         id="Network"
                         options={networkOptions}
                         isSearchable
@@ -162,6 +163,18 @@ export default function InputReceiverDetails({
                         noOptionsMessage={() => errorMessage}
                         onChange={(selectedOption: any) => {
                           handleValueChange(selectedOption, setFieldValue);
+                        }}
+                        styles={{
+                          control: (provided) => ({
+                            ...provided,
+                            height: '50px', // Default for mobile screens
+                            [`@media (min-width: 768px)`]: {
+                              height: '50px', // Medium screens
+                            },
+                            [`@media (min-width: 992px)`]: {
+                              height: '44px', // Large screens
+                            },
+                          }),
                         }}
                       />
                     )}
@@ -176,6 +189,7 @@ export default function InputReceiverDetails({
                   </FormLabel>
                   <Field
                     as={Input}
+                    h={['50px','50px','44px']}
                     type="text"
                     name="Walletaddress"
                     placeholder="Enter wallet address"
@@ -183,8 +197,9 @@ export default function InputReceiverDetails({
                   <FormErrorMessage>{errors.Walletaddress}</FormErrorMessage>
                 </FormControl>
               </GridItem>
-              <GridItem colSpan={1} mt={"30"}>
+              <GridItem colSpan={1} mt={"30px"}>
                 <Button
+                  h={['50px','50px','44px']}
                   type="submit"
                   w={"full"}
                   bg={isValid ? "#0CBF94" : "gray.400"}

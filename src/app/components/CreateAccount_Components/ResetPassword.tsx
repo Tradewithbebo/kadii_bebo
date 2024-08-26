@@ -115,6 +115,7 @@ export default function Resetaccount({Pin}:{Pin:any}) {
                     </FormLabel>
                     <InputGroup>
                       <Field
+                        h={['50px','50px','44px']}
                         as={Input}
                         type={show ? 'text' : 'password'}
                         name="newPassword"
@@ -143,6 +144,7 @@ export default function Resetaccount({Pin}:{Pin:any}) {
                     </FormLabel>
                     <InputGroup>
                       <Field
+                        h={['50px','50px','44px']}
                         as={Input}
                         type={show ? 'text' : 'password'}
                         name="confirmPassword"
@@ -173,6 +175,7 @@ export default function Resetaccount({Pin}:{Pin:any}) {
                     fontWeight={'600'}
                     w={'100%'}
                     color={'#021D17'}
+                    h={['50px','50px','44px']}
                     isDisabled={!isValid || !dirty}
                   >
                       Continue

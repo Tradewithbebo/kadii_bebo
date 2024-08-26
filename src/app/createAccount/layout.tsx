@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <HStack w={"100%"} overflow={"hidden"}>
-        <Box w={["100%", "50%"]}>
+        <Box w={["100%",'100%', "50%"]}>
           {pathname === "/createAccount/createAccount" ||
           pathname === "/createAccount/createPin" ||
           pathname === "/createAccount/verifyMail"

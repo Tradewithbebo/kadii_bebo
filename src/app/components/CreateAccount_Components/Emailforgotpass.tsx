@@ -109,6 +109,7 @@ export default function Emailforgotpass() {
               <FormControl isInvalid={!!errors.email && touched.email}>
                 <Field
                   as={Input}
+                  h={['50px','50px','44px']}
                   id="email"
                   name="email"
                   type="email"
@@ -123,8 +124,9 @@ export default function Emailforgotpass() {
                 // size={["sm","sm"]}
                 type="submit"
                 bg="#0CBF94"
-                width={["40%","50%"]}
+                width={["full"]}
                 isLoading={loading}
+                h={['50px','50px','44px']}
 
               >
                 Continue

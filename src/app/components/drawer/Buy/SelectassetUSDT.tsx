@@ -164,6 +164,7 @@ export default function SelectUSDT({
                 <Button
                   type="submit"
                   w={"full"}
+                  h={['50px','50px','44px']}
                   bg={isValid ? "#0CBF94" : "gray.400"}
                   fontSize={"16px"}
                   fontWeight={"600"}

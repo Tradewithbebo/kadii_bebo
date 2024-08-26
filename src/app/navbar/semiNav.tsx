@@ -21,7 +21,7 @@ export default function SemiNav({
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)" }}
           gap={2}
-          height={{ base: "60px", md: "60px",lg:"60px" }}
+          height={{ base: "55px", md: "50px",lg:"50px" }}
           width={{ base: "300px", md: "350px", lg: "400px" }}
           bg={"#F0F0F0"}
           rounded={"6px"}

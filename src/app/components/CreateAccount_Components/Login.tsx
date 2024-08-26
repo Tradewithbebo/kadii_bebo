@@ -131,6 +131,7 @@ export default function LoginComponent() {
                     w={"full"}
                     fontSize={["16px", "16px"]}
                     fontWeight={"600"}
+                   h={['50px','50px','44px']}
                   >
                     <FcGoogle size={"22px"} /> &nbsp;&nbsp;Continue with google
                   </Button>
@@ -155,6 +156,7 @@ export default function LoginComponent() {
                     </Box>
                     <Field
                       as={Input}
+                     h={['50px','50px','44px']}
                       type="email"
                       name="email"
                       placeholder="Email address"
@@ -172,6 +174,7 @@ export default function LoginComponent() {
                     <InputGroup>
                       <Field
                         as={Input}
+                       h={['50px','50px','44px']}
                         type={show ? "text" : "password"}
                         name="password"
                         placeholder="Enter your password"
@@ -210,6 +213,7 @@ export default function LoginComponent() {
                     fontSize={"16px"}
                     fontWeight={"600"}
                     w={"100%"}
+                   h={['50px','50px','44px']}
                     color={"#021D17"}
                     isDisabled={!isValid || !dirty}
                   >

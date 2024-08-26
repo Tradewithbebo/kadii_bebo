@@ -9,7 +9,7 @@ export  function ButtonForBuy({onOpen}:{onOpen:any}) {
     fontWeight={"600"}
     w={"100%"}
     color={'#021D17'}
-   
+    h={'50px'}
   >
 Get bank account details
 </Button></div>
@@ -23,7 +23,7 @@ export  function ButtonForsell({onOpen}:{onOpen:any}) {
     fontWeight={"600"}
     w={"100%"}
     color={'#021D17'}
-    h={'60px'}
+    h={'50px'}
    
   >
 Get bank account details

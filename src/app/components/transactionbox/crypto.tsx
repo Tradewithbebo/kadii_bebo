@@ -144,7 +144,7 @@ export function SellCrypto() {
           </Box>
 
           <Box w={"100%"}>
-            <Button w={"100%"} onClick={toggle} bg={"#F8F8F8"} h={'60px'}>
+            <Button w={"100%"} onClick={toggle} bg={"#F8F8F8"}  h={'50px'}>
               <HStack w={"full"} justifyContent={"space-between"}>
                 <HStack gap={"8px"}>
                   <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
@@ -258,7 +258,7 @@ export function SellCrypto() {
               Rate:
             </Text>
           </Box>
-          <Button bg={"#F8F8F8"}  h={'60px'} >
+          <Button bg={"#F8F8F8"}   h={'50px'} >
             <HStack  w={"full"}>
               <Box>
                 <TbCurrencyNaira size={"16px"} />
@@ -405,147 +405,164 @@ export function BuyCrypto() {
         columns={[1, 1, 3]}
         spacingY={["5px", "5px", "20px"]}
       >
-        <GridItem colSpan={[1,1, 3]} textAlign={"center"} mb={["10px", "16px"]}>
+        <GridItem
+          colSpan={[1, 1, 3]}
+          textAlign={"center"}
+          mb={["10px", "16px"]}
+        >
           <Box>
-            <Text fontWeight={"600"} fontSize={["14px", "16px"]}>
+            <Text fontWeight={"600"} fontSize={["16px", "16px", "18px"]}>
               Buy crypto
             </Text>
           </Box>
         </GridItem>
         <GridItem
-          colSpan={[1,1, 3]}
+          colSpan={[1, 1, 3]}
           display="flex"
           justifyContent="center"
           alignItems="center"
         >
           <Box>
-            <Divider width={["150px", "200px"]} />
+            <Divider width={["100px", "150px", "200px"]} />
           </Box>
         </GridItem>
 
         {/* second part */}
-        <GridItem colSpan={[1,1,1]} mt={["15px", "32px"]} w={"full"}>
-        <HStack>
-          <Box>
-            <Text
-              fontWeight={"600"}
-              fontSize={["11px", "16px"]}
-              color={"#808080"}
-            >
-              Crypto:
-            </Text>
-          </Box>
-
-          <Box w={"100%"}>
-      <Button w={"100%"} onClick={toggle}>
-        <HStack gap={"16px"} px={"16px"} bg={"#F8F8F8"}>
-          <HStack gap={"8px"}>
-            <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-              <Image src={selectedimage} alt="Crypto" />
-            </Box>
+        <GridItem colSpan={[1, 1, 1]} mt={["15px", "32px"]} w={"full"}>
+          <HStack>
             <Box>
-              <Text
-                fontWeight={"600"}
-                fontSize={["11px", "16px"]}
-                mt={"10px"}
-                mb={"10px"}
-              >
-                {selectedCrypto}
+              <Text fontSize={"16px"} fontWeight={"600"} color={"#808080"}>
+                Crypto:
               </Text>
             </Box>
-          </HStack>
-          <Box ml={["60px", "120px", "0px"]}>
-            <BsChevronDown size={"14px"} />
-          </Box>
-        </HStack>
-      </Button>
 
-      <Fade in={opentwo}>
-        <VStack
-          mt="4"
-          bg="white"
-          rounded="md"
-          shadow="md"
-          w={['250px','300px',"xs"]}
-          zIndex={1000}
-          position="absolute"
-          spacing={0}
-        >
-          {networkOptions.map((item) => (
-            <Box
-              key={item.name}
-              w="100%"
-              px="16px"
-              py="8px"
-              cursor="pointer"
-              _hover={{ bg: "gray.100" }}
-              onClick={() =>
-                handleCryptoSelect(item.name, item.image, item.current_price)
-              }
-            >
-              <HStack w="100%">
-                {item.image && (
-                  <Image
-                    boxSize="20px"
-                    borderRadius="full"
-                    src={item.image}
-                    alt={item.name}
-                    mr="12px"
-                  />
-                )}
-                <Text>{item.name}</Text>
-              </HStack>
+            <Box w={"100%"}>
+              <Button w={"100%"} onClick={toggle} bg={"#F8F8F8"} h={"50px"}>
+                <HStack w={"full"} justifyContent={"space-between"}>
+                  <HStack gap={"8px"}>
+                    <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
+                      <Image src={selectedimage} alt="Crypto" />
+                    </Box>
+                    <Box>
+                      <Text
+                        fontSize={"16px"}
+                        fontWeight={"600"}
+                        mt={"10px"}
+                        mb={"10px"}
+                      >
+                        {selectedCrypto}
+                      </Text>
+                    </Box>
+                  </HStack>
+                  <Box ml={["60px", "120px", "0px"]}>
+                    <BsChevronDown size={"14px"} />
+                  </Box>
+                </HStack>
+              </Button>
+
+              <Fade in={opentwo}>
+                <VStack
+                  mt="4"
+                  bg="white"
+                  rounded="md"
+                  shadow="md"
+                  w={["250px", "300px", "xs"]}
+                  zIndex={1000}
+                  position="absolute"
+                  spacing={0}
+                >
+                  {networkOptions.map((item) => (
+                    <Box
+                      key={item.name}
+                      w="100%"
+                      px="16px"
+                      py="8px"
+                      cursor="pointer"
+                      _hover={{ bg: "gray.100" }}
+                      onClick={() =>
+                        handleCryptoSelect(
+                          item.name,
+                          item.image,
+                          item.current_price
+                        )
+                      }
+                    >
+                      <HStack w="100%">
+                        {item.image && (
+                          <Image
+                            boxSize="20px"
+                            borderRadius="full"
+                            src={item.image}
+                            alt={item.name}
+                            mr="12px"
+                          />
+                        )}
+                        <Text>{item.name}</Text>
+                      </HStack>
+                    </Box>
+                  ))}
+                </VStack>
+              </Fade>
             </Box>
-          ))}
-        </VStack>
-      </Fade>
-    </Box>
-        </HStack>
-      </GridItem>
+          </HStack>
+        </GridItem>
+        {/* <GridItem
+        colSpan={[1, 1,]}
+        mt={["14px", "32px"]}
+        display={{ base: "none", md: "block" }}
+      >
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Divider
+            orientation="vertical"
+            h={"50px"}
+            mr={"24px"}
+            ml={"24px"}
+            color={"#F0F0F0"}
+            size={"xl"}
+          />
+        </Box>
+      </GridItem> */}
         <GridItem
-          colSpan={1}
-          mt={["14px", "32px"]}
-          display={{ base: "none", md: "block" }}
+          colSpan={[1, 1, 2]}
+          mt={["15px", "15px", "32px"]}
+          mb={["40px", "40px", "0px"]}
+          // overflow={'hidden'}
         >
-          <Box display="flex" justifyContent="center" alignItems="center">
+          <HStack
+            gap={["20px", "10px"]}
+            justifyContent={["flex-start", "flex-start", "flex-end"]}
+          >
             <Divider
+              display={{ base: "none", md: "block" }}
               orientation="vertical"
               h={"50px"}
               mr={"24px"}
               ml={"24px"}
               color={"#F0F0F0"}
+              size={"xl"}
             />
-          </Box>
-        </GridItem>
-        <GridItem colSpan={[1,1,1]} mt={["15px","15px", "32px"]} mb={["40px","40px", "0px"]}>
-          <HStack
-            gap={["20px","20px", "10px"]}
-            justifyContent={["flex-start","flex-start", "flex-end"]}
-          >
             <Box>
-              <Text
-                fontWeight={"600"}
-                fontSize={["11px", "16px"]}
-                color={"#808080"}
-              >
+              <Text fontSize={"16px"} fontWeight={"600"} color={"#808080"}>
                 Rate:
               </Text>
             </Box>
-            <HStack bg={"#F8F8F8"} px={"16px"}>
-              <Box>
-                <TbCurrencyNaira size={"14px"} />
-              </Box>
-              <Box mt={"9px"} mb={"9px"}>
-                <Text fontWeight={"600"} fontSize={["11px", "16px"]}>
-                {rate}
-                </Text>
-              </Box>
-            </HStack>
+            <Button bg={"#F8F8F8"} h={"50px"}>
+              <HStack w={"full"}>
+                <Box>
+                  <TbCurrencyNaira size={"16px"} />
+                </Box>
+                <Box mt={"9px"} mb={"9px"} w={"full"}>
+                  <Text fontSize={"16px"} fontWeight={"600"}>
+                    {rate}
+                  </Text>
+                </Box>
+              </HStack>
+            </Button>
           </HStack>
         </GridItem>
 
         {/* third part */}
-        <GridItem colSpan={[1,1, 3]} display={{ base: "none", md: "block" }}>
+        <GridItem colSpan={[1, 1, 3]} display={{ base: "none", md: "block" }}>
           <Box
             mb={["20px", "40px"]}
             mt={["20px", "40px"]}
@@ -569,23 +586,25 @@ export function BuyCrypto() {
                   rounded={"50%"}
                 >
                   <Box>
-                    {" "}
                     <BsExclamationCircle size={"20px"} />
                   </Box>
                 </Box>
               </Box>
               <Box>
-                <Text fontWeight={"500"} fontSize={["12px", "14px"]} color={"#808080"}>
-                  To buy crypto, click on the green button below to generate a
-                  bank account to transfer funds to.
+                <Text
+                  fontWeight={"500"}
+                  fontSize={["12px", "14px"]}
+                  color={"#808080"}
+                >
+                  To sell your crypto, click on the green button below to
+                  generate a wallet address to send your crypto.
                 </Text>
               </Box>
             </HStack>
           </Box>
         </GridItem>
-
         {/* fourth part */}
-        <GridItem w={"full"} colSpan={[1,1, 3]}>
+        <GridItem w={"full"} colSpan={[1, 1, 3]}>
           <ButtonForBuy onOpen={onOpen} />
         </GridItem>
       </SimpleGrid>

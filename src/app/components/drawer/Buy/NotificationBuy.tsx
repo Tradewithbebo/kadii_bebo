@@ -222,6 +222,7 @@ export function MarketRate({
                               rounded={"20px"}
                               bg={"#e5e7eb"}
                               size={"sm"}
+                              h={['50px','50px','44px']}
                             >
                               {item.name == Name ? item.current_price : ""}
                             </Button>

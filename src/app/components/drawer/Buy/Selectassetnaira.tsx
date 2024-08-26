@@ -119,6 +119,7 @@ export default function Selectnaira({
                     <InputLeftAddon>{<TbCurrencyNaira size={""} />}</InputLeftAddon>
                     <Field
                       as={Input}
+                      h={['50px','50px','44px']}
                       type="text"
                       id={"naira"}
                       name={"naira"}
@@ -158,7 +159,7 @@ export default function Selectnaira({
                   _hover={{
                     bg: isValid ? "#0CBF94" : "gray.400",
                   }}
-                  
+                  h={['50px','50px','44px']}
                 >
                   Continue
                 </Button>

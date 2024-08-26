@@ -220,6 +220,7 @@ export default function VerifyMail() {
                     size="xm"
                     mt={"4px"}
                     isDisabled={!isValid || !dirty}
+                    h={['50px','50px','44px']}
                   >
                     Submit
                   </Button>

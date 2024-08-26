@@ -312,6 +312,7 @@ export const Press = ({ loading }: { loading: any }) => {
   return (
     <Box w={"full"} justifyContent={"center"} display={"flex"} mt={"-30px"}>
       <Button
+        h={['50px','50px','44px']}
         type="submit"
         w={"90%"}
         bg={"#0CBF94"}

@@ -119,6 +119,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                       First name
                     </FormLabel>
                     <Field
+                      h={['50px','50px','44px']}
                       as={Input}
                       type="text"
                       name="firstName"
@@ -135,6 +136,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                       Last name
                     </FormLabel>
                     <Field
+                      h={['50px','50px','44px']}
                       as={Input}
                       type="text"
                       name="lastName"
@@ -152,6 +154,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                     </FormLabel>
                     <InputGroup>
                       <Field
+                        h={['50px','50px','44px']}
                         as={Input}
                         type={show ? "text" : "password"}
                         name="password"
@@ -183,6 +186,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                     </FormLabel>
                     <InputGroup>
                       <Field
+                        h={['50px','50px','44px']}
                         as={Input}
                         type={show ? "text" : "password"}
                         name="confirmPassword"
@@ -230,6 +234,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                 </GridItem>
                 <GridItem colSpan={2} mt={"4px"}>
                   <Button
+                    h={['50px','50px','44px']}
                     type="submit"
                     bg="#0CBF94"
                     fontSize={"16px"}

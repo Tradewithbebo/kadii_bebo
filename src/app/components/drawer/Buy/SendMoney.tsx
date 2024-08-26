@@ -267,6 +267,7 @@ export default function SendMoney({
                   fontSize="16px"
                   fontWeight="600"
                   color="#021D17"
+                  h={['50px','50px','44px']}
                 >
                   I have paid
                 </Button>

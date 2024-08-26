@@ -126,6 +126,7 @@ export default function EnterVerification({
                     _hover={{
                       bg: isValid ? "#0CBF94" : "gray.400",
                     }}
+                    h={['50px','50px','44px']}
                   >
                     Continue
                   </Button>
