@@ -240,6 +240,7 @@ export function SellCrypto() {
           justifyContent={["flex-start", "flex-start", "flex-end"]}
         >
           <Divider
+           display={{ base: "none", md: "block" }}
             orientation="vertical"
             h={"50px"}
             mr={"24px"}
