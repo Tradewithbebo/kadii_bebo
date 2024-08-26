@@ -21,19 +21,19 @@ export default function SemiNav({
         <Grid
           templateColumns={{ base: "repeat(2, 1fr)" }}
           gap={2}
-          height={{ base: "auto", md: "35px" }}
-          width={{ base: "300px", sm: "300px", md: "350px", lg: "400px" }}
+          height={{ base: "60px", md: "60px",lg:"60px" }}
+          width={{ base: "300px", md: "350px", lg: "400px" }}
           bg={"#F0F0F0"}
           rounded={"6px"}
-          px={{ base: "10px", md: "5px" }}
-          py={{ base: "10px", md: "0px" }}
+          px={{ base: "5px", md: "5px" ,lg:"5px"}}
+          py={{ base: "5px", md: "5px" ,lg:"5px"}}
         >
           <GridItem
             cursor={"pointer"}
             onClick={handleToggleBuy}
-            bg={Buy ? "#DADADA" : "transparent"}
+            bg={Buy?"white" : "transparent"}
             rounded={"3px"}
-            p={{ base: "10px", md: "5px" }}
+            p={{ base: "5px", md: "5px" }}
             display={"flex"}
             alignItems={"center"}
             gap={"4px"}
@@ -43,8 +43,8 @@ export default function SemiNav({
               <Image src="/image/send.png" alt="Bebo" />
             </Box>
             <Text
+              fontSize={["16px"]}
               fontWeight={"600"}
-              fontSize={{ base: "12px", lg: "15px" }}
               color={Buy ? "#021D17" : "#666666"}
             >
               Sell crypto
@@ -54,7 +54,7 @@ export default function SemiNav({
           <GridItem
             cursor={"pointer"}
             onClick={handleTogglesell}
-            bg={Sell ? "#DADADA" : "transparent"}
+            bg={Sell ? "white" : "transparent"}
             rounded={"3px"}
             p={{ base: "10px", md: "5px" }}
             display={"flex"}
@@ -66,8 +66,8 @@ export default function SemiNav({
               <Image src="/image/Buy.png" alt="Bebo" />
             </Box>
             <Text
-              fontWeight={"600"}
-              fontSize={{ base: "12px", lg: "15px" }}
+             fontSize={"16px"}
+             fontWeight={"600"}
               color={Sell ? "#021D17" : "#666666"}
             >
               Buy crypto

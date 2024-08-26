@@ -23,6 +23,7 @@ export  function ButtonForsell({onOpen}:{onOpen:any}) {
     fontWeight={"600"}
     w={"100%"}
     color={'#021D17'}
+    h={'60px'}
    
   >
 Get bank account details
