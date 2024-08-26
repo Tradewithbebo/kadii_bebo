@@ -9,19 +9,24 @@ import {
 import React from 'react';
 import Kkyc from '@/app/Kyc/Kyc/page';
 
-export default function Kyc({ isOpenone, onCloseone }:{ isOpenone:any, onCloseone:any }) {
+export default function Kyc({
+  isOpenone,
+  onCloseone,
+}: {
+  isOpenone: any;
+  onCloseone: any;
+}) {
   return (
     <Drawer
       isOpen={isOpenone}
-      placement='right'
+      placement="right"
       onClose={onCloseone}
-     
-      size={['sm', 'sm']}
+      size={["sm", "sm"]}
     >
       <DrawerOverlay />
-      <DrawerContent   overflowY="auto">
+      <DrawerContent overflowY="auto">
         <DrawerCloseButton />
-        <Box pt={['30px', '0px']}>
+        <Box pt={["30px", "0px"]}>
           <Kkyc />
         </Box>
       </DrawerContent>

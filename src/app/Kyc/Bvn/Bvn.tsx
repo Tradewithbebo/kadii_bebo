@@ -118,6 +118,7 @@ export default function Bvn() {
                 <Box display={'none'}> 
                   <Field
                     as={Input}
+                    h={['50px','50px','44px']}
                     type="text"
                     name="documentType"
                     placeholder="1245678904"
@@ -134,6 +135,7 @@ export default function Bvn() {
                     </FormLabel>
                     <Field
                       as={Input}
+                      h={['50px','50px','44px']}
                       type="text"
                       name="documentNumber"
                       placeholder="1245678904"
@@ -149,6 +151,7 @@ export default function Bvn() {
                       Upload picture of National ID number
                     </FormLabel>
                     <Input
+                     h={['50px','50px','44px']}
                       type="file"
                       accept=".pdf, .docx"
                       onChange={(event) => {
@@ -194,6 +197,7 @@ export default function Bvn() {
                 </GridItem>
                 <GridItem colSpan={2} mt={"4px"}>
                   <Button
+                  h={['50px','50px','44px']}
                     type="submit"
                     bg="#0CBF94"
                     fontSize={"16px"}

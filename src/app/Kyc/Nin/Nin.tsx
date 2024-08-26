@@ -145,6 +145,7 @@ const handleProceed = async (values: any) => {
               <Box display={'none'}> 
                   <Field
                     as={Input}
+                    h={['50px','50px','44px']}
                     type="text"
                     name="documentType"
                     placeholder="1245678904"
@@ -157,6 +158,7 @@ const handleProceed = async (values: any) => {
                     </FormLabel>
                     <Field
                       as={Input}
+                      h={['50px','50px','44px']}
                       type="text"
                       name="bvn"
                       placeholder="Enter your national ID number"
@@ -166,6 +168,7 @@ const handleProceed = async (values: any) => {
                 </GridItem>
                 <GridItem colSpan={1} mt={'4px'}>
                   <Button
+                   h={['50px','50px','44px']}
                     type="submit"
                     bg="#0CBF94"
                     fontSize={'16px'}
