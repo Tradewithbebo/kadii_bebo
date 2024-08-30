@@ -26,20 +26,121 @@ import {
   Box,
   Text,
   FormErrorMessage,
+  HStack,
+  Image
 } from "@chakra-ui/react";
 import { Formik, Form, Field, useFormik } from "formik";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { myStyles } from "./selectrix";
 import bankName from "./listBanks";
 import Select from "react-select";
+import { AxiosAuthPost, AxiosGet } from "@/app/axios/axios";
 
 export default function AddBank() {
   const [message, setmessage] = useState("");
   const [Value, setValue] = useState("");
-  const handleValueChange = (Value: any, values: any) => {
-    values.Bank = Value;
-    console.log(Value);
-    setValue(Value);
+  const [Banks, setBanks] = useState([]);
+  const [Banksno, setBanksno] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [accountNo, setAccountNo] = useState<string>('');
+  const handleValueChange = (selectedOption: any, setFieldValue: any) => {
+    setFieldValue("Bank", selectedOption ? selectedOption.value : "");
+    setValue(selectedOption);
+    setBanksno(selectedOption ? selectedOption.code:"");
+  };
+  const handleAccountNumberChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (field: string, value: any) => void
+  ) => {
+    const inputValue = event.target.value;
+    setFieldValue("accountnumber", inputValue); // Set Formik's account number value
+    setAccountNo(inputValue);
+  
+  };
+  useEffect(()=>{
+    handleSave()
+  })
+  const handleSave = () => {
+    const url2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
+    console.log('url:',url2);
+    // You can now use `url2` as needed, such as making an API call.
+  };
+
+  const BanksOptions = (data: any) => {
+    const updatedOptions = data.map((item: any) => ({
+      value: item.name,
+      label: <Text>{item.name}</Text>,
+
+      code: item.code,
+      name: item.name,
+    }));
+    setBanks(updatedOptions);
+  };
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined = undefined;// Typing timeoutId as NodeJS.Timeout
+    const fetchData = async () => {
+      const success = await getBanks();
+      if (!success) {
+        setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
+      }
+    };
+
+    fetchData(); // Initial call
+    return () => {
+      // Cleanup function to clear the timeout if it was set
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
+  const url = "banks";
+  const bankCode=Banksno
+  const accountNumber=accountNo
+  const url2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
+
+  const getBanksName = async () => {
+    setLoading(true);
+    try {
+      const res = await AxiosAuthPost(url2,{});
+      setLoading(false);
+      if (res) {
+        // console.log(res.data);
+        BanksOptions(res.data);
+        setLoading(false);
+        setErrorMessage(""); // Clear error message on success
+        return true;
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+    }
+  };
+
+  const getBanks = async () => {
+    setLoading(true);
+    try {
+      const res = await AxiosGet(url);
+      setLoading(false);
+      if (res) {
+        // console.log(res.data);
+        BanksOptions(res.data);
+        setLoading(false);
+        setErrorMessage(""); // Clear error message on success
+        return true;
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+    }
   };
 
   const initialValues = {
@@ -50,9 +151,6 @@ export default function AddBank() {
 
   return (
     <>
-      {/* <Button  colorScheme='teal' onClick={sellOnopen}>
-          Open
-        </Button> */}
       <Formik
         initialValues={initialValues}
         // validationSchema={addUserSchema}
@@ -60,7 +158,15 @@ export default function AddBank() {
           actions.resetForm();
         }}
       >
-        {({ handleSubmit, errors, touched, values, handleChange, isValid }) => (
+        {({
+          handleSubmit,
+          errors,
+          touched,
+          values,
+          handleChange,
+          isValid,
+          setFieldValue,
+        }) => (
           <form onSubmit={handleSubmit}>
             <Box p={4}>
               <SimpleGrid column={2} rowGap={"28px"}>
@@ -84,13 +190,26 @@ export default function AddBank() {
                       as={Select} // Use Select from 'react-select'
                       id="Bank"
                       name="Bank"
-                      options={bankName.Banks}
+                      options={Banks}
                       isSearchable
+                      isLoading={loading}
                       placeholder="Select bank"
                       value={Value}
+                      noOptionsMessage={() => errorMessage}
                       onChange={(selectedOption: any) => {
-                        handleValueChange(selectedOption, values);
-                        handleChange("Bank");
+                        handleValueChange(selectedOption, setFieldValue);
+                      }}
+                      styles={{
+                        control: (provided: any) => ({
+                          ...provided,
+                          height: "50px", // Default for mobile screens
+                          [`@media (min-width: 768px)`]: {
+                            height: "50px", // Medium screens
+                          },
+                          [`@media (min-width: 992px)`]: {
+                            height: "44px", // Large screens
+                          },
+                        }),
                       }}
                       // styles={myStyles}
                     />
@@ -114,6 +233,9 @@ export default function AddBank() {
                       type="text"
                       placeholder="Enter account number"
                       name="accountnumber"
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                        handleAccountNumberChange(event, setFieldValue)
+                      }
                     />
 
                     <FormErrorMessage color={"Crimson"}>

@@ -50,10 +50,12 @@ export default function ConfirmBuyOrder({
             Amount={Amount}
             conversion={conversion}
             currency={currency}
-            crypto={crypto} nn={nn}          />
+            crypto={crypto}
+            nn={nn}
+          />
         </GridItem>
         <GridItem colSpan={1} mt={"28px"}>
-        {/* <Press loading={loading}/> */}
+          {/* <Press loading={loading}/> */}
         </GridItem>
       </SimpleGrid>
     </Box>

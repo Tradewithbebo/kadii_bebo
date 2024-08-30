@@ -33,27 +33,20 @@ const main='Choose verification type';
   return (
     <Box w={"full"}>
       <Center
-        pb={Kyc==="Choose verification type"?['357px', '453px']:['px','px']}
+        pb={
+          Kyc === "Choose verification type" ? ["357px", "453px"] : ["px", "px"]
+        }
       >
         <SimpleGrid columns={1} w={["335px", "400px"]}>
           <GridItem colSpan={1}>
-            <Box>
-              <Text fontWeight={"600"} fontSize={"40px"}>
-                Complete KYC
-              </Text>
-            </Box>
+            <Text fontWeight="600" fontSize="25px">
+              Complete KYC
+            </Text>
           </GridItem>
-          <GridItem colSpan={1}>
-            <Box>
-              <Text
-                color={"#666666"}
-                fontWeight={"600"}
-                fontSize={["14px", "18px"]}
-                mt={"24px"}
-              >
-                Complete KYC to be able to make transactions
-              </Text>
-            </Box>
+          <GridItem colSpan={1} mt={"10px"}>
+            <Text fontWeight="600" fontSize={["15px", "15px"]} color="#666666">
+              Complete KYC to be able to make transactions
+            </Text>
           </GridItem>
           <GridItem colSpan={1} w={"full"} mt={["30px", "40px"]} mb={"28px"}>
             <Text fontWeight={"600"} fontSize={"16px"} mb={"8px"}>
@@ -73,9 +66,11 @@ const main='Choose verification type';
                     <Text
                       fontWeight={"600"}
                       fontSize={"16px"}
-                      color={Kyc==='Choose verification type' ? "#B3B3B3" : "black"}
+                      color={
+                        Kyc === "Choose verification type" ? "#B3B3B3" : "black"
+                      }
                     >
-                    {Kyc || main}
+                      {Kyc || main}
                     </Text>
                   </Box>
                   <Box>
@@ -101,10 +96,21 @@ const main='Choose verification type';
               </MenuList>
             </Menu>
           </GridItem>
-        <GridItem  colSpan={1}>
-        {Kyc===" National ID (NIN)"?<Bvn/>:Kyc==="Bank Verification Number (BVN)"?<Nin/>:''}
-        </GridItem>
-          <GridItem colSpan={1} mt={"34px"} textAlign={"center"} display={Kyc==="Choose verification type"?'block':'none'}>
+          <GridItem colSpan={1}>
+            {Kyc === " National ID (NIN)" ? (
+              <Bvn />
+            ) : Kyc === "Bank Verification Number (BVN)" ? (
+              <Nin />
+            ) : (
+              ""
+            )}
+          </GridItem>
+          <GridItem
+            colSpan={1}
+            mt={"34px"}
+            textAlign={"center"}
+            display={Kyc === "Choose verification type" ? "block" : "none"}
+          >
             <Link
               w={"full"}
               fontWeight={"600"}

@@ -14,6 +14,7 @@ import {
   Button,
   HStack,
   useToast,
+  DrawerFooter,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { Formik, Field, Form } from "formik";
@@ -48,6 +49,7 @@ export default function GeneralFormPage({
   const [asset, setasset] = useState("");
   const [USDT, setUSDT] = useState("");
   const [naira, setnaira] = useState("");
+  const [transactionId, settransactionid] = useState("");
   const [toprice, settoprice] = useState("");
   const [Symbols, setSymbols] = useState("");
   const [Name, setName] = useState("");
@@ -57,7 +59,9 @@ export default function GeneralFormPage({
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast();
-  const url = "orders/buy";
+  const url = "transactions/create";
+  const [currentsImage, setcurrentsImage] = useState('');
+  const [currentsName, setcurrentsName] = useState('');
   const handleclick = () => {
     {
       Currency ? setCurrency(false) : setCurrency(true);
@@ -72,30 +76,31 @@ export default function GeneralFormPage({
       : step == 2
       ? setUSDT("")
       : "";
+      
   };
 
   const handleProceed = async (values: any) => {
     if (values) {
       setLoading(true);
       try {
-        // const res = await AxiosAuthPost(url, values);
+        const res = await AxiosAuthPost(url, values);
         setLoading(false);
-        // if (res && res.data) {
-        //   const checkoutUrl = res.data.checkout_url;
-        //   if (checkoutUrl) {
-        // Set the step to 4
+        if (res && res.data) {
+          const Id = res.data._id;
+          // console.log("id",Id)
+          if (Id) {
+            settransactionid(Id)
         setStep(4);
-
         // Close the modal and reset inputs after 2000ms
         // setTimeout(() => {
         //   onClose(); // Close the modal
         //   resetInputs(); // Reset all inputs
         //   window.open(checkoutUrl, "_blank"); // Open the new window
-        //   // }, 2000); // Adjust the delay time as needed
-        // } else {
-        //   throw new Error("Checkout URL not found in response.");
-        // }
-        // }
+        //   }, 2000); // Adjust the delay time as needed
+        } else {
+          throw new Error("Checkout URL not found in response.");
+        }
+        }
       } catch (err: any) {
         setLoading(false);
         let message = "Check your Network and try again.";
@@ -115,11 +120,9 @@ export default function GeneralFormPage({
     }
   };
 
-  // Function to reset all input fields
   const resetInputs = () => {
     setValue("");
     setCurrentprice("");
-    // setCurrency(true);
     setNetwork("");
     setWalletaddress("");
     setasset("");
@@ -130,12 +133,15 @@ export default function GeneralFormPage({
     setName("");
     setConversion(null);
     setConversion2(null);
-    setStep(4);
+    setStep(1);
+    onClose()
   };
 
   const handleProceeding = () => {
     setStep((cur: number) => cur + 1);
   };
+
+  
   // const [scrollBehavior, setScrollBehavior] = React.useState("inside");
   useEffect(() => {
     // console.log('Currentprice:',Currentprice)
@@ -155,10 +161,9 @@ export default function GeneralFormPage({
     } else {
       console.log("USDTValue:", USDT);
       const USDTValue = parseFloat(USDT);
-      // console.log("USDTValue:", USDTValue);
-      // console.log("Currentprice:", currentPrice);
+      
       const value = USDTValue * currentPrice;
-      // console.log("Currentprice:", currentPrice);
+      
       const formattedValue = parseFloat(value.toFixed(20));
       setConversion2(formattedValue);
     }
@@ -196,11 +201,11 @@ export default function GeneralFormPage({
             position={"absolute"}
             mt={["45px", "40px"]}
             ml={["15px", "10px"]}
-            display={step === 1 ? "none" : "block"}
+            display={step === 1 ||step === 4 ? "none" : "block"}
           >
             <IoIosArrowBack size={"20px"} />
           </Box>
-          <DrawerCloseButton />
+          <DrawerCloseButton  onClick={()=>{resetInputs()}}/>
         </HStack>
         <Box p={4}>
           {step === 1 && (
@@ -212,6 +217,8 @@ export default function GeneralFormPage({
               Network={network}
               settoprice={settoprice}
               setSymbol={setSymbols}
+              setcurrentsImage={setcurrentsImage}
+              setcurrentsName={setcurrentsName}
             />
           )}
           {step === 2 &&
@@ -224,10 +231,15 @@ export default function GeneralFormPage({
                 setnaira={setnaira}
                 Name={Name}
                 setCurrentprice={setCurrentprice}
+                asset={currentsName}
+                rate={toprice}
+                imgsybl={currentsImage}
+                sybl={Symbols}
               />
             ) : (
               <SelectassetUSDT
                 setStep={setStep}
+                rate={toprice}
                 BUY={"Buy in Naira"}
                 handleclick={handleclick}
                 setasset={setasset}
@@ -235,6 +247,8 @@ export default function GeneralFormPage({
                 Name={Name}
                 setCurrentprice={setCurrentprice}
                 sybl={Symbols}
+                imgsybl={currentsImage}
+                asset={currentsName}
               />
             ))}
           {step === 3 && (
@@ -298,11 +312,16 @@ export default function GeneralFormPage({
               setStep={setStep}
               amountUsdt={Currency ? Conversion : USDT}
               amountNaira={Currency ? naira : Conversion2}
-              currentcurrency={Symbols}
-            />
+              currentcurrency={Symbols} transactionId={transactionId}            />
           )}
           {step === 5 && <SuccessBuy />}
         </Box>
+        <DrawerFooter>
+            <Button variant="outline" mr={3} onClick={()=>resetInputs()}>
+              Cancel
+            </Button>
+            
+          </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

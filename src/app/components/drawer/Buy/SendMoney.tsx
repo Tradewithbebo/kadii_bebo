@@ -13,28 +13,73 @@ import {
   Text,
   useToast,
   VStack,
+  // useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ConfirmBuy, ConfirmBuyAlert } from "./NotificationBuy";
 import { IoCopyOutline, IoDocumentOutline } from "react-icons/io5";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
+import { AxiosAuthPostfile } from "@/app/axios/axios";
 
 export default function SendMoney({
   setStep,
   amountNaira,
   amountUsdt,
   currentcurrency,
+  transactionId
 }: {
   setStep: any;
   amountUsdt: any;
   amountNaira: any;
   currentcurrency: any;
+  transactionId:any
 }) {
-  const handleProceed = () => {
-    setStep(5);
-  };
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const id=transactionId
+  // const toast = useToast();
+  const url = `transactions/${id}/upload-reference`;
+ 
+  const handleProceed = async (values: any) => {
+    if (values.document) {
+      setLoading(true);
+      try {
+        // Create a new FormData object
+        const formData = new FormData();
+        formData.append("documentType", values.documentType);
+        formData.append("documentNumber", values.documentNumber);
+        if (values.document) {
+          formData.append("document", values.document);
+        }
 
+        const res = await AxiosAuthPostfile(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        setLoading(false);
+        if (res && res.data) {
+          setStep(5);
+        }
+      } catch (err: any) {
+        setLoading(false);
+        let message = "Check your Network and try again.";
+        if (err.response && err.response.data && err.response.data.message) {
+          message = err.response.data.message;
+        }
+        setErrorMessage(message);
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+      }
+    }
+  };
   const validationSchema = Yup.object().shape({
     document: Yup.mixed()
       .required("A file is required")
@@ -57,35 +102,36 @@ export default function SendMoney({
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const toast = useToast();
-  const [Wallet, setWallet] = useState(
-    "0xy83929ruhdi23uhbd92bf9g2bjbfbfvxtyuv..."
-  );
+  // const [Wallet, setWallet] = useState(
+  //   "0xy83929ruhdi23uhbd92bf9g2bjbfbfvxtyuv..."
+  // );
 
-  const handleCopy = (text: string) => {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => {
-        toast({
-          title: "Copied to clipboard.",
-          description: `Copied: ${text}`,
-          status: "success",
-          duration: 2000,
-          isClosable: true,
-          position: "top-right",
-        });
-      })
-      .catch((err) => {
-        console.error("Could not copy text: ", err);
-      });
-  };
+  // const handleCopy = (text: string) => {
+  //   navigator.clipboard
+  //     .writeText(text)
+  //     .then(() => {
+  //       toast({
+  //         title: "Copied to clipboard.",
+  //         description: `Copied: ${text}`,
+  //         status: "success",
+  //         duration: 2000,
+  //         isClosable: true,
+  //         position: "top-right",
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.error("Could not copy text: ", err);
+  //     });
+  // };
 
   return (
     <Box p={4}>
       <Formik
-        initialValues={{ document: null }}
+        initialValues={{ document: null}}
         validationSchema={validationSchema}
-        onSubmit={(values, actions) => {
-          handleProceed();
+        enableReinitialize
+        onSubmit={(values) => {
+          handleProceed(values);
         }}
       >
         {({ isSubmitting, setFieldValue, errors, touched }) => (
@@ -242,6 +288,16 @@ export default function SendMoney({
                           <FormErrorMessage>{errors.document}</FormErrorMessage>
                         )}
                       </FormControl>
+                      {/* <Field
+                      as={Input}
+                      h={["50px", "50px", "44px"]}
+                      type="text"
+                      id={"transactionId"}
+                      name={"transactionId"}
+                      placeholder={transactionId.toString()}
+                      value={transactionId}
+                     
+                    /> */}
                     </VStack>
                   </GridItem>
 
@@ -260,8 +316,8 @@ export default function SendMoney({
 
               <GridItem colSpan={1} mt="28px">
                 <Button
-                  onClick={handleProceed}
-                  type="button"
+                  // onClick={handleProceed}
+                  type="submit"
                   w="full"
                   bg="#0CBF94"
                   fontSize="16px"

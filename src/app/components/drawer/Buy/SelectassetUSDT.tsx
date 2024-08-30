@@ -10,6 +10,9 @@ import {
   Button,
   InputGroup,
   InputLeftAddon,
+  HStack,
+  Image,
+  InputRightAddon,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { Formik, Field, Form, FieldProps } from "formik";
@@ -38,7 +41,10 @@ export default function SelectUSDT({
   setUSDT,
   Name,
   setCurrentprice,
-  sybl
+  sybl,
+  imgsybl,
+  rate,
+  asset
 }: {
   setStep: any;
   BUY: any;
@@ -47,7 +53,10 @@ export default function SelectUSDT({
   setUSDT: any;
   Name:any;
   setCurrentprice:any;
-  sybl:any
+  sybl:any,
+  imgsybl:any,
+  rate:any,
+  asset:any
 }) {
   const [Value, setValue] = useState(null);
 
@@ -90,7 +99,7 @@ export default function SelectUSDT({
               </GridItem>
               <GridItem colSpan={1} mt={"18px"}>
                 <Text fontWeight="600" fontSize="15px" color="#666666">
-                  Select the amount of asset you want to buy
+                Select amount of asset you want to buy
                 </Text>
               </GridItem>
 
@@ -117,28 +126,108 @@ export default function SelectUSDT({
                   <FormErrorMessage>{errors.asset}</FormErrorMessage>
                 </FormControl>
               </GridItem> */}
-              <GridItem mt={"18px"}>
+               <GridItem mt={"18px"} display={"none"}>
                 <MarketRate Name={Name} setCurrentprice={setCurrentprice} />
+              </GridItem>
+              <GridItem colSpan={1} mb={"28px"} mt={"18px"}>
+                {/* <FormControl isInvalid={!!errors.naira && touched.naira}> */}
+                <FormLabel fontSize="16px" fontWeight="600">
+                  My Rate
+                </FormLabel>
+                <InputGroup>
+                  <Field
+                    // variant='unstyled'
+                    as={Input}
+                    disabled
+                    h={["50px", "50px", "44px"]}
+                    type="text"
+                    id={"rate"}
+                    name={"rate"}
+                    placeholder={rate}
+                    color="black"
+                    _placeholder={{ color: "black.700" }}
+                    borderColor={"#cbd5e1"}
+                    value={rate}
+                    style={{
+                      borderRight: "none",
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }}
+                  />
+                  <InputRightAddon h={["50px", "50px", "44px"]}>
+                  <HStack>
+                        <Image
+                          boxSize="25px"
+                          objectFit="cover"
+                          src={imgsybl}
+                          // width="18"
+                          // height="14"
+                          alt="bebo"
+                        ></Image>
+                        <Text fontWeight={"600"} fontSize={"16px"}>
+                          {" "}
+                          {sybl.toUpperCase()}
+                        </Text>
+                      </HStack>
+                  </InputRightAddon>
+                </InputGroup>
+                {/* <FormErrorMessage>{errors.naira}</FormErrorMessage> */}
+                {/* </FormControl> */}
+                <Text
+                  fontSize={"10px"}
+                  fontWeight={"500"}
+                  color={"grey"}
+                  mt={"10px"}
+                  mb={"5px"}
+                >
+                  Generic Market Rate
+                </Text>
+                <Box
+                  w={"fit-content"}
+                  bg={"#E7F6EC"}
+                  p={"3px"}
+                  borderRadius={"5px"}
+                >
+                  <Text fontSize={"12px"} fontWeight={"600"}>
+                    1 Naira = {rate} Naira
+                  </Text>
+                </Box>
               </GridItem>
               <GridItem colSpan={1} mb={"28px"}>
                 <FormControl isInvalid={!!errors.USDT && touched.USDT}>
                   <FormLabel fontSize="16px" fontWeight="600">
-                    Total amount
+                  Total amount of {asset} i want to buy in naira
                   </FormLabel>
                   <InputGroup>
-                    <InputLeftAddon>{sybl}</InputLeftAddon>
                     <Field
+                      h={["50px", "50px", "44px"]}
                       as={Input}
                       type="text"
                       id={"USDT"}
                       name={"USDT"}
                       placeholder={"10.00"}
                       style={{
-                        borderLeft: "none",
-                        borderTopLeftRadius: 0,
-                        borderBottomLeftRadius: 0,
+                        borderRight: "none",
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
                       }}
                     />
+                    <InputRightAddon h={["50px", "50px", "44px"]}>
+                      <HStack>
+                        <Image
+                          boxSize="25px"
+                          objectFit="cover"
+                          src={imgsybl}
+                          // width="18"
+                          // height="14"
+                          alt="bebo"
+                        ></Image>
+                        <Text fontWeight={"600"} fontSize={"16px"}>
+                          {" "}
+                          {sybl.toUpperCase()}
+                        </Text>
+                      </HStack>
+                    </InputRightAddon>
                   </InputGroup>
                   <FormErrorMessage>{errors.USDT}</FormErrorMessage>
                 </FormControl>
@@ -151,11 +240,7 @@ export default function SelectUSDT({
                 justifyContent={"right"}
               >
                 <Button onClick={handleclick}>
-                  <Text
-                    fontWeight={"600"}
-                    fontSize={"16px"}
-                    color={"#0CBF94"}
-                  >
+                  <Text fontWeight={"600"} fontSize={"16px"} color={"#0CBF94"}>
                     {BUY}
                   </Text>
                 </Button>
@@ -164,7 +249,7 @@ export default function SelectUSDT({
                 <Button
                   type="submit"
                   w={"full"}
-                  h={['50px','50px','44px']}
+                  h={["50px", "50px", "44px"]}
                   bg={isValid ? "#0CBF94" : "gray.400"}
                   fontSize={"16px"}
                   fontWeight={"600"}
@@ -173,9 +258,8 @@ export default function SelectUSDT({
                   _hover={{
                     bg: isValid ? "#0CBF94" : "gray.400",
                   }}
-                
                 >
-                  Continue
+                  Swap
                 </Button>
               </GridItem>
             </SimpleGrid>

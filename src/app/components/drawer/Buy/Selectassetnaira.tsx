@@ -10,13 +10,17 @@ import {
   Button,
   InputGroup,
   InputLeftAddon,
+  InputRightAddon,
+  HStack,
+  Image
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Field, Form, FieldProps } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
 import NotificationBuy, { MarketRate } from "./NotificationBuy";
 import { TbCurrencyNaira } from "react-icons/tb";
+import { AxiosGet } from "@/app/axios/axios";
 
 // Example network options
 const networkOptions = [
@@ -37,7 +41,12 @@ export default function Selectnaira({
   handleclick,
   setasset,
   setnaira,
-  Name,setCurrentprice
+  Name,
+  setCurrentprice,
+  asset,
+  rate,
+  imgsybl,
+  sybl
 }: {
   setStep: any;
   BUY: any;
@@ -45,21 +54,58 @@ export default function Selectnaira({
   setasset: any;
   setnaira: any;
   Name: any;
-  setCurrentprice:any
+  setCurrentprice: any;
+  asset:any,
+  rate:any,
+  imgsybl:any,
+  sybl:any
 }) {
   const [Value, setValue] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [networkOptions, setNetworkOptions] = useState([]);
+  const url = "wallet/assets";
+  const [errorMessage, setErrorMessage] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const success = await getnetwork();
+      if (!success) {
+        setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
+      }
+    };
+    fetchData(); // Initial call
+  }, []);
+  const getnetwork = async () => {
+    setLoading(true);
+    try {
+      const res = await AxiosGet(url);
+      setLoading(false);
+      if (res) {
+        console.log(res.data);
+        // setLoading(false)
+        setNetworkOptions(res.data);
+        setErrorMessage(""); // Clear error message on success
+        return true; // Indicate success
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+    }
+  };
 
   // const handleValueChange = (selectedOption: any, setFieldValue: any) => {
   //   setFieldValue("asset", selectedOption ? selectedOption.value : "");
   //   setValue(selectedOption);
   // };
 
-  const handleProceed = (values:any) => {
+  const handleProceed = (values: any) => {
     setasset(values.asset);
     setnaira(values.naira);
     setStep(3);
   };
-  
 
   return (
     <Formik
@@ -68,7 +114,7 @@ export default function Selectnaira({
         naira: "",
       }}
       validationSchema={validationSchema}
-        onSubmit={handleProceed}
+      onSubmit={handleProceed}
     >
       {({ errors, touched, setFieldValue, isValid, dirty }) => (
         <Form>
@@ -76,64 +122,119 @@ export default function Selectnaira({
             <SimpleGrid columns={1}>
               <GridItem colSpan={1}>
                 <Text fontWeight="600" fontSize="25px">
-                  Select asset
+                  Selected asset
                 </Text>
               </GridItem>
               <GridItem colSpan={1} mt={"18px"}>
                 <Text fontWeight="600" fontSize="15px" color="#666666">
-                  Select an asset you want to buy
+                  Select amount of asset you want to buy
                 </Text>
               </GridItem>
-              {/* <GridItem colSpan={1} mt={"40px"}>
-                <FormControl isInvalid={!!errors.asset && touched.asset}>
-                  <FormLabel fontSize="16px" fontWeight="600">
-                    Select asset to buy
-                  </FormLabel>
-                  <Field name="asset">
-                    {({ field }: FieldProps) => (
-                      <Select
-                        {...field}
-                        id="asset"
-                        options={networkOptions}
-                        isSearchable
-                        placeholder="Select asset"
-                        value={Value}
-                        onChange={(selectedOption: any) => {
-                          handleValueChange(selectedOption, setFieldValue);
-                        }}
-                      />
-                    )}
-                  </Field>
-                  <FormErrorMessage>{errors.asset}</FormErrorMessage>
-                </FormControl>
-              </GridItem> */}
-              <GridItem mt={"18px"}>
+
+              <GridItem mt={"18px"} display={"none"}>
                 <MarketRate Name={Name} setCurrentprice={setCurrentprice} />
+              </GridItem>
+              <GridItem colSpan={1} mb={"28px"} mt={"18px"}>
+                {/* <FormControl isInvalid={!!errors.naira && touched.naira}> */}
+                <FormLabel fontSize="16px" fontWeight="600">
+                  My Rate
+                </FormLabel>
+                <InputGroup>
+                  <Field
+                    // variant='unstyled'
+                    as={Input}
+                    disabled
+                    h={["50px", "50px", "44px"]}
+                    type="text"
+                    id={"rate"}
+                    name={"rate"}
+                    placeholder={rate}
+                    color="black"
+                    _placeholder={{ color: "black.700" }}
+                    borderColor={"#cbd5e1"}
+                    value={rate}
+                    style={{
+                      borderRight: "none",
+                      borderTopRightRadius: 0,
+                      borderBottomRightRadius: 0,
+                    }}
+                  />
+                  <InputRightAddon h={["50px", "50px", "44px"]}>
+                  <HStack>
+                        <Image
+                          boxSize="25px"
+                          objectFit="cover"
+                          src={imgsybl}
+                          // width="18"
+                          // height="14"
+                          alt="bebo"
+                        ></Image>
+                        <Text fontWeight={"600"} fontSize={"16px"}>
+                          {" "}
+                          {sybl.toUpperCase()}
+                        </Text>
+                      </HStack>
+                  </InputRightAddon>
+                </InputGroup>
+                {/* <FormErrorMessage>{errors.naira}</FormErrorMessage> */}
+                {/* </FormControl> */}
+                <Text
+                  fontSize={"10px"}
+                  fontWeight={"500"}
+                  color={"grey"}
+                  mt={"10px"}
+                  mb={"5px"}
+                >
+                  Generic Market Rate
+                </Text>
+                <Box
+                  w={"fit-content"}
+                  bg={"#E7F6EC"}
+                  p={"3px"}
+                  borderRadius={"5px"}
+                >
+                  <Text fontSize={"12px"} fontWeight={"600"}>
+                    1 Naira = {rate} Naira
+                  </Text>
+                </Box>
               </GridItem>
               <GridItem colSpan={1} mb={"28px"}>
                 <FormControl isInvalid={!!errors.naira && touched.naira}>
                   <FormLabel fontSize="16px" fontWeight="600">
-                    Total amount
+                    Total amount of {asset} i want to buy in naira
                   </FormLabel>
                   <InputGroup>
-                    <InputLeftAddon>{<TbCurrencyNaira size={""} />}</InputLeftAddon>
                     <Field
                       as={Input}
-                      h={['50px','50px','44px']}
+                      h={["50px", "50px", "44px"]}
                       type="text"
                       id={"naira"}
                       name={"naira"}
                       placeholder={"₦ 50,000.00"}
                       style={{
-                        borderLeft: "none",
-                        borderTopLeftRadius: 0,
-                        borderBottomLeftRadius: 0,
+                        borderRight: "none",
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
                       }}
                     />
+                    <InputRightAddon h={["50px", "50px", "44px"]}>
+                      <HStack>
+                        <img
+                          src=" https://flagcdn.com/48x36/ng.png"
+                          width="18"
+                          height="14"
+                          alt="Nigeria"
+                        ></img>
+                        <Text fontWeight={"600"} fontSize={"16px"}>
+                          NGN
+                        </Text>
+                      </HStack>
+                    </InputRightAddon>
                   </InputGroup>
                   <FormErrorMessage>{errors.naira}</FormErrorMessage>
                 </FormControl>
               </GridItem>
+
               <GridItem
                 cursor={"pointer"}
                 mt={""}
@@ -159,9 +260,9 @@ export default function Selectnaira({
                   _hover={{
                     bg: isValid ? "#0CBF94" : "gray.400",
                   }}
-                  h={['50px','50px','44px']}
+                  h={["50px", "50px", "44px"]}
                 >
-                  Continue
+                  Swap
                 </Button>
               </GridItem>
             </SimpleGrid>

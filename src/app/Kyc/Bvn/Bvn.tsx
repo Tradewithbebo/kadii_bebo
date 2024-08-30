@@ -197,7 +197,7 @@ export default function Bvn() {
                 </GridItem>
                 <GridItem colSpan={2} mt={"4px"}>
                   <Button
-                  h={['50px','50px','44px']}
+                  h={['50px','50px','44px']} 
                     type="submit"
                     bg="#0CBF94"
                     fontSize={"16px"}

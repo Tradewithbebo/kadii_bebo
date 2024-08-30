@@ -98,7 +98,6 @@ export function MarketRate({
     name: any;
     image: any;
     current_price: any;
-    // Add other properties if needed
   };
 
   const [netValue, setNetValue] = useState<NetworkData[]>([]);
@@ -273,11 +272,11 @@ export function ConfirmBuy({
         >
           <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
             <Text fontWeight={"600"} fontSize={"24px"} color={"#021D17"}>
-              {currency} {Amount}
+              {currency.toUpperCase()} {Amount}
             </Text>
           </GridItem>
           <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
-          {nn? <Text fontWeight={"600"} fontSize={['12px',"16px"]} color="#666666">
+          {nn? <Text fontWeight={"600"} fontSize={['14px','14px',"16px"]} color="#666666">
               You will receive {conversion} worth of
               <span
                 style={{

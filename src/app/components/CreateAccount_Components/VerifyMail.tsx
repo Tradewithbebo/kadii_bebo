@@ -105,7 +105,7 @@ export default function VerifyMail() {
         <Formik
           initialValues={{ pin: ["", "", "", "", "", ""], email: initialEmail }}
           validationSchema={VerifyMailSchema}
-          enableReinitialize
+           
           onSubmit={(values) => {
             if (initialEmail !== null) handleSubmit(values);
           }}
