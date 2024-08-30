@@ -54,7 +54,7 @@ const Backward = () => {
         </HStack>
           <DrawerBody>
          {/* // eslint-disable-next-line react/no-children-prop */}
-         { step===1?<SellAddBank Setstep={setStep} />:step===2? <AddBank/>:step===3?<SelectAsset/>:""}
+         { step===1?<SellAddBank Setstep={setStep} />:step===2? <AddBank setStep={setStep}/>:step===3?<SelectAsset/>:""}
           </DrawerBody>
           <DrawerFooter>
             <Button variant="outline" mr={3} onClick={onClose}>

@@ -162,6 +162,7 @@ export default function InputReceiverDetails({
                   Input receiver details
                 </Text>
               </GridItem>
+
               <GridItem colSpan={1} mt={"10px"}>
                 <Text
                   fontWeight="600"
@@ -174,10 +175,21 @@ export default function InputReceiverDetails({
               <GridItem colSpan={1} mt={"18px"}>
                 <NotificationBuy />
               </GridItem>
+              <GridItem colSpan={1} mb={"10px"}>
+                <Button
+                  fontWeight="600"
+                  bg={'#F8F8F8'}
+                  fontSize="16px"
+                  width="full"
+                  h={["50px", "50px", "44px"]}
+                >
+                  Only Accept USDT TRC20
+                </Button>
+              </GridItem>
               <GridItem colSpan={1} mb={"28px"}>
                 <FormControl isInvalid={!!errors.Network && touched.Network}>
                   <FormLabel fontSize="16px" fontWeight="600">
-                    Network
+                    Crypto
                   </FormLabel>
                   <Field name="Network">
                     {({ field }: FieldProps) => (
@@ -187,7 +199,7 @@ export default function InputReceiverDetails({
                         options={networkOptions}
                         isSearchable
                         isLoading={loading}
-                        placeholder="Select Network"
+                        placeholder="Select Crypto"
                         value={Value}
                         noOptionsMessage={() => errorMessage}
                         onChange={(selectedOption: any) => {

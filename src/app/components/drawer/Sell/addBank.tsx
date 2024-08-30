@@ -30,13 +30,15 @@ import {
   Image
 } from "@chakra-ui/react";
 import { Formik, Form, Field, useFormik } from "formik";
+import { GrStatusGood } from "react-icons/gr";
 import React, { useEffect, useState } from "react";
 import { myStyles } from "./selectrix";
 import bankName from "./listBanks";
 import Select from "react-select";
 import { AxiosAuthPost, AxiosGet } from "@/app/axios/axios";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
-export default function AddBank() {
+export default function AddBank({setStep}:{setStep:any}) {
   const [message, setmessage] = useState("");
   const [Value, setValue] = useState("");
   const [Banks, setBanks] = useState([]);
@@ -148,28 +150,26 @@ export default function AddBank() {
     accountnumber: "",
     accountname: "",
   };
-
+const handleSubmit=()=>{
+  setStep(1)
+}
   return (
     <>
       <Formik
         initialValues={initialValues}
-        // validationSchema={addUserSchema}
-        onSubmit={async (values, actions) => {
-          actions.resetForm();
+        onSubmit={() => {
+          handleSubmit();
         }}
       >
         {({
-          handleSubmit,
           errors,
           touched,
-          values,
-          handleChange,
           isValid,
           setFieldValue,
         }) => (
-          <form onSubmit={handleSubmit}>
+          <Form>
             <Box p={4}>
-              <SimpleGrid column={2} rowGap={"28px"}>
+              <SimpleGrid columns={2} rowGap={"28px"}>
                 <GridItem colSpan={2}>
                   <Text fontWeight="600" fontSize="25px">
                     Add bank details
@@ -187,7 +187,7 @@ export default function AddBank() {
                 <GridItem colSpan={2}>
                   <FormControl isInvalid={!!errors.Bank && touched.Bank}>
                     <Field
-                      as={Select} // Use Select from 'react-select'
+                      as={Select}
                       id="Bank"
                       name="Bank"
                       options={Banks}
@@ -196,11 +196,11 @@ export default function AddBank() {
                       placeholder="Select bank"
                       value={Value}
                       noOptionsMessage={() => errorMessage}
-                      onChange={(selectedOption: any) => {
+                      onChange={(selectedOption:any) => {
                         handleValueChange(selectedOption, setFieldValue);
                       }}
                       styles={{
-                        control: (provided: any) => ({
+                        control: (provided:any) => ({
                           ...provided,
                           height: "50px", // Default for mobile screens
                           [`@media (min-width: 768px)`]: {
@@ -211,7 +211,6 @@ export default function AddBank() {
                           },
                         }),
                       }}
-                      // styles={myStyles}
                     />
                     {errors.Bank && touched.Bank && (
                       <FormErrorMessage color={"Crimson"}>
@@ -228,56 +227,64 @@ export default function AddBank() {
                       Account number
                     </FormLabel>
                     <Field
+                      h={["50px", "50px", "44px"]}
                       as={Input}
                       id="accountnumber"
                       type="text"
                       placeholder="Enter account number"
                       name="accountnumber"
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      onChange={(event:any) =>
                         handleAccountNumberChange(event, setFieldValue)
                       }
                     />
-
                     <FormErrorMessage color={"Crimson"}>
                       {errors.accountnumber}
                     </FormErrorMessage>
                   </FormControl>
-                </GridItem>
-                <GridItem colSpan={2}>
-                  <FormControl
-                    isInvalid={!!errors.accountname && touched.accountname}
+                  <Box
+                    mt={"8px"}
+                    w={"fit-content"}
+                    bg={"#E7F6EC"}
+                    p={"5px"}
+                    borderRadius={"5px"}
                   >
-                    <FormLabel fontSize={"16px"} fontWeight={"600"}>
-                      Account name
-                    </FormLabel>
-                    <Field
-                      as={Input}
-                      id="accountname"
-                      type="text"
-                      placeholder="Enter account name"
-                      name="accountname"
-                    />
-                    <FormErrorMessage color={"Crimson"}>
-                      {errors.accountname}
-                    </FormErrorMessage>
-                  </FormControl>
+                    <HStack>
+                      <IoIosCheckmarkCircleOutline
+                        color={"#0F973D"}
+                        size={"20px"}
+                      />
+                      <Text
+                        fontSize={"14px"}
+                        fontWeight={"600"}
+                        color={"#0F973D"}
+                      >
+                        OSHODI DAVID OLUWATOBI
+                      </Text>
+                    </HStack>
+                  </Box>
                 </GridItem>
+
                 <GridItem colSpan={2}>
                   <Button
+                    h={["50px", "50px", "44px"]}
                     bg="#0CBF94"
                     w={"full"}
                     color={"#021D17"}
                     fontSize={"16px"}
                     fontWeight={"600"}
+                    type="submit"
+                    isDisabled={!isValid}
                   >
                     Save bank account
                   </Button>
                 </GridItem>
               </SimpleGrid>
             </Box>
-          </form>
+          </Form>
         )}
       </Formik>
+
+   
     </>
   );
 }

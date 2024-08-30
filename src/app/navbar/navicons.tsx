@@ -29,18 +29,18 @@ export  function IoIosSettingss({path}:{path:any}) {
   export  function AiOutlineSwapsM({path}:{path:any}) {
     const pathname = usePathname() == path
   return (
-    <AiOutlineSwap size={"18px"} color={pathname ? "#099137" :"#999999"} />
+    <AiOutlineSwap size={"24px"} color={pathname ? "#099137" :"#999999"} />
   )
 }
 export  function IoIosSettingssM({path}:{path:any}) {
     const pathname = usePathname() == path;
     return (
-      <IoIosSettings size={"18px"} color={pathname ? "#099137" :"#999999"} />
+      <IoIosSettings size={"24px"} color={pathname ? "#099137" :"#999999"} />
     )
   }
   export  function FaFolderMinussM({path}:{path:any}) {
     const pathname = usePathname() == path;
     return (
-        <FaFolderMinus size={"16px"}color={pathname ? "#099137" :"#999999"}/>
+        <FaFolderMinus size={"24px"}color={pathname ? "#099137" :"#999999"}/>
     )
   }

@@ -81,7 +81,7 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
             cursor={"pointer"}
             _hover={
               {
-                bg:"#ccfbf1",
+                bg:"#E7F6EC",
                 borderColor:"#0CBF94"
               }
             }
@@ -129,7 +129,7 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
             }}
             _hover={
               {
-                bg:"#ccfbf1",
+                bg:"#E7F6EC",
                 borderColor:"#0CBF94"
               }
             }
@@ -187,7 +187,7 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
             }}
             _hover={
               {
-                bg:"#ccfbf1",
+                bg:"#E7F6EC",
                 borderColor:"#0CBF94"
               }
             }

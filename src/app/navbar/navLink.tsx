@@ -61,7 +61,7 @@ export function NavLinkMobile({ items }: { items: navitem }) {
     <Box>
       {items.icon}
     </Box>
-    <Text  fontSize={"12px"} fontWeight={"600"} color={pathname ? "#099137" :"#999999"}>
+    <Text  fontSize={"16px"} fontWeight={"600"} color={pathname ? "#099137" :"#999999"}>
       {items.title}
     </Text>
   </VStack>
