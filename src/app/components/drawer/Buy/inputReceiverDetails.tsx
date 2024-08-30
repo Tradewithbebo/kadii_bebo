@@ -72,9 +72,9 @@ export default function InputReceiverDetails({
     setcurrentsImage(currentImage);
     setcurrentsName(currentName);
     // console.log('price',currentPrice)
-    alert(
-      `Network: ${values.Network}, Wallet Address: ${values.Walletaddress}, Current Price: ${currentPrice}`
-    );
+    // alert(
+    //   `Network: ${values.Network}, Wallet Address: ${values.Walletaddress}, Current Price: ${currentPrice}`
+    // );
     setStep(2);
   };
 
