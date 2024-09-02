@@ -56,15 +56,7 @@ export function NotificationSell() {
                       ml={"10px"}
                       gap={"12px"}
                     >
-                      <Box>
-                        <Text
-                          fontWeight={"600"}
-                          fontSize={"14px"}
-                          color={"#021D17"}
-                        >
-                          Complete your KYC
-                        </Text>
-                      </Box>
+                  
                       <HStack>
                         <Text
                           fontWeight={"500"}

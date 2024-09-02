@@ -161,12 +161,7 @@ const handleSubmit=()=>{
           handleSubmit();
         }}
       >
-        {({
-          errors,
-          touched,
-          isValid,
-          setFieldValue,
-        }) => (
+        {({ errors, touched, isValid, setFieldValue }) => (
           <Form>
             <Box p={4}>
               <SimpleGrid columns={2} rowGap={"28px"}>
@@ -178,7 +173,7 @@ const handleSubmit=()=>{
                 <GridItem colSpan={2} mt={"-10px"}>
                   <Text
                     fontWeight="600"
-                    fontSize={["11px", "15px"]}
+                    fontSize={["15px", "15px"]}
                     color="#666666"
                   >
                     Add your preferred bank for instant payout
@@ -196,11 +191,11 @@ const handleSubmit=()=>{
                       placeholder="Select bank"
                       value={Value}
                       noOptionsMessage={() => errorMessage}
-                      onChange={(selectedOption:any) => {
+                      onChange={(selectedOption: any) => {
                         handleValueChange(selectedOption, setFieldValue);
                       }}
                       styles={{
-                        control: (provided:any) => ({
+                        control: (provided: any) => ({
                           ...provided,
                           height: "50px", // Default for mobile screens
                           [`@media (min-width: 768px)`]: {
@@ -233,7 +228,7 @@ const handleSubmit=()=>{
                       type="text"
                       placeholder="Enter account number"
                       name="accountnumber"
-                      onChange={(event:any) =>
+                      onChange={(event: any) =>
                         handleAccountNumberChange(event, setFieldValue)
                       }
                     />
@@ -283,8 +278,6 @@ const handleSubmit=()=>{
           </Form>
         )}
       </Formik>
-
-   
     </>
   );
 }
