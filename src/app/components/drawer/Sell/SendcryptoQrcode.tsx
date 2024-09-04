@@ -30,6 +30,9 @@ export default function SendcryptoQrcode() {
           <Box
             mt={"8px"}
             w={"fit-content"}
+
+
+            
             bg={"#E7F6EC"}
             p={"5px"}
             borderRadius={"5px"}

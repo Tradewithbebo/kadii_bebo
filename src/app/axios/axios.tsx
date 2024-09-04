@@ -203,3 +203,19 @@ export async function AxiosGet(url: string) {
     throw err;
   }
 }
+export async function AxiosAuthPatchfile(url: string, dataObject: any, p0: { headers: { 'Content-Type': string; }; }) {
+  const token = getAuthToken(); // Ensure this function is defined and working
+  const authConfig = {
+    headers: {
+      "Content-Type": "multipart/form-data", // Automatically handled by axios
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.patch(`${baseUrl}${url}`, dataObject, authConfig);
+    return res.data;
+  } catch (err) {
+    throw err;
+  }
+}

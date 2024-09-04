@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Fade } from 'react-awesome-reveal'
 import { MdHome } from 'react-icons/md'
+import ConfettiPop from './ConfettiPop'
 
 export default function SuccessBuy() {
     const Router=useRouter()
@@ -21,6 +22,7 @@ export default function SuccessBuy() {
     alt='Bebo' />
 </Box></Box>
         </GridItem></Fade>
+        <GridItem rounded={'50%'}> <ConfettiPop /></GridItem>
         <GridItem mb={'24px'} textAlign={'center'} colSpan={1}>
             <Text color={'#021D17'} fontWeight={'600'} fontSize={["32px",'40px']}> 
             Success

@@ -316,12 +316,7 @@ export default function GeneralFormPage({
           )}
           {step === 5 && <SuccessBuy />}
         </Box>
-        <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={()=>resetInputs()}>
-              Cancel
-            </Button>
-            
-          </DrawerFooter>
+        
       </DrawerContent>
     </Drawer>
   );

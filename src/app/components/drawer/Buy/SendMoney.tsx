@@ -20,7 +20,7 @@ import { ConfirmBuy, ConfirmBuyAlert } from "./NotificationBuy";
 import { IoCopyOutline, IoDocumentOutline } from "react-icons/io5";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
-import { AxiosAuthPostfile } from "@/app/axios/axios";
+import { AxiosAuthPatchfile, AxiosAuthPostfile } from "@/app/axios/axios";
 
 export default function SendMoney({
   setStep,
@@ -42,32 +42,30 @@ export default function SendMoney({
   const url = `transactions/${id}/upload-reference`;
  
   const handleProceed = async (values: any) => {
-    if (values.document) {
+    if (values.paymentReference) {
       setLoading(true);
       try {
-        // Create a new FormData object
         const formData = new FormData();
-        formData.append("documentType", values.documentType);
-        formData.append("documentNumber", values.documentNumber);
-        if (values.document) {
-          formData.append("document", values.document);
-        }
-
-        const res = await AxiosAuthPostfile(url, formData, {
+        formData.append("paymentReference", values.paymentReference);
+  
+        const res = await AxiosAuthPatchfile(url, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+  
         setLoading(false);
         if (res && res.data) {
           setStep(5);
         }
       } catch (err: any) {
         setLoading(false);
+  
         let message = "Check your Network and try again.";
         if (err.response && err.response.data && err.response.data.message) {
           message = err.response.data.message;
         }
+  
         setErrorMessage(message);
         toast({
           title: "Error",
@@ -81,7 +79,7 @@ export default function SendMoney({
     }
   };
   const validationSchema = Yup.object().shape({
-    document: Yup.mixed()
+    paymentReference: Yup.mixed()
       .required("A file is required")
       .test(
         "fileSize",
@@ -127,7 +125,7 @@ export default function SendMoney({
   return (
     <Box p={4}>
       <Formik
-        initialValues={{ document: null}}
+        initialValues={{ paymentReference: null}}
         validationSchema={validationSchema}
         enableReinitialize
         onSubmit={(values) => {
@@ -238,7 +236,7 @@ export default function SendMoney({
                   <GridItem colSpan={2} mt="12px">
                     <VStack spacing={4} align="flex-start">
                       <FormControl
-                        isInvalid={!!errors.document && touched.document}
+                        isInvalid={!!errors.paymentReference && touched.paymentReference}
                       >
                         {/* <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Upload picture of National ID number
@@ -250,7 +248,7 @@ export default function SendMoney({
                             const file = event.currentTarget.files?.[0];
                             if (file) {
                               // console.log("Selected file:", file);
-                              setFieldValue("document", file); // This will update Formik's state
+                              setFieldValue("paymentReference", file); // This will update Formik's state
                               setSelectedFile(file);
                             }
                           }}
@@ -285,7 +283,7 @@ export default function SendMoney({
                         {selectedFile ? (
                           <Text mt={2}>File selected: {selectedFile.name}</Text>
                         ) : (
-                          <FormErrorMessage>{errors.document}</FormErrorMessage>
+                          <FormErrorMessage>{errors.paymentReference}</FormErrorMessage>
                         )}
                       </FormControl>
                       {/* <Field
