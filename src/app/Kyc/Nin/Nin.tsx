@@ -24,8 +24,6 @@ import { IoDocumentOutline } from 'react-icons/io5';
 const NinSchema = Yup.object().shape({
   bvn: Yup.string()
     .matches(/^\d+$/, 'Must be a number')
-    // .min(6, 'Must be exactly 6 digits')
-    // .max(6, 'Must be exactly 6 digits')
     .required('BVN is required'),
 });
 

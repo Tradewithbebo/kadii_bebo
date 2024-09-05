@@ -25,8 +25,8 @@ import { Console } from "console";
 const BvnSchema = Yup.object().shape({
   documentNumber: Yup.string()
     .matches(/^\d+$/, "Must be a number")
-    .min(10, "Must be exactly 10 digits")
-    .max(10, "Must be exactly 10 digits")
+    .min(11, "Must be exactly 10 digits")
+    .max(11, "Must be exactly 10 digits")
     .required("National ID number is required"),
   document: Yup.mixed()
     .required("A file is required")
