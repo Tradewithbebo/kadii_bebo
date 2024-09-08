@@ -225,13 +225,20 @@ export default function SelectUSDT({
                       }}
                     
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const inputValue = e.target.value.replace(/,/g, "");
+                        let inputValue = e.target.value.replace(/,/g, "");
 
                         // If the input is empty, set "naira" to an empty string or 0 to avoid NaN
                         if (!inputValue) {
                           setFieldValue("USDT", "");
                           setConversion2("");
                           return;
+                        }
+                        if (!/^\d*$/.test(inputValue)) {
+                          return;
+                        }
+                    
+                        if (inputValue && inputValue.length > 10) {
+                          inputValue = inputValue.slice(0, 10); // Limit the input to 10 digits
                         }
 
                         const USDT = parseFloat(inputValue);
@@ -271,8 +278,7 @@ export default function SelectUSDT({
                   h={["50px", "50px", "44px"]}
                   type="text"
                   value={
-                  new Intl.NumberFormat("en-NG", {
-                  }).format(Number(Conversion2))}
+                  Conversion2}
                   borderColor={"#cbd5e1"}
                 />
 

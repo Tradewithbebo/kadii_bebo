@@ -270,36 +270,50 @@ export function ConfirmBuy({
           mb={"12px"}
           // ml={'-45px'}
         >
-          <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
-            <Text fontWeight={"600"} fontSize={"24px"} color={"#021D17"}>
+          <GridItem
+            colSpan={[1, 3]}
+            display={"flex"}
+            justifyContent={"center"}
+            w={"full"}
+          >
+            <Text
+              fontWeight={"600"}
+              fontSize={"24px"}
+              color={"#021D17"}
+              textAlign={"center"}
+              w={"full"}
+            >
               {currency.toUpperCase()} {Amount}
             </Text>
           </GridItem>
-          <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"center"}>
-          {nn? <Text fontWeight={"600"} fontSize={['14px','14px',"16px"]} color="#666666">
-              You will receive {conversion} worth of
-              <span
-                style={{
-                  justifyContent: "center",
-                  display: "flex",
-                  width: "full",
-                }}
+          <GridItem
+            colSpan={[1, 3]}
+            display={"flex"}
+            justifyContent={"center"}
+            w={"full"}
+          >
+            {nn ? (
+              <Text
+              fontWeight={"600"}
+              fontSize={["16px"]}
+              color="#666666"
+              textAlign={"center"}
+              w={"full"}
               >
-                {" "}
-                {crypto}
-              </span>
-            </Text> :<Text fontWeight={"600"} fontSize={['12px',"16px"]} color="#666666">
-              You will pay {conversion} naira for
-              <span
-                style={{
-                  justifyContent: "center",
-                  display: "flex",
-                  width: "full",
-                }}
+                You will receive {conversion} worth of {crypto}
+              </Text>
+            ) : (
+              <Text
+                fontWeight={"600"}
+                fontSize={["16px"]}
+                color="#666666"
+                textAlign={"center"}
+                w={"full"}
               >
-              {Amount} {crypto}
-              </span>
-            </Text> }
+                You will pay {new Intl.NumberFormat("en-NG", {
+                  }).format(Number(conversion))} naira for {Amount} {crypto}
+              </Text>
+            )}
           </GridItem>
         </SimpleGrid>
       </Box>

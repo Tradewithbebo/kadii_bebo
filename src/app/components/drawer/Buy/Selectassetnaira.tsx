@@ -228,7 +228,7 @@ export default function Selectnaira({
                       name={"naira"}
                       placeholder={"₦ 50,000.00"}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        const inputValue = e.target.value.replace(/,/g, "");
+                        let inputValue = e.target.value.replace(/,/g, "");
 
                         // If the input is empty, set "naira" to an empty string or 0 to avoid NaN
                         if (!inputValue) {
@@ -236,7 +236,13 @@ export default function Selectnaira({
                           setConversion("");
                           return;
                         }
-
+                        if (!/^\d*$/.test(inputValue)) {
+                          return;
+                        }
+                    
+                        if (inputValue && inputValue.length > 10) {
+                          inputValue = inputValue.slice(0, 10); // Limit the input to 10 digits
+                        }
                         const nairaValue = parseFloat(inputValue);
 
                         setFieldValue("naira", nairaValue);
