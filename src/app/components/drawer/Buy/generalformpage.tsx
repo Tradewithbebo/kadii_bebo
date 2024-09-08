@@ -33,6 +33,7 @@ import SendMoney from "./SendMoney";
 import { AxiosAuthPost, AxiosPost } from "@/app/axios/axios";
 import { useRouter } from "next/navigation";
 import SuccessBuy from "./success";
+import { useCryptoContext } from "./usecontextbuy";
 
 export default function GeneralFormPage({
   isOpen,
@@ -44,24 +45,43 @@ export default function GeneralFormPage({
   const [Value, setValue] = useState("");
   const [Currentprice, setCurrentprice] = useState("");
   const [Currency, setCurrency] = useState(true);
-  const [network, setNetwork] = useState("");
+  // const [network, setNetwork] = useState("");
   const [walletaddress, setWalletaddress] = useState("");
   const [asset, setasset] = useState("");
   const [USDT, setUSDT] = useState("");
   const [naira, setnaira] = useState("");
   const [transactionId, settransactionid] = useState("");
-  const [toprice, settoprice] = useState("");
-  const [Symbols, setSymbols] = useState("");
-  const [Name, setName] = useState("");
-  const [Conversion, setConversion] = useState<number | null>(null);
-  const [Conversion2, setConversion2] = useState<number | null>(null); // Allow null for initial state
+  // const [toprice, settoprice] = useState("");
+  // const [Symbols, setSymbols] = useState("");
+  // const [Name, setName] = useState("");
+   // Allow null for initial state
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast();
   const url = "transactions/create";
-  const [currentsImage, setcurrentsImage] = useState('');
-  const [currentsName, setcurrentsName] = useState('');
+  // const [currentsImage, setcurrentsImage] = useState('');
+  // const [currentsName, setcurrentsName] = useState('');
+  const {
+    Symbols,
+    setNetwork,
+    setSymbols,
+    setName,
+    settoprice,
+    toprice,
+    setcurrentsImage,
+    setcurrentsName,
+    network,
+    currentsImage,
+    currentsName,
+    Name,
+    Conversion,
+        setConversion,
+        setConversion2,
+        Conversion2,
+    
+  } = useCryptoContext();
+
   const handleclick = () => {
     {
       Currency ? setCurrency(false) : setCurrency(true);
@@ -144,31 +164,34 @@ export default function GeneralFormPage({
   
   // const [scrollBehavior, setScrollBehavior] = React.useState("inside");
   useEffect(() => {
-    // console.log('Currentprice:',Currentprice)
-    updateNetworkOptions();
-  });
+    if (toprice && (naira || USDT)) {
+      updateNetworkOptions();
+    }
+  }, [naira, USDT, toprice]);
+  
   const updateNetworkOptions = () => {
-    // console.log('Currentprice:',toprice)
     const currentPrice = parseFloat(toprice);
-    // console.log('Currentprice:',Currentprice)
-    if (Currency) {
-      const nairaValue = parseFloat(naira);
-      // console.log('naira:',nairaValue)
-      const value = nairaValue / currentPrice;
-      // console.log('Currentprice:',value)
-      const formattedValue = parseFloat(value.toFixed(13));
-      setConversion(formattedValue);
-    } else {
-      console.log("USDTValue:", USDT);
-      const USDTValue = parseFloat(USDT);
-      
-      const value = USDTValue * currentPrice;
-      
-      const formattedValue = parseFloat(value.toFixed(20));
-      setConversion2(formattedValue);
+  
+    if (!isNaN(currentPrice) && currentPrice > 0) {
+      if (Currency && naira) {
+        const nairaValue = parseFloat(naira);
+        if (!isNaN(nairaValue) && nairaValue > 0) {
+          const value = nairaValue / currentPrice;
+          const formattedValue = parseFloat(value.toFixed(13));
+          setConversion(formattedValue);
+        }
+      } else if (USDT) {
+        const USDTValue = parseFloat(USDT);
+        if (!isNaN(USDTValue) && USDTValue > 0) {
+          const value = USDTValue * currentPrice;
+          const formattedValue = parseFloat(value.toFixed(20));
+          setConversion2(formattedValue);
+        }
+      }
     }
   };
-
+  
+  
   const initialValues = {
     amountNaira: Currency ? parseFloat(naira) : Conversion2,
     amountBlockchain: Currency ? Conversion : parseFloat(USDT),
@@ -201,11 +224,15 @@ export default function GeneralFormPage({
             position={"absolute"}
             mt={["45px", "40px"]}
             ml={["15px", "10px"]}
-            display={step === 1 ||step === 4 ? "none" : "block"}
+            display={step === 1 || step === 4 ? "none" : "block"}
           >
             <IoIosArrowBack size={"20px"} />
           </Box>
-          <DrawerCloseButton  onClick={()=>{resetInputs()}}/>
+          <DrawerCloseButton
+            onClick={() => {
+              resetInputs();
+            }}
+          />
         </HStack>
         <Box p={4}>
           {step === 1 && (
@@ -213,7 +240,7 @@ export default function GeneralFormPage({
               setStep={setStep}
               setNetwork={setNetwork}
               setWalletaddress={setWalletaddress}
-              setName={setName}
+              // setName={setName}
               Network={network}
               settoprice={settoprice}
               setSymbol={setSymbols}
@@ -232,7 +259,10 @@ export default function GeneralFormPage({
                 Name={Name}
                 setCurrentprice={setCurrentprice}
                 asset={currentsName}
-                rate={toprice}
+                rate={new Intl.NumberFormat("en-NG", {
+                  // style: 'currency',
+                  // currency: 'NGN',
+                }).format(toprice)}
                 imgsybl={currentsImage}
                 sybl={Symbols}
               />
@@ -255,7 +285,17 @@ export default function GeneralFormPage({
             <>
               <ConfirmBuyOrder
                 setStep={setStep}
-                Amount={Currency ? naira : USDT}
+                Amount={
+                  Currency
+                    ? new Intl.NumberFormat("en-NG", {
+                        // style: 'currency',
+                        // currency: 'NGN',
+                      }).format(Number(naira))
+                    : new Intl.NumberFormat("en-NG", {
+                        // style: 'currency',
+                        // currency: 'NGN',
+                      }).format(Number(USDT))
+                }
                 conversion={Currency ? Conversion : Conversion2}
                 currency={Currency ? "₦" : Symbols}
                 crypto={Name}
@@ -312,11 +352,12 @@ export default function GeneralFormPage({
               setStep={setStep}
               amountUsdt={Currency ? Conversion : USDT}
               amountNaira={Currency ? naira : Conversion2}
-              currentcurrency={Symbols} transactionId={transactionId}            />
+              currentcurrency={Symbols}
+              transactionId={transactionId}
+            />
           )}
           {step === 5 && <SuccessBuy />}
         </Box>
-        
       </DrawerContent>
     </Drawer>
   );
@@ -326,7 +367,7 @@ export const Press = ({ loading }: { loading: any }) => {
   return (
     <Box w={"full"} justifyContent={"center"} display={"flex"} mt={"-30px"}>
       <Button
-        h={['50px','50px','44px']}
+        h={["50px", "50px", "44px"]}
         type="submit"
         w={"90%"}
         bg={"#0CBF94"}

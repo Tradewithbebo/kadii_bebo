@@ -57,7 +57,7 @@ export default function HomePageBody() {
           backgroundPosition="center" // Centers the image within the box
           backgroundRepeat="no-repeat" // Prevents the image from repeating
           pt={"40px"}
-          pb={["40px","80px", "205px"]}
+          pb={["40px", "80px", "205px"]}
         >
           <Center>
             <VStack>
@@ -84,14 +84,26 @@ export default function HomePageBody() {
                     pb={"51px"}
                     pt={"40px"}
                   >
-                    {Buy ? <SellCrypto /> : <BuyCrypto />}
+                    {Buy ? (
+                      <SellCrypto />
+                    ) : (
+                      <BuyCrypto
+                        
+                      />
+                    )}
                   </Box>
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["350px",'465px',"692px"]}>
+              <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
-                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs"   h={'50px'}>
+                  <Button
+                    bg={"#FFFFFF"}
+                    w={"100%"}
+                    py={"18px"}
+                    boxShadow="xs"
+                    h={"50px"}
+                  >
                     <Text
                       color={"#021D17"}
                       fontWeight={"600"}
@@ -110,18 +122,18 @@ export default function HomePageBody() {
                 </GridItem>
               </SimpleGrid>
               <Box
-        display={{ base: "block", md: "none" }}
-        position="fixed"
-        bottom="0"
-        width="100%"
-        zIndex="10"
-        bg="white"
-        boxShadow="md"
-        justifyContent={'center'}
-        w={'full'}
-      >
-        <Footer />
-      </Box>
+                display={{ base: "block", md: "none" }}
+                position="fixed"
+                bottom="0"
+                width="100%"
+                zIndex="10"
+                bg="white"
+                boxShadow="md"
+                justifyContent={"center"}
+                w={"full"}
+              >
+                <Footer />
+              </Box>
             </VStack>
           </Center>
         </Box>

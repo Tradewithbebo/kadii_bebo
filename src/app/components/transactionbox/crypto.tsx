@@ -17,66 +17,86 @@ import {
   Center,
   useDisclosure,
   Fade,
+  Spinner,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { BsChevronDown, BsExclamationCircle } from "react-icons/bs";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { MenuItems } from "./menuitem";
 import { ChevronDownIcon } from "@chakra-ui/icons";
-import {ButtonForBuy, ButtonForsell} from "./ButtonForBuy";
+import { ButtonForBuy, ButtonForsell } from "./ButtonForBuy";
 import InputReceiverDetails from "../drawer/Buy/inputReceiverDetails";
 import GeneralFormPage from "../drawer/Buy/generalformpage";
 import { AxiosGet } from "@/app/axios/axios";
 import Generalsell from "../drawer/Sell/Generalsell";
+import { useCryptoContext } from "../drawer/Buy/usecontextbuy";
 
 export function SellCrypto() {
-  const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
+  const [selectedCrypto, setSelectedCrypto] = useState("");
   const [selectedimage, setselectedimage] = useState("/image/crypto.png");
   const [BTCrate, setBTCRate] = useState("");
-  const [rate, setRate] = useState('');
- 
-  const handleCryptoSelect = (crypto: string,image:any,rates:any) => {
+  const [rate, setRate] = useState("");
+
+  const handleCryptoSelect = (crypto: string, image: any, rates: any) => {
     setSelectedCrypto(crypto);
-    setselectedimage (image)
-    setRate(rates)// Update the selected crypto in state
-    onClose()
+    setselectedimage(image);
+    setRate(
+      new Intl.NumberFormat("en-NG", {
+        // style: 'currency',
+        // currency: 'NGN',
+      }).format(rates)
+    ); // Update the selected crypto in state
+    onClose();
   };
+
   const { onOpen } = useDisclosure();
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
-  
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { isOpen:sellisopen, onOpen:sellonopen, onClose:Sellonclose } = useDisclosure();
-  const { isOpen:opentwo, onToggle:toggle, onClose } = useDisclosure()
-  
-  const url = 'wallet/assets';
+  const {
+    isOpen: sellisopen,
+    onOpen: sellonopen,
+    onClose: Sellonclose,
+  } = useDisclosure();
+  const { isOpen: opentwo, onToggle: toggle, onClose } = useDisclosure();
+
+  const url = "wallet/assets";
   type NetworkOption = {
     title: string;
-    current_price:any
-   name: string;
+    current_price: any;
+    name: string;
     // menu: JSX.Element;
     image?: string; // Optional if you have an image property
   };
-  
+
   const getnetwork = async () => {
     setLoading(true);
     try {
       const res = await AxiosGet(url);
       setLoading(false);
       if (res) {
-        // console.log(res.data); 
-     
-        const btcData = res.data.find((crypto: any) => crypto.name === "Bitcoin");
-      
-      if (btcData) {
-        setRate(btcData.current_price); // Set the current price of Bitcoin
-      }
-    
+        // console.log(res.data);
+
+        const btcData = res.data.find(
+          (crypto: any) => crypto.name === "Bitcoin"
+        );
+
+        if (btcData) {
+          setRate(
+            new Intl.NumberFormat("en-NG", {
+              // style: 'currency',
+              // currency: 'NGN',
+            }).format(btcData.current_price)
+          ); // Set the current price of Bitcoin
+          setSelectedCrypto("Bitcoin");
+        }
+
         setNetworkOptions(res.data);
 
         setLoading(false);
-        setErrorMessage(''); // Clear error message on success
-        return true; 
+        setErrorMessage(""); // Clear error message on success
+        return true;
       }
     } catch (err: any) {
       setLoading(false);
@@ -87,8 +107,9 @@ export function SellCrypto() {
       setErrorMessage(message);
     }
   };
-  
+
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined = undefined; // Typing timeoutId as NodeJS.Timeout
     const fetchData = async () => {
       const success = await getnetwork();
       if (!success) {
@@ -97,6 +118,12 @@ export function SellCrypto() {
     };
 
     fetchData(); // Initial call
+    return () => {
+      // Cleanup function to clear the timeout if it was set
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, []);
 
   return (
@@ -134,21 +161,21 @@ export function SellCrypto() {
       <GridItem colSpan={[1, 1, 1]} mt={["15px", "32px"]} w={"full"}>
         <HStack>
           <Box>
-            <Text
-               fontSize={"16px"}
-               fontWeight={"600"}
-              color={"#808080"}
-            >
+            <Text fontSize={"16px"} fontWeight={"600"} color={"#808080"}>
               Crypto:
             </Text>
           </Box>
 
           <Box w={"100%"}>
-            <Button w={"100%"} onClick={toggle} bg={"#F8F8F8"}  h={'50px'}>
+            <Button w={"100%"} onClick={toggle} bg={"#F8F8F8"} h={"50px"}>
               <HStack w={"full"} justifyContent={"space-between"}>
                 <HStack gap={"8px"}>
                   <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-                    <Image src={selectedimage} alt="Crypto" />
+                    {loading ? (
+                      <Spinner />
+                    ) : (
+                      <Image src={selectedimage} alt="Crypto" />
+                    )}
                   </Box>
                   <Box>
                     <Text
@@ -240,7 +267,7 @@ export function SellCrypto() {
           justifyContent={["flex-start", "flex-start", "flex-end"]}
         >
           <Divider
-           display={{ base: "none", md: "block" }}
+            display={{ base: "none", md: "block" }}
             orientation="vertical"
             h={"50px"}
             mr={"24px"}
@@ -249,24 +276,23 @@ export function SellCrypto() {
             size={"xl"}
           />
           <Box>
-            <Text
-              fontSize={"16px"}
-              fontWeight={"600"}
-              color={"#808080"}
-              
-            >
+            <Text fontSize={"16px"} fontWeight={"600"} color={"#808080"}>
               Rate:
             </Text>
           </Box>
-          <Button bg={"#F8F8F8"}   h={'50px'} >
-            <HStack  w={"full"}>
+          <Button bg={"#F8F8F8"} h={"50px"}>
+            <HStack w={"full"}>
               <Box>
-                <TbCurrencyNaira size={"16px"} />
+                <TbCurrencyNaira size={"20px"} />
               </Box>
-              <Box mt={"9px"} mb={"9px"}  w={"full"}>
-                <Text fontSize={"16px"} fontWeight={"600"}>
-                  {rate}
-                </Text>
+              <Box mt={"9px"} mb={"9px"} w={"full"}>
+                {loading ? (
+                  <Spinner />
+                ) : (
+                  <Text fontSize={"16px"} fontWeight={"600"}>
+                    {rate}
+                  </Text>
+                )}
               </Box>
             </HStack>
           </Button>
@@ -325,57 +351,82 @@ export function SellCrypto() {
 }
 
 export function BuyCrypto() {
-  const [selectedCrypto, setSelectedCrypto] = useState("Bitcoin");
-  const { isOpen:opentwo, onToggle:toggle, onClose:close } = useDisclosure()
-  // const handleCryptoSelect = (crypto: string) => {
-  //   setSelectedCrypto(crypto); // Update the selected crypto in state
-  // };
+  const {
+    setmenucurrent_price,
+    setmenuimage,
+    setmenusymbol,
+    setmenuname,
+    menucurrent_price,
+    menuimage,
+    menusymbol,
+    menuname,
+  } = useCryptoContext();
+
+  const [selectedCrypto, setSelectedCrypto] = useState("");
+  const { isOpen: opentwo, onToggle: toggle, onClose: close } = useDisclosure();
   const { isOpen, onOpen, onClose } = useDisclosure();
- const [selectedimage, setselectedimage] = useState("/image/crypto.png");
+  const [selectedimage, setselectedimage] = useState("/image/crypto.png");
   const [BTCrate, setBTCRate] = useState("");
-  const [rate, setRate] = useState('');
- 
-  const handleCryptoSelect = (crypto: string,image:any,rates:any) => {
-    setSelectedCrypto(crypto);
-    setselectedimage (image)
-    setRate(rates)// Update the selected crypto in state
-    close()
-  };
-  // const { isOpen, onOpen, onClose } = useDisclosure();
+  const [rate, setRate] = useState("");
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
-  
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  
-  
-  const url = 'wallet/assets';
+
+  const handleCryptoSelect = (crypto: string, image: any, rates: any,symbol:any) => {
+    setSelectedCrypto(crypto);
+    setselectedimage(image);
+    setRate(
+      new Intl.NumberFormat("en-NG", {
+        // style: 'currency',
+        // currency: 'NGN',
+      }).format(rates)
+    ); // Set the current price of Bitcoin// Update the selected crypto in state
+    setmenucurrent_price(rates);
+    setmenuimage(image);
+    setmenusymbol(symbol);
+    setmenuname(crypto);
+    close();
+  };
+  // const { isOpen, onOpen, onClose } = useDisclosure();
+ 
+
+  const url = "wallet/assets";
   type NetworkOption = {
     title: string;
-    current_price:any
-   name: string;
+    current_price: any;
+    name: string;
+    symbol:any;
     // menu: JSX.Element;
     image?: string; // Optional if you have an image property
   };
-  
+
   const getnetwork = async () => {
     setLoading(true);
     try {
       const res = await AxiosGet(url);
       setLoading(false);
       if (res) {
-        // console.log(res.data); 
-     
-        const btcData = res.data.find((crypto: any) => crypto.name === "Bitcoin");
-      
-      if (btcData) {
-        setRate(btcData.current_price); // Set the current price of Bitcoin
-      }
-    
+        // console.log(res.data);
+
+        const btcData = res.data.find(
+          (crypto: any) => crypto.name === "Bitcoin"
+        );
+
+        if (btcData) {
+          setRate(
+            new Intl.NumberFormat("en-NG", {
+              // style: 'currency',
+              // currency: 'NGN',
+            }).format(btcData.current_price)
+          ); // Set the current price of Bitcoin
+          setSelectedCrypto("Bitcoin");
+        }
+
         setNetworkOptions(res.data);
 
         setLoading(false);
-        setErrorMessage(''); // Clear error message on success
-        return true; 
+        setErrorMessage(""); // Clear error message on success
+        return true;
       }
     } catch (err: any) {
       setLoading(false);
@@ -386,17 +437,32 @@ export function BuyCrypto() {
       setErrorMessage(message);
     }
   };
-  
+  const [isSuccess, setIsSuccess] = useState(false); // Track success status
+
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined;
+  
     const fetchData = async () => {
       const success = await getnetwork();
-      if (!success) {
-        setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
+      if (success) {
+        setIsSuccess(true); // Mark success as true if data is fetched successfully
+      } else {
+        timeoutId = setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
       }
     };
-
-    fetchData(); // Initial call
-  }, []);
+  
+    // Fetch data only if success has not been achieved
+    if (!isSuccess) {
+      fetchData(); // Initial call to fetch data
+    }
+  
+    return () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId); // Clear timeout on unmount
+      }
+    };
+    // Empty dependency array ensures it only runs on component mount
+  }, [isSuccess]); // Remove `isSuccess` from dependency array// Add isSuccess as a dependency
   return (
     <>
       <SimpleGrid
@@ -441,7 +507,11 @@ export function BuyCrypto() {
                 <HStack w={"full"} justifyContent={"space-between"}>
                   <HStack gap={"8px"}>
                     <Box mt={"5px"} mb={"5px"} width={"20px"} height={"20px"}>
-                      <Image src={selectedimage} alt="Crypto" />
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <Image src={selectedimage} alt="Crypto" />
+                      )}
                     </Box>
                     <Box>
                       <Text
@@ -483,7 +553,8 @@ export function BuyCrypto() {
                         handleCryptoSelect(
                           item.name,
                           item.image,
-                          item.current_price
+                          item.current_price,
+                          item.symbol,
                         )
                       }
                     >
@@ -549,12 +620,16 @@ export function BuyCrypto() {
             <Button bg={"#F8F8F8"} h={"50px"}>
               <HStack w={"full"}>
                 <Box>
-                  <TbCurrencyNaira size={"16px"} />
+                  <TbCurrencyNaira size={"20px"} />
                 </Box>
                 <Box mt={"9px"} mb={"9px"} w={"full"}>
-                  <Text fontSize={"16px"} fontWeight={"600"}>
-                    {rate}
-                  </Text>
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <Text fontSize={"16px"} fontWeight={"600"}>
+                      {rate}
+                    </Text>
+                  )}
                 </Box>
               </HStack>
             </Button>

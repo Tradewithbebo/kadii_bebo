@@ -19,6 +19,7 @@ import { Formik, Field, Form, FieldProps } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
 import NotificationBuy, { MarketRate } from "./NotificationBuy";
+import { useCryptoContext } from "./usecontextbuy";
 
 // Example network options
 const networkOptions = [
@@ -58,12 +59,23 @@ export default function SelectUSDT({
   rate:any,
   asset:any
 }) {
+  const {
+    Conversion,
+        setConversion,
+        setConversion2,
+        Conversion2,
+  } = useCryptoContext();
   const [Value, setValue] = useState(null);
+  const updateNetworkOptions = (USDT: number) => {
+    const currentPrice = parseFloat(rate); // Assuming 'rate' is the current price
 
-  // const handleValueChange = (selectedOption: any, setFieldValue: any) => {
-  //   setFieldValue("asset", selectedOption ? selectedOption.value : "");
-  //   setValue(selectedOption);
-  // };
+    if ( currentPrice > 0 && USDT > 0) {
+      const value = USDT * currentPrice;
+      const formattedValue = parseFloat(value.toFixed(20));
+      setConversion2(formattedValue);
+    }
+  };
+
 
   const handleProceed = (values:any) => {
     // setasset(values.asset);
@@ -189,7 +201,7 @@ export default function SelectUSDT({
                   borderRadius={"5px"}
                 >
                   <Text fontSize={"12px"} fontWeight={"600"}>
-                    1 Naira = {rate} Naira
+                    1 {Name} = {rate} Naira
                   </Text>
                 </Box>
               </GridItem>
@@ -211,7 +223,22 @@ export default function SelectUSDT({
                         borderTopRightRadius: 0,
                         borderBottomRightRadius: 0,
                       }}
-                    />
+                    
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const inputValue = e.target.value.replace(/,/g, "");
+
+                        // If the input is empty, set "naira" to an empty string or 0 to avoid NaN
+                        if (!inputValue) {
+                          setFieldValue("USDT", "");
+                          setConversion2("");
+                          return;
+                        }
+
+                        const USDT = parseFloat(inputValue);
+
+                        setFieldValue("USDT", USDT);
+                        updateNetworkOptions(USDT);
+                      }}/>
                     <InputRightAddon h={["50px", "50px", "44px"]}>
                       <HStack>
                         <Image
@@ -231,6 +258,25 @@ export default function SelectUSDT({
                   </InputGroup>
                   <FormErrorMessage>{errors.USDT}</FormErrorMessage>
                 </FormControl>
+              </GridItem>
+              <GridItem colSpan={1} mb={"28px"}>
+                {/* <FormControl isInvalid={!!errors.naira && touched.naira}> */}
+                <FormLabel fontSize="16px" fontWeight="600">
+                  Amount of {Name} you will get
+                </FormLabel>
+                <Field
+                placeholder='converted value'
+                 disabled
+                  as={Input}
+                  h={["50px", "50px", "44px"]}
+                  type="text"
+                  value={
+                  new Intl.NumberFormat("en-NG", {
+                  }).format(Number(Conversion2))}
+                  borderColor={"#cbd5e1"}
+                />
+
+                {/* </FormControl> */}
               </GridItem>
               <GridItem
                 cursor={"pointer"}

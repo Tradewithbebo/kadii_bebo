@@ -21,6 +21,7 @@ import * as Yup from "yup";
 import NotificationBuy, { MarketRate } from "./NotificationBuy";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { AxiosGet } from "@/app/axios/axios";
+import { useCryptoContext } from "./usecontextbuy";
 
 // Example network options
 const networkOptions = [
@@ -60,11 +61,26 @@ export default function Selectnaira({
   imgsybl:any,
   sybl:any
 }) {
+  const {
+    Conversion,
+        setConversion,
+        setConversion2,
+        Conversion2,
+  } = useCryptoContext();
   const [Value, setValue] = useState(null);
   const [loading, setLoading] = useState(false);
   const [networkOptions, setNetworkOptions] = useState([]);
   const url = "wallet/assets";
   const [errorMessage, setErrorMessage] = useState("");
+  const updateNetworkOptions = (nairaValue: number) => {
+    const currentPrice = parseFloat(rate); // Assuming 'rate' is the current price
+
+    if ( currentPrice > 0 && nairaValue > 0) {
+      const value = nairaValue / currentPrice;
+      const formattedValue = parseFloat(value.toFixed(13));
+      setConversion(formattedValue);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       const success = await getnetwork();
@@ -160,20 +176,20 @@ export default function Selectnaira({
                     }}
                   />
                   <InputRightAddon h={["50px", "50px", "44px"]}>
-                  <HStack>
-                        <Image
-                          boxSize="25px"
-                          objectFit="cover"
-                          src={imgsybl}
-                          // width="18"
-                          // height="14"
-                          alt="bebo"
-                        ></Image>
-                        <Text fontWeight={"600"} fontSize={"16px"}>
-                          {" "}
-                          {sybl.toUpperCase()}
-                        </Text>
-                      </HStack>
+                    <HStack>
+                      <Image
+                        boxSize="25px"
+                        objectFit="cover"
+                        src={imgsybl}
+                        // width="18"
+                        // height="14"
+                        alt="bebo"
+                      ></Image>
+                      <Text fontWeight={"600"} fontSize={"16px"}>
+                        {" "}
+                        {sybl.toUpperCase()}
+                      </Text>
+                    </HStack>
                   </InputRightAddon>
                 </InputGroup>
                 {/* <FormErrorMessage>{errors.naira}</FormErrorMessage> */}
@@ -194,7 +210,7 @@ export default function Selectnaira({
                   borderRadius={"5px"}
                 >
                   <Text fontSize={"12px"} fontWeight={"600"}>
-                    1 Naira = {rate} Naira
+                    1 {Name} = {rate} Naira
                   </Text>
                 </Box>
               </GridItem>
@@ -211,6 +227,21 @@ export default function Selectnaira({
                       id={"naira"}
                       name={"naira"}
                       placeholder={"₦ 50,000.00"}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        const inputValue = e.target.value.replace(/,/g, "");
+
+                        // If the input is empty, set "naira" to an empty string or 0 to avoid NaN
+                        if (!inputValue) {
+                          setFieldValue("naira", "");
+                          setConversion("");
+                          return;
+                        }
+
+                        const nairaValue = parseFloat(inputValue);
+
+                        setFieldValue("naira", nairaValue);
+                        updateNetworkOptions(nairaValue);
+                      }}
                       style={{
                         borderRight: "none",
                         borderTopRightRadius: 0,
@@ -233,6 +264,23 @@ export default function Selectnaira({
                   </InputGroup>
                   <FormErrorMessage>{errors.naira}</FormErrorMessage>
                 </FormControl>
+              </GridItem>
+              <GridItem colSpan={1} mb={"28px"}>
+                {/* <FormControl isInvalid={!!errors.naira && touched.naira}> */}
+                <FormLabel fontSize="16px" fontWeight="600">
+                  Amount of {Name} you will get
+                </FormLabel>
+                <Field
+                placeholder='converted value'
+                 disabled
+                  as={Input}
+                  h={["50px", "50px", "44px"]}
+                  type="text"
+                  value={Conversion}
+                  borderColor={"#cbd5e1"}
+                />
+
+                {/* </FormControl> */}
               </GridItem>
 
               <GridItem

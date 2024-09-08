@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import React from 'react'
 import NavbarTwo from "./navbar/navbarTwo";
 import HomePageBody from "./components/homePageBody";
+import { CryptoProvider } from "./components/drawer/Buy/usecontextbuy";
 
 
 export default function Home() {
@@ -22,7 +23,9 @@ export default function Home() {
 <>
 
 <NavbarTwo/>
-<HomePageBody/>
+<CryptoProvider>
+      <HomePageBody />
+    </CryptoProvider>
 </>
   
   );

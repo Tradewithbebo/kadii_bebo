@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import NotificationBuy from "./NotificationBuy";
 import { AxiosGet } from "@/app/axios/axios";
 import { Image } from '@chakra-ui/react';
+import { useCryptoContext } from "./usecontextbuy";
 
 const validationSchema = Yup.object().shape({
   Network: Yup.string().required("Network is required"),
@@ -28,7 +29,7 @@ export default function InputReceiverDetails({
   setStep,
   setNetwork,
   setWalletaddress,
-  setName,
+
   settoprice,
   Network,
   setSymbol,
@@ -38,30 +39,76 @@ export default function InputReceiverDetails({
   setStep: any;
   setNetwork: any;
   setWalletaddress: any;
-  setName: any;
+  // setName: any;
   settoprice: any;
   Network: any;
   setSymbol: any;
   setcurrentsImage: any;
   setcurrentsName: any;
 }) {
+
+  const {
+    menucurrent_price,
+    menuimage,
+    menusymbol,
+    menuname,
+    setrefreshName,
+    setName
+  } = useCryptoContext();
   const [Value, setValue] = useState(null);
   const [NetValue, setNetValue] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [currentPrice, setCurrentPrice] = useState(0);
-  const [currentSymbol, setcurrentSymbol] = useState("");
-  const [currentImage, setcurrentImage] = useState("");
-  const [currentName, setcurrentName] = useState("");
+  const [currentPrice, setCurrentPrice] = useState(menucurrent_price);
+  const [currentSymbol, setcurrentSymbol] = useState(menusymbol);
+  const [currentImage, setcurrentImage] = useState(menuimage);
+  const [currentName, setcurrentName] = useState(menuname);
+  
+ 
+  // const defaultOption = {
+  //   value: "defaultValue", // Your fixed default value here
+  //   current_price: parseFloat('100'), // Default price if none selected
+  //   symbol: "USD", // Default symbol
+  //   image: "defaultImageURL", // Default image URL
+  //   name: "Default Name" // Default name
+  // };
 
-  const handleValueChange = (selectedOption: any, setFieldValue: any) => {
-    setFieldValue("Network", selectedOption ? selectedOption.value : "");
-    setValue(selectedOption);
-    setCurrentPrice(selectedOption ? selectedOption.current_price : 0);
-    setcurrentSymbol(selectedOption ? selectedOption.symbol : "");
-    setcurrentImage(selectedOption ? selectedOption.image : "");
-    setcurrentName(selectedOption ? selectedOption.name : "");
+  const defaultOption = {
+    value: menuname,
+    label: (
+      <HStack>
+        <Image
+          boxSize="22px"
+          objectFit="cover"
+          src={menuimage} // Replace with actual URL
+          alt="Btc"
+        />
+        <Text>{menuname}</Text>
+      </HStack>
+    ),
+    current_price: menucurrent_price,
+    symbol: menusymbol,
+    image: menuimage, // Replace with actual URL
+    name: menuname,
   };
+  
+  // Initialize Value state
+  // const [Value, setValue] = useState();
+ const handleValueChange = (selectedOption: any, setFieldValue: any) => {
+  
+  
+  // Use defaultOption values if no selection is made
+  const option = selectedOption || defaultOption;
+  
+  setFieldValue("Network", option.value);
+  setValue(option);
+  setCurrentPrice(option.current_price);
+  setcurrentSymbol(option.symbol);
+  setcurrentImage(option.image);
+  setcurrentName(option.name);
+  setrefreshName( option.name)
+};
+
 
   const handleProceed = (values: any) => {
     setNetwork(values.Network);
@@ -71,6 +118,7 @@ export default function InputReceiverDetails({
     setSymbol(currentSymbol);
     setcurrentsImage(currentImage);
     setcurrentsName(currentName);
+    
     // console.log('price',currentPrice)
     // alert(
     //   `Network: ${values.Network}, Wallet Address: ${values.Walletaddress}, Current Price: ${currentPrice}`
@@ -147,7 +195,7 @@ export default function InputReceiverDetails({
   return (
     <Formik
       initialValues={{
-        Network: "",
+        Network: defaultOption.value,
         Walletaddress: "",
       }}
       validationSchema={validationSchema}
@@ -187,7 +235,7 @@ export default function InputReceiverDetails({
                 </Button>
               </GridItem>
               <GridItem colSpan={1} mb={"28px"}>
-                <FormControl isInvalid={!!errors.Network && touched.Network}>
+                {/* <FormControl isInvalid={!!errors.Network && touched.Network}> */}
                   <FormLabel fontSize="16px" fontWeight="600">
                     Crypto
                   </FormLabel>
@@ -200,7 +248,7 @@ export default function InputReceiverDetails({
                         isSearchable
                         isLoading={loading}
                         placeholder="Select Crypto"
-                        value={Value}
+                        value={Value || defaultOption}
                         noOptionsMessage={() => errorMessage}
                         onChange={(selectedOption: any) => {
                           handleValueChange(selectedOption, setFieldValue);
@@ -220,8 +268,8 @@ export default function InputReceiverDetails({
                       />
                     )}
                   </Field>
-                  <FormErrorMessage>{errors.Network}</FormErrorMessage>
-                </FormControl>
+                  {/* <FormErrorMessage>{errors.Network}</FormErrorMessage> */}
+                {/* </FormControl> */}
               </GridItem>
               <GridItem colSpan={1} mb={"28px"}>
                 <FormControl
