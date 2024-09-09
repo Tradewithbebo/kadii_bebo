@@ -225,26 +225,33 @@ export default function SelectUSDT({
                       }}
                     
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        let inputValue = e.target.value.replace(/,/g, "");
-
-                        // If the input is empty, set "naira" to an empty string or 0 to avoid NaN
-                        if (!inputValue) {
-                          setFieldValue("USDT", "");
-                          setConversion2("");
-                          return;
+                        let inputValue = e.target.value;
+                
+                        // Remove any non-numeric characters except for the decimal point
+                        inputValue = inputValue.replace(/[^0-9.]/g, '');
+                
+                        // Ensure only one decimal point is allowed
+                        const parts = inputValue.split('.');
+                        if (parts.length > 2) {
+                          inputValue = parts[0] + '.' + parts.slice(1).join('');
                         }
-                        if (!/^\d*$/.test(inputValue)) {
-                          return;
+                
+                        // Limit the total length of input to 10 characters (including the decimal point)
+                        if (inputValue.length > 10) {
+                          inputValue = inputValue.slice(0, 10);
                         }
-                    
-                        if (inputValue && inputValue.length > 10) {
-                          inputValue = inputValue.slice(0, 10); // Limit the input to 10 digits
+                
+                        // If input starts with a decimal point, prepend a zero
+                        if (inputValue.startsWith('.')) {
+                          inputValue = '0' + inputValue;
                         }
-
+                
+                        // Update the Formik field and any other state
+                        setFieldValue("USDT", inputValue);
                         const USDT = parseFloat(inputValue);
-
-                        setFieldValue("USDT", USDT);
+                        setConversion2(inputValue); // Ensure this is the correct state update
                         updateNetworkOptions(USDT);
+                      
                       }}/>
                     <InputRightAddon h={["50px", "50px", "44px"]}>
                       <HStack>

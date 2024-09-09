@@ -680,7 +680,7 @@ export function BuyCrypto() {
         </GridItem>
         {/* fourth part */}
         <GridItem w={"full"} colSpan={[1, 1, 3]}>
-          <ButtonForBuy onOpen={onOpen} />
+          <ButtonForBuy onOpen={onOpen} loading={selectedCrypto} />
         </GridItem>
       </SimpleGrid>
       <GeneralFormPage isOpen={isOpen} onClose={onClose} />

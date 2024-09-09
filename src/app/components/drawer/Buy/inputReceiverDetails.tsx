@@ -223,17 +223,7 @@ export default function InputReceiverDetails({
               <GridItem colSpan={1} mt={"18px"}>
                 <NotificationBuy />
               </GridItem>
-              <GridItem colSpan={1} mb={"10px"}>
-                <Button
-                  fontWeight="600"
-                  bg={'#F8F8F8'}
-                  fontSize="16px"
-                  width="full"
-                  h={["50px", "50px", "44px"]}
-                >
-                  Only Accept USDT TRC20
-                </Button>
-              </GridItem>
+             
               <GridItem colSpan={1} mb={"28px"}>
                 {/* <FormControl isInvalid={!!errors.Network && touched.Network}> */}
                   <FormLabel fontSize="16px" fontWeight="600">
@@ -271,6 +261,18 @@ export default function InputReceiverDetails({
                   {/* <FormErrorMessage>{errors.Network}</FormErrorMessage> */}
                 {/* </FormControl> */}
               </GridItem>
+              <GridItem colSpan={1} mb={"10px"}>
+                <Button
+                  fontWeight="600"
+                  bg={'#F8F8F8'}
+                  fontSize="16px"
+                  width="full"
+                  h={["50px", "50px", "44px"]}
+                >
+                  Only Accept USDT TRC20
+                </Button>
+              </GridItem>
+              
               <GridItem colSpan={1} mb={"28px"}>
                 <FormControl
                   isInvalid={!!errors.Walletaddress && touched.Walletaddress}
@@ -288,6 +290,7 @@ export default function InputReceiverDetails({
                   <FormErrorMessage>{errors.Walletaddress}</FormErrorMessage>
                 </FormControl>
               </GridItem>
+              
               <GridItem colSpan={1} mt={"30px"}>
                 <Button
                   h={["50px", "50px", "44px"]}
