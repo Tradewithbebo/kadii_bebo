@@ -29,6 +29,44 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedCrypto, setSelectedCrypto] = useState("");
   const [Refreshingprice, setRefreshingprice] = useState();
+  const [Wetrade, setWetrade] = useState('');
+  const networks = [
+    {
+      "cryptocurrency": "Bitcoin",
+      "network": "Bitcoin Network"
+    },
+    {
+      "cryptocurrency": "USDT",
+      "network": "TRC20 Network"
+    },
+    {
+      "cryptocurrency": "Ethereum",
+      "network": "ERC20 Network"
+    },
+    {
+      "cryptocurrency": "TRON",
+      "network": "TRC20 Network"
+    },
+    {
+      "cryptocurrency": "Dogecoin",
+      "network": "ERC20 Network"
+    },
+    {
+      "cryptocurrency": "BNB",
+      "network": "BSC Network"
+    }
+  ];
+  useEffect(() => {
+    // Find the selected network based on menuname (cryptocurrency)
+    const selectedNetwork = networks.find(item => item.cryptocurrency === menuname);
+    
+    // If a match is found, update the Wetrade state with the network
+    if (selectedNetwork) {
+      setWetrade(selectedNetwork.network);
+    } else {
+      setWetrade(''); // Reset Wetrade if no match is found
+    }
+  }, [menuname]);
 
   const url = "wallet/assets";
   type NetworkOption = {
@@ -123,7 +161,9 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
         Conversion,
         setConversion,
         setConversion2,
-        Conversion2
+        Conversion2,
+        Wetrade, 
+        setWetrade
       }}
     >
       {children}

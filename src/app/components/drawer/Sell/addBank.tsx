@@ -27,8 +27,11 @@ import {
   Text,
   FormErrorMessage,
   HStack,
-  Image
+  Image,
+  useToast,
+  Spinner,
 } from "@chakra-ui/react";
+import { useDebounce, useDebouncedCallback } from "use-debounce";
 import { Formik, Form, Field, useFormik } from "formik";
 import { GrStatusGood } from "react-icons/gr";
 import React, { useEffect, useState } from "react";
@@ -37,36 +40,86 @@ import bankName from "./listBanks";
 import Select from "react-select";
 import { AxiosAuthPost, AxiosGet } from "@/app/axios/axios";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-
-export default function AddBank({setStep}:{setStep:any}) {
+import * as Yup from "yup";
+const validationSchema = Yup.object({
+  // accountName: Yup.string()
+  //   .required('Account Name is required')
+  //   .min(2, 'Account Name must be at least 2 characters long'),
+  accountNumber: Yup.string()
+    .required("Account Number is required")
+    .min(10, "Account Number must be at least 11 characters long") // Adjust length based on your needs
+    .matches(/^\d+$/, "Account Number must be digits only"),
+  bankCode: Yup.string().required("Bank Code is required"),
+});
+export default function AddBank({ setStep }: { setStep: any }) {
+  const toast = useToast();
   const [message, setmessage] = useState("");
   const [Value, setValue] = useState("");
   const [Banks, setBanks] = useState([]);
-  const [Banksno, setBanksno] = useState('');
+  const [Banksno, setBanksno] = useState("");
+  const [BanksName, setBankName] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [accountNo, setAccountNo] = useState<string>('');
+  const [accountNo, setAccountNo] = useState<string>("");
   const handleValueChange = (selectedOption: any, setFieldValue: any) => {
-    setFieldValue("Bank", selectedOption ? selectedOption.value : "");
+    setFieldValue("accountName", selectedOption ? selectedOption.value : "");
     setValue(selectedOption);
-    setBanksno(selectedOption ? selectedOption.code:"");
+    setBanksno(selectedOption ? selectedOption.code : "");
   };
   const handleAccountNumberChange = (
     event: React.ChangeEvent<HTMLInputElement>,
     setFieldValue: (field: string, value: any) => void
   ) => {
     const inputValue = event.target.value;
-    setFieldValue("accountnumber", inputValue); // Set Formik's account number value
+    setFieldValue("accountNumber", inputValue);
     setAccountNo(inputValue);
-  
+    
+    // Reset bank name when account number changes
+    if (BanksName) {
+      setBankName(""); // Clear the bank name when account number changes
+    }
   };
-  useEffect(()=>{
-    handleSave()
-  })
-  const handleSave = () => {
-    const url2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
-    console.log('url:',url2);
-    // You can now use `url2` as needed, such as making an API call.
+  
+  const url = "banks";
+  const bankCode = Banksno;
+  // const [accountNumber] = useDebounce(accountNo, 500);
+  const accountNumber = accountNo;
+  // const url2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
+  useEffect(() => {
+    if (accountNumber.length === 10) {
+      const newUrl2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
+      // console.log('url',newUrl2)
+      // setUrl2(newUrl2);
+      handleSave(newUrl2);
+    }
+  }, [accountNumber, bankCode]);
+  const handleSave = async (url2: any) => {
+    try {
+      setLoading2(true);
+      const res = await AxiosGet(url2);
+      if (res) {
+        // console.log('url',res.data.accountName)
+        setLoading2(false);
+        setBankName(res.data.accountName);
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom-right",
+        size: "sm",
+      });
+    }
   };
 
   const BanksOptions = (data: any) => {
@@ -80,7 +133,7 @@ export default function AddBank({setStep}:{setStep:any}) {
     setBanks(updatedOptions);
   };
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined = undefined;// Typing timeoutId as NodeJS.Timeout
+    let timeoutId: NodeJS.Timeout | undefined = undefined; // Typing timeoutId as NodeJS.Timeout
     const fetchData = async () => {
       const success = await getBanks();
       if (!success) {
@@ -96,32 +149,6 @@ export default function AddBank({setStep}:{setStep:any}) {
       }
     };
   }, []);
-  const url = "banks";
-  const bankCode=Banksno
-  const accountNumber=accountNo
-  const url2 = `banks/accounts/verify/${bankCode}/${accountNumber}`;
-
-  const getBanksName = async () => {
-    setLoading(true);
-    try {
-      const res = await AxiosAuthPost(url2,{});
-      setLoading(false);
-      if (res) {
-        // console.log(res.data);
-        BanksOptions(res.data);
-        setLoading(false);
-        setErrorMessage(""); // Clear error message on success
-        return true;
-      }
-    } catch (err: any) {
-      setLoading(false);
-      let message = "Check your Network and try again.";
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
-      }
-      setErrorMessage(message);
-    }
-  };
 
   const getBanks = async () => {
     setLoading(true);
@@ -146,19 +173,57 @@ export default function AddBank({setStep}:{setStep:any}) {
   };
 
   const initialValues = {
-    Bank: "",
-    accountnumber: "",
-    accountname: "",
+    accountName: BanksName,
+    accountNumber: accountNumber,
+    bankCode: Banksno,
   };
-const handleSubmit=()=>{
-  setStep(1)
-}
+
+  const url3 = "banks/accounts";
+  const addBank = async (values: any) => {
+    try {
+      const res = await AxiosAuthPost(url3, values); // Pass form values to the API call
+      if (res) {
+        toast({
+          title: "Error",
+          description: "Bank added successfully",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "bottom-right",
+          size: "sm",
+        });
+        // Handle success response here
+        // console.log("Bank added successfully:", res.data);
+        setStep(1);
+      }
+    } catch (err: any) {
+      setLoading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom-right",
+        size: "sm",
+      });
+    }
+  };
+
   return (
     <>
       <Formik
         initialValues={initialValues}
-        onSubmit={() => {
-          handleSubmit();
+        // validationSchema={validationSchema}
+        enableReinitialize
+        onSubmit={(values) => {
+          // console.log("Form values:", values);
+          addBank(values);
         }}
       >
         {({ errors, touched, isValid, setFieldValue }) => (
@@ -180,11 +245,13 @@ const handleSubmit=()=>{
                   </Text>
                 </GridItem>
                 <GridItem colSpan={2}>
-                  <FormControl isInvalid={!!errors.Bank && touched.Bank}>
+                  <FormControl
+                    isInvalid={!!errors.accountName && touched.accountName}
+                  >
                     <Field
                       as={Select}
-                      id="Bank"
-                      name="Bank"
+                      id="accountName"
+                      name="accountName"
                       options={Banks}
                       isSearchable
                       isLoading={loading}
@@ -207,16 +274,16 @@ const handleSubmit=()=>{
                         }),
                       }}
                     />
-                    {errors.Bank && touched.Bank && (
+                    {errors.accountName && touched.accountName && (
                       <FormErrorMessage color={"Crimson"}>
-                        {errors.Bank}
+                        {errors.accountName}
                       </FormErrorMessage>
                     )}
                   </FormControl>
                 </GridItem>
                 <GridItem colSpan={2}>
                   <FormControl
-                    isInvalid={!!errors.accountnumber && touched.accountnumber}
+                    isInvalid={!!errors.accountNumber && touched.accountNumber}
                   >
                     <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Account number
@@ -224,38 +291,53 @@ const handleSubmit=()=>{
                     <Field
                       h={["50px", "50px", "44px"]}
                       as={Input}
-                      id="accountnumber"
+                      id="accountNumber"
                       type="text"
                       placeholder="Enter account number"
-                      name="accountnumber"
+                      name="accountNumber"
                       onChange={(event: any) =>
                         handleAccountNumberChange(event, setFieldValue)
                       }
                     />
+
                     <FormErrorMessage color={"Crimson"}>
-                      {errors.accountnumber}
+                      {errors.accountNumber}
                     </FormErrorMessage>
                   </FormControl>
                   <Box
                     mt={"8px"}
                     w={"fit-content"}
-                    bg={"#E7F6EC"}
+                    bg={
+                      BanksName.length === 0
+                        ? "white"
+                        : loading
+                        ? "white"
+                        : "#E7F6EC"
+                    }
                     p={"5px"}
                     borderRadius={"5px"}
                   >
-                    <HStack>
-                      <IoIosCheckmarkCircleOutline
-                        color={"#0F973D"}
-                        size={"20px"}
-                      />
-                      <Text
-                        fontSize={"14px"}
-                        fontWeight={"600"}
-                        color={"#0F973D"}
-                      >
-                        OSHODI DAVID OLUWATOBI
-                      </Text>
-                    </HStack>
+                    {loading2 ? (
+                      <Spinner color="#E7F6EC" />
+                    ) : (
+                      <HStack>
+                        {BanksName.length === 0 ? (
+                          ""
+                        ) : (
+                          <IoIosCheckmarkCircleOutline
+                            color={"#0F973D"}
+                            size={"20px"}
+                          />
+                        )}
+                        <Text
+                          fontSize={"14px"}
+                          fontWeight={"600"}
+                          color={"#0F973D"}
+                        >
+                          {BanksName}
+                        </Text>
+                      </HStack>
+                    )}
                   </Box>
                 </GridItem>
 
@@ -268,7 +350,7 @@ const handleSubmit=()=>{
                     fontSize={"16px"}
                     fontWeight={"600"}
                     type="submit"
-                    isDisabled={!isValid}
+                    isDisabled={!isValid || BanksName.length === 0}
                   >
                     Save bank account
                   </Button>

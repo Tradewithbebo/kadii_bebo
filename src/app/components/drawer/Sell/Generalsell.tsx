@@ -30,7 +30,7 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
 //   const { onOpen } = useDisclosure();
 const Backward = () => {
     setStep((cur: number) => cur - 1);}

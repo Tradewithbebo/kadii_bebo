@@ -53,7 +53,9 @@ export default function InputReceiverDetails({
     menusymbol,
     menuname,
     setrefreshName,
-    setName
+    setName,
+    Wetrade, 
+    setWetrade
   } = useCryptoContext();
   const [Value, setValue] = useState(null);
   const [NetValue, setNetValue] = useState([]);
@@ -269,7 +271,7 @@ export default function InputReceiverDetails({
                   width="full"
                   h={["50px", "50px", "44px"]}
                 >
-                  Only Accept USDT TRC20
+                  Only Accept {Wetrade}
                 </Button>
               </GridItem>
               

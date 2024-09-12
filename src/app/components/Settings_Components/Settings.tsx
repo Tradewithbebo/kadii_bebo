@@ -30,10 +30,15 @@ import Edithprofile_Drawer from "./Edithprofile_Drawer";
 import Footer from "@/app/navbar/footer";
 import SettingsChangePassword from "./settingsChangePassword";
 import Settingsupdatepin from "./settingsupdatepin";
+import { AxiosGet } from "@/app/axios/axios";
 // import NavbarTwo from "../navbar/navbarTwo";
 // import Footer from "../navbar/footer";
 // import Edithprofile_Drawer from "../components/Settings_Components/Edithprofile_Drawer";
-
+interface user {
+  firstName: any;
+  lastName: any;
+  email:any;
+}
 export default function Settings() {
   const {
     isOpen: isopenEdith,
@@ -50,6 +55,24 @@ export default function Settings() {
     onOpen: onopenUpdatePin,
     onClose: oncloseUpdatePin,
   } = useDisclosure();
+  const capitalizeFirstLetter = (name: any) => {
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  };
+  const url = "auth/me";
+  const [userDetails, setUserDetails] = useState<user>();
+  const fetchUserDetails = async () => {
+    try {
+      const res = await AxiosGet(url);
+      if (res) {
+        setUserDetails(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useState(() => {
+    fetchUserDetails();
+  });
   return (
     <>
       <Box w={"full"} position="fixed" top="0" zIndex="1000" bg={"#fafafa"}>
@@ -142,7 +165,17 @@ export default function Settings() {
                                     fontWeight={"600"}
                                     color={"#021D17"}
                                   >
-                                    Oshodi David
+                                    {userDetails?.firstName
+                                      ? capitalizeFirstLetter(
+                                          userDetails.firstName
+                                        )
+                                      : ""}
+                                    &nbsp;
+                                    {userDetails?.lastName
+                                      ? capitalizeFirstLetter(
+                                          userDetails.lastName
+                                        )
+                                      : ""}
                                   </Text>
                                 </Box>
                                 <Box w={"full"}>
@@ -152,7 +185,7 @@ export default function Settings() {
                                     fontWeight={"600"}
                                     color={"#808080"}
                                   >
-                                    Oshodidavid@gmail.com
+                                    {userDetails?.email}
                                   </Text>
                                 </Box>
                               </VStack>
