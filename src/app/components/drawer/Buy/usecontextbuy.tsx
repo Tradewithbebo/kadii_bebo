@@ -43,7 +43,7 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [sellimage, setsellimage] = useState('');
   const [sellsymbol, setsellsymbol] = useState('');
   const [selectedsellNetwork, setSelectedsellNetwork] = useState<Network | null>(null);
-  const [currency,setcurrency]=useState(false)
+  // const [currency,setcurrency]=useState(false)
   const [sellvalueusdt, setsellvalueusdt] = useState('');
   const [sellvalunaira, setsellvaluenaira] = useState('');
   const [Address, setAddress] = useState('');
@@ -251,8 +251,8 @@ useEffect(() => {
         setsellConversion,
         sellConversion2,
         setsellConversion2,
-        currency,
-        setcurrency,
+        // currency,
+        // setcurrency,
         sellvalunaira,
         setsellvaluenaira,
         sellvalueusdt,

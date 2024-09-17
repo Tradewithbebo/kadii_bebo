@@ -37,12 +37,12 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
- const {setcurrency,currency} = useCryptoContext();
+//  const {setcurrency,currency} = useCryptoContext();
 
   const [step, setStep] = useState(1);
-const handleclick=()=>{
-setcurrency(!currency)
-}
+// const handleclick=()=>{
+// setcurrency(!currency)
+// }
 const Backward = () => {
   step==10?setStep(1) : setStep((cur: number) => cur - 1);}
   return (
@@ -83,18 +83,10 @@ const Backward = () => {
             ) : step === 2 ? (
               <SelectAsset setStep={setStep} />
             ) : step === 3 ? (
-              currency ? (
-                // <Selectnaira
-                //     setStep={setStep}
-                //     handleclick={handleclick}
-
-                //   />
-
-                ""
-              ) : (
-                <SelectUSDT setStep={setStep} handleclick={handleclick} />
+            
+                <SelectUSDT setStep={setStep}  />
               )
-            ) : step === 4 ? (
+             : step === 4 ? (
               <ConfirmsellOrder setStep={setStep} />
             ) : step === 5 ? (
               <SendcryptoQrcode setstep={setStep} />

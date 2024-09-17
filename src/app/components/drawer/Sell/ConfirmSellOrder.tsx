@@ -28,7 +28,6 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
     selectedsellNetwork,
     setSelectedsellNetwork,
     blockchain,
-    currency,
     sellvalunaira,
     setsellvaluenaira,
     sellvalueusdt,
@@ -81,17 +80,7 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
               justifyContent={"center"}
               w={"full"}
             >
-              {currency ? (
-                <Text
-                  fontWeight={"600"}
-                  fontSize={["16px"]}
-                  color="#666666"
-                  textAlign={"center"}
-                  w={"full"}
-                >
-                  You will send {sellConversion} naira worth of {blockchain}
-                </Text>
-              ) : (
+              
                 <Text
                   fontWeight={"600"}
                   fontSize={["16px"]}
@@ -105,7 +94,7 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
                   )}{" "}
                   naira
                 </Text>
-              )}
+           
             </GridItem>
           </SimpleGrid>
         </GridItem>

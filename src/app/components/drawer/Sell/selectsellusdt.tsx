@@ -33,10 +33,10 @@ const validationSchema = Yup.object().shape({
 
 export default function SelectUSDT({
   setStep,
-  handleclick,
+  // handleclick,
 }: {
   setStep: any;
-  handleclick: any;
+  // handleclick: any;
 }) {
   const toast = useToast();
   const {
