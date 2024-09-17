@@ -107,16 +107,11 @@ export default function GeneralFormPage({
         setLoading(false);
         if (res && res.data) {
           const Id = res.data._id;
-          // console.log("id",Id)
+        
           if (Id) {
             settransactionid(Id)
         setStep(4);
-        // Close the modal and reset inputs after 2000ms
-        // setTimeout(() => {
-        //   onClose(); // Close the modal
-        //   resetInputs(); // Reset all inputs
-        //   window.open(checkoutUrl, "_blank"); // Open the new window
-        //   }, 2000); // Adjust the delay time as needed
+       
         } else {
           throw new Error("Checkout URL not found in response.");
         }

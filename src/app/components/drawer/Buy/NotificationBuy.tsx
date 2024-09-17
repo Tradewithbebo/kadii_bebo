@@ -19,6 +19,7 @@ import { Formik, Field, Form, useFormikContext } from "formik";
 import React, { useEffect, useState } from "react";
 import { BsExclamationCircle } from "react-icons/bs";
 import { SlArrowRight } from "react-icons/sl";
+import { useCryptoContext } from "./usecontextbuy";
 //   import ModalKyc from "./modalKyc";
 export default function NotificationBuy() {
   return (
@@ -314,6 +315,54 @@ export function ConfirmBuy({
                   }).format(Number(conversion))} naira for {Amount} {crypto}
               </Text>
             )}
+          </GridItem>
+        </SimpleGrid>
+      </Box>
+    </>
+  );
+}
+export function ConfirmSell() {
+  const {setcurrency,currency} = useCryptoContext();
+  return (
+    <>
+      <Box>
+        <SimpleGrid
+          w={"auto"}
+          bg={"#F8F8F8"}
+          p={"16px"}
+          rounded={"10px"}
+          rowGap={"16px"}
+          border={"1px"}
+          borderColor="gray.200"
+          mb={"12px"}
+        >
+          <GridItem
+            colSpan={[1, 3]}
+            display={"flex"}
+            justifyContent={"center"}
+            w={"full"}
+          >
+            <Text
+              fontWeight={"600"}
+              fontSize={"24px"}
+              color={"#021D17"}
+              textAlign={"center"}
+              w={"full"}
+            >
+              {''.toUpperCase()} {''}
+            </Text>
+          </GridItem>
+          <GridItem
+            colSpan={[1, 3]}
+            display={"flex"}
+            justifyContent={"center"}
+            w={"full"}
+          >
+           <Text>
+                You will recieve {new Intl.NumberFormat("en-NG", {
+                  }).format(Number(''))} naira for {''} {''}
+              </Text>
+         
           </GridItem>
         </SimpleGrid>
       </Box>

@@ -8,7 +8,10 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   // State variables shared across components
   const [Conversion, setConversion] = useState<number | null>(null);
   const [Conversion2, setConversion2] = useState<number | null>(null);
+  const [sellConversion2, setsellConversion2] = useState<number | null>(null);
+  const [sellConversion, setsellConversion] = useState<number | null>(null);
   const [step, setStep] = useState(1);
+  const [userId, setUserId] = useState(null);
   const [network, setNetwork] = useState('');
   const [walletAddress, setWalletAddress] = useState('');
   const [Name, setName] = useState('');
@@ -30,30 +33,59 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [selectedCrypto, setSelectedCrypto] = useState("");
   const [Refreshingprice, setRefreshingprice] = useState();
   const [Wetrade, setWetrade] = useState('');
+  const [sellWetrade, setsellWetrade] = useState('');
+  const [accountName, setaccountName] = useState('');
+  const [accountid, setaccountid] = useState('');
+  const [bankName, setbankName] = useState('');
+  const [accountNumber, setaccountNumber] = useState('');
+  const [blockchain, setblockchain] = useState('');
+  const [sellRate, setsellRate] = useState('');
+  const [sellimage, setsellimage] = useState('');
+  const [sellsymbol, setsellsymbol] = useState('');
+  const [selectedsellNetwork, setSelectedsellNetwork] = useState<Network | null>(null);
+  const [currency,setcurrency]=useState(false)
+  const [sellvalueusdt, setsellvalueusdt] = useState('');
+  const [sellvalunaira, setsellvaluenaira] = useState('');
+  const [Address, setAddress] = useState('');
+  const [transactionId, settransactionid] = useState("");
+  
+  
+  interface Network {
+    image: any;
+    symbol: any;
+    name: any;
+    current_price: any;
+  }
   const networks = [
     {
       "cryptocurrency": "Bitcoin",
-      "network": "Bitcoin Network"
+      "network": "Bitcoin Network",
+      "Address":"1AQewX4JjNQ6Y6s3SRZYr1PFNQhsTAug1p"
     },
     {
-      "cryptocurrency": "USDT",
-      "network": "TRC20 Network"
+      "cryptocurrency": "Tether",
+      "network": "TRC20 Network",
+      "Address":"TVUWkKu3HnAEiCxKJMGoYr6w5E74yofbyd"
     },
     {
       "cryptocurrency": "Ethereum",
-      "network": "ERC20 Network"
+      "network": "ERC20 Network",
+       "Address":"0x5B19a7F1995adEa1AE60aE30eA59D4432B247bbF"
     },
     {
       "cryptocurrency": "TRON",
-      "network": "TRC20 Network"
+      "network": "TRC20 Network",
+       "Address":"TUqW77ZvFip3sKVYmoCpgamfrAaPJKVU6n"
     },
     {
       "cryptocurrency": "Dogecoin",
-      "network": "ERC20 Network"
+      "network": "ERC20 Network",
+       "Address":"DHcFsqLhzG7s74ZFKEf6X8iC5CQr8s3Ntj"
     },
     {
       "cryptocurrency": "BNB",
-      "network": "BSC Network"
+      "network": "BSC Network",
+      "Address":"0x7857734A28cb4ecF5c5601D74D5131C88eDAC9b7"
     }
   ];
   useEffect(() => {
@@ -64,9 +96,21 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
     if (selectedNetwork) {
       setWetrade(selectedNetwork.network);
     } else {
-      setWetrade(''); // Reset Wetrade if no match is found
+      setWetrade('not available'); // Reset Wetrade if no match is found
     }
   }, [menuname]);
+  useEffect(() => {
+    // Find the selected network based on menuname (cryptocurrency)
+    const selectedNetwork = networks.find(item => item.cryptocurrency === blockchain);
+    
+    // If a match is found, update the Wetrade state with the network
+    if (selectedNetwork) {
+      setsellWetrade(selectedNetwork.network);
+      setAddress(selectedNetwork.Address)
+    } else {
+      setsellWetrade('not available'); // Reset Wetrade if no match is found
+    }
+  }, [blockchain]);
 
   const url = "wallet/assets";
   type NetworkOption = {
@@ -125,18 +169,44 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
     };
   
     fetchData(); // Initial call
-  
+    fetchUserData();
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId); // Clear the timeout if it exists
       }
     };
   }, []);
+  const url2='auth/me'
+ // Example of setting the userId after an API call or another process
+ const fetchUserData = async () => {
+  try {
+    const response = await AxiosGet(url2); // Your API endpoint
+    console.log('Full response:', response); // Log the response to verify
+    if (response && response.data && response.data._id) {
+      // console.log('User ID:', response.data._id); // Log the user ID to confirm
+      setUserId(response.data._id); // Set the user ID to state
+    } else {
+     
+    }
+  } catch (error) {
+  }
+};
+useEffect(() => {
   
- 
+}, []);
+
   return (
     <CryptoContext.Provider
       value={{
+        Address,
+        setAddress,
+        accountid,
+        setaccountid,
+        sellWetrade,
+        setsellWetrade,
+        // selectedNetwork,
+        selectedsellNetwork,
+        setSelectedsellNetwork,
         Refreshingprice,
         setmenucurrent_price,
         menucurrent_price,
@@ -162,8 +232,33 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
         setConversion,
         setConversion2,
         Conversion2,
-        Wetrade, 
-        setWetrade
+        Wetrade,
+        setWetrade,
+        userId,
+        setUserId,
+        blockchain,
+        setblockchain,
+        setaccountName,
+        setbankName,
+        setaccountNumber,
+        sellRate,
+        setsellRate,
+        sellimage,
+        setsellimage,
+        sellsymbol,
+        setsellsymbol,
+        sellConversion,
+        setsellConversion,
+        sellConversion2,
+        setsellConversion2,
+        currency,
+        setcurrency,
+        sellvalunaira,
+        setsellvaluenaira,
+        sellvalueusdt,
+        setsellvalueusdt,
+        transactionId,
+        settransactionid,
       }}
     >
       {children}

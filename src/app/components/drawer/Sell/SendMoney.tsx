@@ -15,31 +15,53 @@ import {
   VStack,
   // useToast,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { ConfirmBuy, ConfirmBuyAlert } from "./NotificationBuy";
+import React, { useEffect, useState } from "react";
+// import { ConfirmBuy, ConfirmBuyAlert } from "./NotificationBuy";
 import { IoCopyOutline, IoDocumentOutline } from "react-icons/io5";
 import * as Yup from "yup";
 import { Field, Form, Formik } from "formik";
-import { AxiosAuthPatchfile, AxiosAuthPostfile } from "@/app/axios/axios";
+import { AxiosAuthPatchfile, AxiosAuthPost, AxiosAuthPostfile } from "@/app/axios/axios";
+import { ConfirmBuyAlert } from "../Buy/NotificationBuy";
+import { useCryptoContext } from "../Buy/usecontextbuy";
 
 export default function SendMoney({
   setStep,
-  amountNaira,
-  amountUsdt,
-  currentcurrency,
-  transactionId
+  //  transactionId
 }: {
   setStep: any;
-  amountUsdt: any;
-  amountNaira: any;
-  currentcurrency: any;
-  transactionId:any
+ 
+  // transactionId:any
 }) {
+   const {
+     setblockchain,
+     sellRate,
+     setsellRate,
+     sellimage,
+     setsellimage,
+     sellsymbol,
+     setsellsymbol,
+     sellConversion,
+     sellConversion2,
+     setsellConversion2,
+     selectedsellNetwork,
+     setSelectedsellNetwork,
+     blockchain,
+     currency,
+     sellvalunaira,
+     setsellvaluenaira,
+     sellvalueusdt,
+     setsellvalueusdt,
+     transactionId,
+     settransactionid,
+   } = useCryptoContext();
   const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   const id=transactionId
-  // const toast = useToast();
   const url = `transactions/${id}/upload-reference`;
+
+  
  
   const handleProceed = async (values: any) => {
     if (values.paymentReference) {
@@ -56,7 +78,7 @@ export default function SendMoney({
   
         setLoading(false);
         if (res && res.data) {
-          setStep(5);
+          setStep(7);
         }
       } catch (err: any) {
         setLoading(false);
@@ -135,79 +157,17 @@ export default function SendMoney({
         {({ isSubmitting, setFieldValue, errors, touched }) => (
           <Form>
             <SimpleGrid columns={1}>
-              <GridItem colSpan={1}>
+              
+            <GridItem colSpan={1}>
                 <Text fontWeight="600" fontSize="25px">
-                  Send money
+                  Select asset
                 </Text>
               </GridItem>
-              <GridItem colSpan={1} mt="18px">
+              <GridItem colSpan={1} mt={"18px"}>
                 <Text fontWeight="600" fontSize="15px" color="#666666">
-                  Send funds to the account details below
+                  Please submit your proof of payment
                 </Text>
               </GridItem>
-
-              <GridItem mt="40px">
-                <ConfirmBuyAlert />
-              </GridItem>
-              <GridItem colSpan={1} mt="28px">
-                <SimpleGrid
-                  columns={2}
-                  bg="#F8F8F8"
-                  px="16px"
-                  py="24px"
-                  rounded="10px"
-                >
-                  <GridItem colSpan={2}>
-                    <Text fontSize="16px" fontWeight="600" color="#021D17">
-                      Send only ₦ {amountNaira} for {amountUsdt}{" "}
-                      {currentcurrency} to the account details below :
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={1} mt="45px">
-                    <Text fontSize="16px" fontWeight="600" color="#808080">
-                      Account name
-                    </Text>
-                  </GridItem>
-                  <GridItem
-                    colSpan={1}
-                    width="full"
-                    justifyContent="end"
-                    display="flex"
-                    mt="45px"
-                  >
-                    <Text fontSize="16px" fontWeight="600" color="#808080">
-                      Account number
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={1} mt="12px">
-                    <Text fontSize="16px" fontWeight="600" color="#021D17">
-                      Bebo cryptocurrency limited (ltd)
-                    </Text>
-                  </GridItem>
-                  <GridItem
-                    colSpan={1}
-                    width="full"
-                    justifyContent="end"
-                    display="flex"
-                    mt="12px"
-                  >
-                    <Text fontSize="16px" fontWeight="600" color="#021D17">
-                      0163568964
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={2} mt="28px">
-                    <Text fontSize="16px" fontWeight="600" color="#808080">
-                      Bank Name
-                    </Text>
-                  </GridItem>
-                  <GridItem colSpan={2} mt="12px">
-                    <Text fontSize="16px" fontWeight="600" color="#021D17">
-                      GTbank
-                    </Text>
-                  </GridItem>
-                </SimpleGrid>
-              </GridItem>
-
               <GridItem colSpan={1} mt="28px">
                 <SimpleGrid
                   overflow="hidden"
@@ -306,7 +266,7 @@ export default function SendMoney({
                   </GridItem>
                   <GridItem colSpan={2} mt="12px">
                     <Text fontSize="16px" fontWeight="600" color="#021D17">
-                      {currentcurrency.toUpperCase()}
+                      {sellsymbol.toUpperCase()}
                     </Text>
                   </GridItem>
                 </SimpleGrid>

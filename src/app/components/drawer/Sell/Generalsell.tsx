@@ -20,6 +20,13 @@ import AddBank from "./addBank";
 import { IoIosArrowBack } from "react-icons/io";
 import SelectAsset from "./SelectAsset";
 import SendcryptoQrcode from "./SendcryptoQrcode";
+import Selectnaira from "./selectsellnaira";
+import SelectUSDT from "./selectsellusdt";
+import { ConfirmSell } from "../Buy/NotificationBuy";
+import ConfirmsellOrder from "./ConfirmSellOrder";
+import { useCryptoContext } from "../Buy/usecontextbuy";
+import SendMoney from "./SendMoney";
+import SuccessBuy from "./success";
 
 export default function Generalsell({
     isOpen,
@@ -30,13 +37,24 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
+ const {setcurrency,currency} = useCryptoContext();
+
   const [step, setStep] = useState(1);
-//   const { onOpen } = useDisclosure();
+const handleclick=()=>{
+setcurrency(!currency)
+}
 const Backward = () => {
-    setStep((cur: number) => cur - 1);}
+  step==10?setStep(1) : setStep((cur: number) => cur - 1);}
   return (
     <Box>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={"sm"}>
+      <Drawer
+        isOpen={isOpen}
+        placement="right"
+        onClose={() => {
+          onClose(), step === 7 && setStep(1);
+        }}
+        size={"sm"}
+      >
         <DrawerOverlay />
         <DrawerContent>
           <HStack>
@@ -50,22 +68,52 @@ const Backward = () => {
             >
               <IoIosArrowBack size={"20px"} />
             </Box>
-            <DrawerCloseButton />
+            <DrawerCloseButton
+              onClick={() => {
+                step === 7 && setStep(1);
+              }}
+            />
           </HStack>
           <DrawerBody>
             {/* // eslint-disable-next-line react/no-children-prop */}
             {step === 1 ? (
               <SellAddBank Setstep={setStep} />
-            ) : step === 2 ? (
+            ) : step === 10 ? (
               <AddBank setStep={setStep} />
+            ) : step === 2 ? (
+              <SelectAsset setStep={setStep} />
             ) : step === 3 ? (
-              <SelectAsset />
-            ) :step===4?(
-              <SendcryptoQrcode/>
-            ):("")}
+              currency ? (
+                // <Selectnaira
+                //     setStep={setStep}
+                //     handleclick={handleclick}
+
+                //   />
+
+                ""
+              ) : (
+                <SelectUSDT setStep={setStep} handleclick={handleclick} />
+              )
+            ) : step === 4 ? (
+              <ConfirmsellOrder setStep={setStep} />
+            ) : step === 5 ? (
+              <SendcryptoQrcode setstep={setStep} />
+            ) : step === 6 ? (
+              <SendMoney setStep={setStep} />
+            ) : step === 7 ? (
+              <SuccessBuy />
+            ) : (
+              ""
+            )}
           </DrawerBody>
           <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
+            <Button
+              variant="outline"
+              mr={3}
+              onClick={() => {
+                onClose(), step === 7 && setStep(1);
+              }}
+            >
               Cancel
             </Button>
           </DrawerFooter>

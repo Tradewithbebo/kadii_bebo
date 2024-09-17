@@ -1,157 +1,169 @@
 "use client";
 import {
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
-  Button,
-  Input,
-  useDisclosure,
-  ChakraProvider,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  SimpleGrid,
-  GridItem,
-  FormControl,
-  FormLabel,
-  VStack,
   Box,
-  Text,
-  Image,
-  FormErrorMessage,
+  Button,
+  GridItem,
   HStack,
+  Image,
+  SimpleGrid,
   Spinner,
+  Text,
+  useToast,
 } from "@chakra-ui/react";
-import { Formik, Form, Field, useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import { myStyles } from "./selectrix";
-import bankName from "./listBanks";
-import Select from "react-select";
-import { NotificationSell } from "./sellNotification";
 import { IoIosArrowForward } from "react-icons/io";
-import { CiLock } from "react-icons/ci";
 import { AxiosGet } from "@/app/axios/axios";
+import { useCryptoContext } from "../Buy/usecontextbuy";
+import { NotificationSell } from "./sellNotification";
+
 interface Network {
   image: any;
   symbol: any;
   name: any;
+  current_price: any;
 }
-export default function SelectAsset() {
-  const [message, setmessage] = useState("");
-  const [Value, setValue] = useState("");
-  //   const [Value, setValue] = useState(null);
+
+export default function SelectAsset({ setStep }: { setStep: any }) {
+  const {
+    setblockchain,
+    setsellRate,
+    setsellimage,
+    setsellsymbol,
+    selectedsellNetwork, 
+        setSelectedsellNetwork,
+  } = useCryptoContext();
+
   const [NetValue, setNetValue] = useState<Network[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [Loadingaset, setLoadingaset] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
   const url = "wallet/assets";
-  useEffect(() => {
-    const fetchData = async () => {
-      const success = await getnetwork();
-      if (!success) {
-        setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
-      }
-    };
 
-    fetchData(); // Initial call
-  }, []);
-
-  const getnetwork = async () => {
-    setLoading(true);
+  // Fetch the available networks
+  const getnetwork = async (): Promise<boolean> => {
+    setLoadingaset(true);
     try {
       const res = await AxiosGet(url);
-      setLoading(false);
+      setLoadingaset(false);
       if (res) {
-        console.log(res.data);
+        console.log("Networks fetched:", res.data); // Log fetched networks
         setNetValue(res.data);
-        setLoading(false);
-        setErrorMessage(""); // Clear error message on success
-        return true;
+        setErrorMessage("");
+        return true; // Return true on success
+      } else {
+        return false; // Return false if no response or empty data
       }
     } catch (err: any) {
-      setLoading(false);
+      setLoadingaset(false);
       let message = "Check your Network and try again.";
       if (err.response && err.response.data && err.response.data.message) {
         message = err.response.data.message;
       }
       setErrorMessage(message);
+      return false; // Return false on failure
     }
   };
-
-  return (
-    <>
-      <Box p={4}>
-        <SimpleGrid column={2} rowGap={"18px"}>
-          <GridItem colSpan={2}>
-            <Text fontWeight="600" fontSize="25px">
-              Select asset
-            </Text>
+  
+  
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined = undefined; // Typing timeoutId as NodeJS.Timeout
+    const fetchData = async () => {
+      const success = await getnetwork();
+      if (!success) {
+        timeoutId = setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
+      }
+    };
+  
+    fetchData(); // Initial call
+    return () => {
+      // Cleanup function to clear the timeout if it was set
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
+return (
+  <>
+    <Box p={4}>
+      <SimpleGrid column={2} rowGap={"18px"}>
+        <GridItem colSpan={2}>
+          <Text fontWeight="600" fontSize="25px">
+            Select asset
+          </Text>
+        </GridItem>
+        <GridItem colSpan={2} mt={"-10px"}>
+          <Text fontWeight="600" fontSize={["11px", "15px"]} color="#666666">
+            Select any crypto assets to deposit and instantly convert to cash
+          </Text>
+        </GridItem>
+        <GridItem colSpan={2} w={"full"}>
+          <NotificationSell />
+        </GridItem>
+        {Loadingaset ? (
+          <GridItem
+            colSpan={2}
+            display={"flex"}
+            justifyContent={"center"}
+            w={"full"}
+            height="50vh"
+            // display="flex"
+            // justifyContent="center"
+            alignItems="center"
+          >
+          <HStack>
+          <Spinner size="lg" />
+          <Text fontSize="16px" fontWeight="600" ml={3}>
+            Getting Assets
+          </Text>
+        </HStack>
           </GridItem>
-          <GridItem colSpan={2} mt={"-10px"}>
-            <Text fontWeight="600" fontSize={["11px", "15px"]} color="#666666">
-              Select any crypto assets to deposit and instantly convert to cash
-            </Text>
-          </GridItem>
-          <GridItem colSpan={2} w={"full"}>
-            <NotificationSell />
-          </GridItem>
-          {loading ? (
+        ) : (
+          NetValue.map((network, index) => (
             <GridItem
               colSpan={2}
-              display={"flex"}
-              justifyContent={"center"}
               w={"full"}
+              key={index}
+              onClick={() => {
+                console.log("Selected network:", network); // Log selected network
+                setblockchain(network.name);
+                setsellRate(network.current_price);
+                setsellimage(network.image);
+                setsellsymbol(network.symbol);
+                setSelectedsellNetwork(network); // Set selected network for price updates
+                setStep(3);
+              }}
             >
-              <Spinner />
-            </GridItem>
-          ) : (
-            NetValue.map((network, index) => (
-              <GridItem colSpan={2} w={"full"} key={index}>
-                <Button
-                  w={"full"}
-                  py={"35px"}
-                  //   onClick={() => onopenUpdatePassword()}
-                >
+              <Button w={"full"} py={"35px"}>
+                <HStack w={"full"}>
                   <HStack w={"full"}>
-                    <HStack w={"full"}>
-                      <Box>
-                        <Image
-                          boxSize="20px"
-                          objectFit="cover"
-                          src={network.image}
-                          alt={network.symbol}
-                        />
-                      </Box>
-                      <Box>
-                        <Text
-                          color={"#000000"}
-                          fontSize={"16px"}
-                          fontWeight={"600px"}
-                        >
-                          {network.name}
-                        </Text>
-                      </Box>
-                    </HStack>
                     <Box>
-                      <IoIosArrowForward />
+                      <Image
+                        boxSize="20px"
+                        objectFit="cover"
+                        src={network.image}
+                        alt={network.symbol}
+                      />
+                    </Box>
+                    <Box>
+                      <Text
+                        color={"#000000"}
+                        fontSize={"16px"}
+                        fontWeight={"600px"}
+                      >
+                        {network.name}
+                      </Text>
                     </Box>
                   </HStack>
-                </Button>
-              </GridItem>
-            ))
-          )}
-
-          <GridItem colSpan={2}></GridItem>
-          <GridItem colSpan={2}></GridItem>
-        </SimpleGrid>
-      </Box>
-    </>
-  );
+                  <Box>
+                    <IoIosArrowForward />
+                  </Box>
+                </HStack>
+              </Button>
+            </GridItem>
+          ))
+        )}
+      </SimpleGrid>
+    </Box>
+  </>
+);
 }
