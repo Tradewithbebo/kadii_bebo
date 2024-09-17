@@ -18,7 +18,7 @@ import { CiLock } from "react-icons/ci";
 import { BsBank, BsChevronDown } from "react-icons/bs";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { BsExclamationCircle } from "react-icons/bs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 // import { BuyCrypto, SellCrypto } from "../incompleteKyc/crypto_two";
 import { IoIosArrowForward } from "react-icons/io";
@@ -70,7 +70,7 @@ export default function Settings() {
       console.log(error);
     }
   };
-  useState(() => {
+  useEffect(() => {
     fetchUserDetails();
   });
   return (
