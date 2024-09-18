@@ -89,58 +89,61 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
           </Text>
         </GridItem>
         <GridItem colSpan={1} mt="18px">
-          {banksToDisplay.map((bank) => (
-            <SimpleGrid
-              key={bank._id}
-              onClick={() => {
-                setaccountName(bank.accountName);
-                setbankName(bank.bankName);
-                setaccountNumber(bank.accountNumber);
-                setaccountid(bank._id);
-                Setstep(2);
-              }}
-              mb="8px"
-              columns={6}
-              w="full"
-              gap="40px"
-              p="16px"
-              border="1px"
-              bgColor="#f3f4f6"
-              borderColor="#e5e7eb"
-              borderRadius="10px"
-              cursor="pointer"
-              _hover={{
-                bg: "#E7F6EC",
-                borderColor: "#0CBF94",
-              }}
-            >
-              <GridItem colSpan={6} display="flex" justifyContent="start">
-                <Text fontWeight="600" fontSize="16px">
-                  {bank.accountName}
-                </Text>
-              </GridItem>
-              <GridItem colSpan={4} display="flex">
-                <Box flexGrow={3}>
-                  <Text fontWeight="400" fontSize="14px">
-                    {bank.accountNumber}
-                  </Text>
-                </Box>
-                <Box>
-                  <Divider
-                    orientation="vertical"
-                    border="1px"
-                    color="#d4d4d8"
-                    mr="15px"
-                  />
-                </Box>
-                <Box flexGrow={2}>
-                  <Text fontWeight="400" fontSize="14px">
-                    {bank.bankName}
-                  </Text>
-                </Box>
-              </GridItem>
-            </SimpleGrid>
-          ))}
+     {banksToDisplay.map((bank) => (
+  <SimpleGrid
+    key={bank._id}
+    onClick={() => {
+      setaccountName(bank.accountName);
+      setbankName(bank.bankName);
+      setaccountNumber(bank.accountNumber);
+      setaccountid(bank._id);
+      Setstep(2);
+    }}
+    mb="8px"
+    columns={6}
+    w="full"
+    gap="40px"
+    p="16px"
+    border="1px"
+    bgColor="#f3f4f6"
+    borderColor="#e5e7eb"
+    borderRadius="10px"
+    cursor="pointer"
+    _hover={{
+      bg: "#E7F6EC",
+      borderColor: "#0CBF94",
+    }}
+  >
+    <GridItem colSpan={6} display="flex" justifyContent="start">
+      <Text fontWeight="600" fontSize="16px" isTruncated>
+        {bank.accountName}
+      </Text>
+    </GridItem>
+    <GridItem colSpan={4} display="flex" alignItems="center" w={'full'}>
+      <Box flexGrow={0} flexShrink={0} overflow="hidden">
+        <Text fontWeight="400" fontSize="14px" isTruncated>
+          {bank.accountNumber}
+        </Text>
+      </Box>
+      <Box px={'4px'}>
+        <Divider
+        // justifyContent={'center'} display={'flex'} w={'full'}
+        orientation="vertical"
+        height="20px"  // Define height to make the divider visible
+        borderColor="#d4d4d8"  // Use borderColor instead of color
+        borderWidth="1px"
+        />
+      </Box>
+      <Box flexGrow={0} minWidth="100px" flexShrink={0} overflow="hidden">
+        <Text fontWeight="400" fontSize="14px" isTruncated>
+        {bank.bankName.length > 15 ? `${bank.bankName.slice(0, 15)}...` : bank.bankName}
+        </Text>
+      </Box>
+    </GridItem>
+  </SimpleGrid>
+))}
+
+
           {existingBank.length > 2 && (
             <Button
               onClick={() => setShowAll(!showAll)}
