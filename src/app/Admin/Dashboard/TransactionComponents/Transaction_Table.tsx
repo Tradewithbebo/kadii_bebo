@@ -130,8 +130,6 @@ export default function Transaction_Table() {
     const matchesSearch = Object.values(row).some((value) =>
       String(value).toLowerCase().includes(String(searchtr).toLowerCase())
     );
-
-    // Time filter logic
     return matchesSearch;
   });
 

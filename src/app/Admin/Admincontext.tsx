@@ -9,6 +9,12 @@ interface Network {
   name: any;
   current_price: any;
 }
+interface User {
+  fullName: any;
+  email: any;
+  kycStatus: any;
+  current_price: any;
+}
 
 interface Transaction {
   status: string;
@@ -28,8 +34,12 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
 
   const [transaction, setTransaction] = useState([]);
   const [searchtr, setsearchtr] = useState([]);
+  const [searchUser, setsearchUser] = useState([]);
 
   const [Loadingaset, setLoadingaset] = useState(false);
+  const [errorMessage3, setErrorMessage3] = useState("");
+  const [Loadinguser, setLoadinguser] = useState(false);
+  const [Users, setUsers] = useState<User[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [currentSlice, setCurrentSlice] = useState<Network[]>([]); // To hold the current 2 items to display
   const [sliceIndex, setSliceIndex] = useState(0); // To track the current slice index
@@ -118,6 +128,7 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
     };
 
     fetchData();
+    
   }, [NetValue]);
 
   // Effect to cycle through NetValue and display two items every 5 seconds
@@ -155,7 +166,34 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
     // Update slice index to move forward by 2, with wrap-around
     setSliceIndex(nextIndex);
   };
+  useEffect(()=>{
+    getusers();
+  })
 
+  const url3 = "users";
+  const getusers = async (): Promise<boolean> => {
+    setLoadinguser(true);
+    try {
+      const res = await AxiosGet(url3);
+      setLoadinguser(false);
+      if (res) {
+        // console.log("Networks fetched:", res.data); // Log fetched networks
+        setUsers(res.data.items);
+        setErrorMessage3("");
+        return true;
+      } else {
+        return false; // Return false if no response or empty data
+      }
+    } catch (err: any) {
+      setLoadinguser(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage3(message);
+      return false; // Return false on failure
+    }
+  };
   return (
     <AdminCryptoContext.Provider
       value={{
@@ -174,6 +212,9 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         setsearchtr,
         transactmnth,
         settransactionmnth,
+        Users,
+        searchUser,
+        setsearchUser,
       }}
     >
       {children}

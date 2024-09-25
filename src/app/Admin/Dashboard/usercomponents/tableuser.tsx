@@ -1,25 +1,43 @@
-'use client'
+"use client";
 
-import { Box,Text, Tbody, Td, Thead, Tr, Table, Th, HStack, useToast } from "@chakra-ui/react";
-import React from "react";
+import { Box, Text, Tbody, Td, Thead, Tr, Table, Th, HStack, Button, Flex, useToast } from "@chakra-ui/react";
+import React, { useState } from "react";
 import { GrStatusGood } from "react-icons/gr";
-import { IoFilterSharp } from "react-icons/io5";
-import { MdCoPresent, MdCopyAll, MdCopyright, MdGppGood } from "react-icons/md";
-// import { GrStatusGood } from "react-icons/gr";
-import { IoCopyOutline } from "react-icons/io5";
+import { IoFilterSharp, IoCopyOutline } from "react-icons/io5";
+import { MdGppGood, MdCircle } from "react-icons/md";
 import { useRouter } from "next/navigation";
 
 export default function TAbleuser({
   headers,
   data,
-  bank
+  // bank
 }: {
   headers: any;
   data: any;
-  bank: any;
+  // bank: any;
 }) {
-  const toast = useToast()
-  const Router=useRouter()
+  const toast = useToast();
+  const Router = useRouter();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Adjust this value as needed
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+
+  // Get the current items for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -37,6 +55,7 @@ export default function TAbleuser({
         console.error("Could not copy text: ", err);
       });
   };
+
   return (
     <>
       <Box
@@ -70,91 +89,107 @@ export default function TAbleuser({
           </Thead>
 
           <Tbody>
-            {data.map((row: any, rowIndex: any) => (
+            {currentData.map((row: any, rowIndex: any) => (
               <Tr key={rowIndex}>
                 {Object.values(row).map((value: any, cellIndex) => (
                   <Td
                     key={cellIndex}
-                    color={cellIndex === 2 ? "#2F7F37" : "#000000"} // Conditional color
+                    color={
+                      cellIndex === 2 && value === "NOT-STARTED"
+                        ? "#B59803"
+                        : value === "PENDING"
+                        ? "ORANGE"
+                        : value === "APPROVED"
+                        ? "#2F7F37"
+                         : value === "REJECTED"
+                        ? "#FF4834"
+                        : "#000000"
+                    }
                     fontSize={"12px"}
-                   
                     fontWeight={"600"}
-                    //   bg={cellIndex === 2 ? 'yellow.200' : 'transparent'}  // Conditional background color
                   >
-                    {cellIndex === 0 ? ( <Box  cursor={'pointer'} onClick={ ()=>{
-                          Router.push('/Admin/Dashboard/User/1')
-                        }}>{value } </Box>):value }
-                    
-                 
-                   
-                    {cellIndex === 2 && (
-                      <MdGppGood
-                        style={{
-                          display: "inline",
-                          marginLeft: "8px",
-                          color: "green",
-                        }}
-                        
-                      />
+                    {cellIndex === 0 ? (
+                      <Box
+                        cursor={"pointer"}
+                        onClick={() => Router.push("/Admin/Dashboard/User/1")}
+                      >
+                        {value}
+                      </Box>
+                    ) : (
+                      value
                     )}
-                      {cellIndex === 0  && (
-        
-                    <HStack><Text color={'#71717A'} fontSize={'9px'} fontWeight={'500'}>
-                    {bank[rowIndex]}
-                  </Text> <Box as="button"
-                          onClick={() => handleCopy(bank[rowIndex])}><IoCopyOutline/></Box></HStack>
-                  )}
+
+                    {cellIndex === 2 && (
+                     <MdGppGood
+                     style={{
+                       display: "inline",
+                       marginLeft: "8px",
+                       color:
+                         value === "NOT-STARTED"
+                           ? "#B59803"
+                           : value === "PENDING"
+                           ? "ORANGE"
+                           : value === "APPROVED"
+                           ? "#2F7F37"
+                           : value === "REJECTED"
+                           ? "#FF4834"
+                           : "#000000",
+                     }}
+                   />
+                    )}
+
+                    {/* {cellIndex === 0 && ( */}
+                    {/* <HStack> */}
+                    {/* <Text color={'#71717A'} fontSize={'9px'} fontWeight={'500'}> */}
+                    {/* {bank[rowIndex]} */}
+                    {/* </Text> */}
+                    {/* <Box as="button" onClick={() => handleCopy(bank[rowIndex])}>
+                          <IoCopyOutline />
+                        </Box> */}
+                    {/* </HStack> */}
+                    {/* )} */}
                   </Td>
                 ))}
               </Tr>
             ))}
           </Tbody>
         </Table>
+        {/* Pagination Buttons */}
+        <Flex justifyContent="space-between" mt={4} mx={"10px"}>
+          <Button
+            onClick={handlePrev}
+            isDisabled={currentPage === 1}
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            bg={"#0CBF94"}
+          >
+            Previous
+          </Button>
+          <Text
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            textAlign={"center"}
+            justifyContent={"center"}
+            w={"full"}
+            display={"flex"}
+            alignItems={"center"}
+          >
+            Page {currentPage} of {totalPages}
+          </Text>
+          <Button
+            onClick={handleNext}
+            isDisabled={currentPage === totalPages}
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            bg={"#0CBF94"}
+          >
+            Next
+          </Button>
+        </Flex>
       </Box>
     </>
   );
 }
-
-// import React from 'react';
-// import { Box, Text, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
-
-// const orderTypeColors = {
-//   "Type 1": "blue.500",
-//   "Type 2": "green.500",
-//   "Type 3": "red.500",
-//   // Add more types and colors as needed
-// };
-
-// const TAbleuser = ({ headers, data }) => {
-//   return (
-//     <Box p={5}>
-//       <Table variant="simple">
-//         <Thead>
-//           <Tr>
-//             {headers.map((header, index) => (
-//               <Th key={index}>{header}</Th>
-//             ))}
-//             <Th>Order Type</Th> {/* Add Order Type header */}
-//           </Tr>
-//         </Thead>
-//         <Tbody>
-//           {data.map((item, index) => (
-//             <Tr key={index}>
-//               <Td>{item.customerInfo}</Td>
-//               <Td>{item.email}</Td>
-//               <Td>{item.kycLevel}</Td>
-//               <Td>{item.transactions}</Td>
-//               <Td>
-//                 <Text fontWeight="bold" color={orderTypeColors[item.orderType]}>
-//                   {item.orderType}
-//                 </Text>
-//               </Td> {/* Style Order Type */}
-//             </Tr>
-//           ))}
-//         </Tbody>
-//       </Table>
-//     </Box>
-//   );
-// };
-
-// export default TAbleuser;

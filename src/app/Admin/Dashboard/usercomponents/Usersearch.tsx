@@ -1,6 +1,7 @@
 import { Box, Card, CardBody, GridItem, SimpleGrid,Text } from '@chakra-ui/react'
 import React from 'react'
 import Search from './search'
+// import Search from './search'
 
 export default function Usersearch() {
   return (

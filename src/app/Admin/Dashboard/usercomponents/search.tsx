@@ -1,28 +1,36 @@
 'use client';
 
-import { Flex, HStack, Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { FaSearch } from "react-icons/fa";
-import React from 'react'
-import { MdSearch } from 'react-icons/md';
-// import { useDebounce, useDebouncedCallback } from 'use-debounce';
-interface searchProps{
-  placeholder:string;
-}
-export default function Search({placeholder}:searchProps) {
+import { Input, InputGroup, InputLeftElement } from '@chakra-ui/react';
+import { FaSearch } from 'react-icons/fa';
+import React, { ChangeEvent } from 'react';
+import { useAdminContext } from '../../Admincontext';
 
-  // console.log(searchparams)
-  // console.log(pathname)
+interface SearchProps {
+  placeholder: string;
+}
+
+export default function Search({ placeholder }: SearchProps) {
+  const { searchUser, setsearchUser } = useAdminContext();
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setsearchUser(e.target.value);
+  };
+
   return (
-   
- <>
-  <InputGroup>
-    <InputLeftElement pointerEvents='none'>
-      <FaSearch color='#A1A1AA' size={'13px'} />
-    </InputLeftElement>
-    <Input type='tel' placeholder='Type to search'
-    fontSize={'12px'}
-    fontWeight={'500px'} />
-  </InputGroup></>
-  )
+    <>
+      <InputGroup>
+        <InputLeftElement pointerEvents="none">
+          <FaSearch color="#A1A1AA" size={'13px'} />
+        </InputLeftElement>
+        <Input
+          type="text"
+          placeholder={placeholder} // Use the placeholder prop
+          fontSize="12px"
+          fontWeight="500" // Corrected from '500px'
+          value={searchUser}
+          onChange={handleInputChange}
+        />
+      </InputGroup>
+    </>
+  );
 }
