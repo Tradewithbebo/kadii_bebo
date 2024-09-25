@@ -14,12 +14,40 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React, { useState } from 'react'
+import { useAdminContext } from "../../Admincontext";
 
 export default function TransactionCard() {
+  const {
+    Status,
+    custo_info,
+    Asset_received,
+    Amount_sent,
+    Dates,
+    transaction,
+    searchtr,
+    setsearchtr,
+    transactmnth,
+    settransactionmnth,
+  } = useAdminContext();
     const [Month,setMonth]=useState('All time')
-    const change=(NoMonths:any)=>{
-        setMonth(NoMonths)
-    }
+   
+const change = (NoMonths: string) => {
+  setMonth(NoMonths);
+
+  if (NoMonths === '7 Days') {
+    settransactionmnth(7);
+  } else if (NoMonths === '12 Months') {
+    settransactionmnth(365);
+  } else if (NoMonths === '6 Months') {
+    settransactionmnth(182.5);
+  } else if (NoMonths === '30 Days') {
+    settransactionmnth(30);
+  } else if (NoMonths === 'All time') {
+    settransactionmnth('');
+  } else {
+    settransactionmnth('');
+  }
+};
     const NoMonths=
        [ 'All time',
         '12 Months',
@@ -72,7 +100,9 @@ export default function TransactionCard() {
             ) : (
               <Text
               cursor={'pointer'}
-              onClick={()=>change(month)}
+              onClick={()=>{change(month)
+
+              }}
                 fontSize={'11px'}
                 fontWeight={'700'}
                 color={'#71717A'}

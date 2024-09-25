@@ -10,22 +10,17 @@ import {
   Table,
   Th,
   HStack,
+  Button,
+  Flex,
   useToast,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import { GrStatusGood } from "react-icons/gr";
 import { IoFilterSharp } from "react-icons/io5";
 import {
   MdCircle,
-  MdCoPresent,
-  MdCopyAll,
-  MdCopyright,
-  MdFmdBad,
-  MdGppBad,
-  MdGppGood,
 } from "react-icons/md";
-// import { GrStatusGood } from "react-icons/gr";
-import { IoCopyOutline } from "react-icons/io5";
+import { useAdminContext } from "../../Admincontext";
 
 export default function TransactionTable({
   headers,
@@ -36,6 +31,29 @@ export default function TransactionTable({
   data: any;
   bank: any;
 }) {
+
+  const {transaction } = useAdminContext();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Adjust this value as needed
+
+  const totalPages = Math.ceil(data.length / itemsPerPage);
+  
+  // Get the current items for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
+
   return (
     <>
       <Box
@@ -69,21 +87,16 @@ export default function TransactionTable({
           </Thead>
 
           <Tbody>
-            {data.map((row: any, rowIndex: any) => (
+            {currentData.map((row: any, rowIndex: any) => (
               <Tr key={rowIndex}>
                 {Object.values(row).map((value: any, cellIndex) => (
                   <Td
-                    // w={cellIndex === 1 ? "full" : ""}
                     key={cellIndex}
-                    color={
-                      
-                       "#000000"
-                    } // Conditional color
+                    color={"#000000"}
                     fontSize={"12px"}
                     fontWeight={"600"}
-                    //   bg={cellIndex === 2 ? 'yellow.200' : 'transparent'}  // Conditional background color
                   >
-                    {cellIndex === 0 && value == "Completed" ? (
+                    {cellIndex === 0 && value === "buy" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#2F7F37" />
@@ -97,8 +110,13 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : cellIndex === 0 && value == "In-progress" ? (
-                      <Box rounded={"10px"} px={"2px"} bg={"#FCF2C1"} w={"100%"}>
+                    ) : cellIndex === 0 && value === "In-progress" ? (
+                      <Box
+                        rounded={"10px"}
+                        px={"2px"}
+                        bg={"#FCF2C1"}
+                        w={"100%"}
+                      >
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#B59803" />
                           <Text color={"#B59803"} fontSize={"12px"}>
@@ -107,7 +125,7 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : cellIndex === 0 && value == "Declined" ? (
+                    ) : cellIndex === 0 && value === "sell" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#FF4834" />
@@ -117,7 +135,7 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : (
+                    ) :  cellIndex === 5 ?null  : (
                       value
                     )}
                     {cellIndex === 1 && (
@@ -135,6 +153,41 @@ export default function TransactionTable({
             ))}
           </Tbody>
         </Table>
+        {/* Pagination Buttons */}
+        <Flex justifyContent="space-between" mt={4} mx={"10px"}>
+          <Button
+            onClick={handlePrev}
+            isDisabled={currentPage === 1}
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            bg={"#0CBF94"}
+          >
+            Previous
+          </Button>
+          <Text
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            textAlign={"center"}
+            justifyContent={"center"}
+            w={"full"}
+            display={"flex"}
+            alignItems={"center"}
+          >
+            Page {currentPage} of {totalPages}
+          </Text>
+          <Button
+            onClick={handleNext}
+            isDisabled={currentPage === totalPages}
+            color={"#3F3F46"}
+            fontWeight={"500"}
+            fontSize={"13px"}
+            bg={"#0CBF94"}
+          >
+            Next
+          </Button>
+        </Flex>
       </Box>
     </>
   );

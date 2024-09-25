@@ -12,8 +12,11 @@ import {
   GridItem,
   Image
 } from "@chakra-ui/react";
+import { useAdminContext } from "../../Admincontext";
 
 export default function Bard() {
+
+  const { NetValue, currentSlice, setNetValue} = useAdminContext();
   // const columns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
   const data = [
     {
@@ -65,85 +68,73 @@ export default function Bard() {
 }
 export function Bardtwo() {
   // const columns = useBreakpointValue({ base: 1, md: 2, lg: 4 });
-
+  const { NetValue, currentSlice, setNetValue, getnetwork} = useAdminContext();
   return (
-    <SimpleGrid pb={'19px'}>
-      
-      <Card
-      border="1px" borderColor="gray.200" borderRadius="md"
-        cursor="pointer"
-        transition="transform 0.5s ease-in-out, background-color 0.7s ease"
-      >
-        <CardBody>
-          <HStack mb={"32px"} justifyContent={"space-between"}>
-            <Box>
-              {" "}
-              <Text fontSize="16px" fontWeight="700">
-                Live rates
-              </Text>
-            </Box>
-            <Box>
-              {" "}
-              <Button bg={"#186B53"}>
-                <Text fontSize="15px" fontWeight="500" color={"#FFFFFF"}  _hover={
-                {
-                  color:'black'
-                }
-              } >
-                  Update rates
-                </Text>
-              </Button>
-            </Box>
-          </HStack>
-          <HStack  w={'full'}>
-          <SimpleGrid columns={[1,5]} w={'full'}>
-  
-  <GridItem colSpan={2}  display={'flex'} justifyContent={'start'}>
-    <HStack>
-    <Box>
-    <Image
-       boxSize='20px'
-       borderRadius='full'
-       src="/image/crypto.png"
-       alt='Simon the pensive'
-       mr='12px'
-       />
- </Box>
- <Box>
- <Text fontSize="18px" fontWeight="700">Tether USD</Text>
- </Box>
-    </HStack>
-  </GridItem>
-  <GridItem colSpan={3} display={'flex'} justifyContent={'end'}>
-  <Text fontSize="18px" fontWeight="700">1033.5</Text>
-</GridItem>
-</SimpleGrid>
-  <Box> <Divider orientation='vertical'  h={'50px'}  borderWidth="2px" color={'#E6E6E6'}/></Box>
-  <SimpleGrid columns={[1,5]}  w={'full'}>
-  
-  <GridItem colSpan={2}  display={'flex'} justifyContent={'start'}>
-    <HStack>
-    <Box>
-    <Image
-     boxSize='20px'
-     borderRadius='full'
-     src="/image/crypto.png"
-     alt='Simon the pensive'
-     mr='12px'
-     />
- </Box>
- <Box>
- <Text fontSize="18px" fontWeight="700">BTC</Text>
- </Box>
-    </HStack>
-  </GridItem>
-  <GridItem colSpan={3} display={'flex'} justifyContent={'end'}>
-  <Text fontSize="18px" fontWeight="700">1033.5</Text>
-</GridItem>
-</SimpleGrid>
-          </HStack>
-        </CardBody>
-      </Card>
+    <SimpleGrid pb={'19px'} spacing={4}>
+    <Card
+      border="1px"
+      borderColor="gray.200"
+      borderRadius="md"
+      cursor="pointer"
+      transition="transform 0.5s ease-in-out, background-color 0.7s ease"
+    >
+
+      <CardBody>
+        <HStack mb={"32px"} justifyContent={"space-between"}>
+          <Text fontSize={{ base: "14px", md: "16px" }} fontWeight="700">
+            Live rates
+          </Text>
+          <Button bg={"#186B53"} onClick={()=>getnetwork()}>
+            <Text
+              fontSize={{ base: "13px", md: "15px" }}
+              fontWeight="500"
+              color={"#FFFFFF"}
+              _hover={{ color: 'black' }}
+            >
+              Update rates
+            </Text>
+          </Button>
+        </HStack>
+        
+        <HStack w={'full'} spacing={4} flexDirection={{ base: 'column', md: 'row' }}>
+        {currentSlice.map((item: any, index: any) => (
+  <React.Fragment key={index}>
+    <SimpleGrid columns={{ base: 1, md: 5 }} w={'full'} spacing={4}>
+      <GridItem colSpan={{ base: 1, md: 2 }} display={'flex'} justifyContent={'start'}>
+        <HStack>
+          <Image
+            boxSize='20px'
+            borderRadius='full'
+            src={item.image || "/image/crypto.png"} // Use the dynamic image or fallback
+            alt={item.name || 'Crypto Image'}       // Use dynamic name or fallback
+            mr='12px'
+          />
+          <Text fontSize={{ base: "16px", md: "18px" }} fontWeight="700">
+            {item.symbol}  {/* Dynamic symbol */}
+          </Text>
+        </HStack>
+      </GridItem>
+      <GridItem colSpan={{ base: 1, md: 3 }} display={'flex'} justifyContent={'end'}>
+        <Text fontSize={{ base: "16px", md: "18px" }} fontWeight="700">
+          {item.current_price} {/* Dynamic current price */}
+        </Text>
+      </GridItem>
     </SimpleGrid>
+
+    {/* Optional Divider between the two slices */}
+    {index < currentSlice.length - 1 && (
+      <Box>
+        <Divider orientation='vertical' h={'50px'} borderWidth="2px" color={'#E6E6E6'} />
+      </Box>
+    )}
+  </React.Fragment>
+))}
+
+        </HStack>
+      </CardBody>
+    </Card>
+  </SimpleGrid>
   );
 }
+
+

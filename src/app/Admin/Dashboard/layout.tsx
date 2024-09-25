@@ -4,6 +4,8 @@ import React, { useEffect } from "react";
 import Navbar from "./navbar/navbar";
 import Sidebar from "./sidebar/sidebar";
 import { redirect, useRouter } from "next/navigation";
+import { AdminContext } from "../Admincontext";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
    
@@ -14,6 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }
   }, [router]);
   return (
+    <AdminContext>
     <Flex flexDirection={'column'}>
       <Box position="sticky" top={'0px'}  left="0" width="100%" zIndex="1000" bg="white" >
         <Navbar/>
@@ -28,6 +31,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Box>
         </Flex>
       </Box>
-    </Flex>
+    </Flex></AdminContext>
   );
 }

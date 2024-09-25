@@ -50,7 +50,6 @@ export default function Login() {
         const res = await AxiosPost(url, values);
         setLoading(false);
         if (res) {
-          // console.log('authToken',res.data.accessToken )
           localStorage.setItem("stk-apk", JSON.stringify({ authToken: res.data.accessToken }));
           router.push("/Admin/Dashboard/dashboard");
         }
@@ -66,17 +65,17 @@ export default function Login() {
   };
 
   return (
-    <Box bg={"#186B53"}>
-      <Center h="100vh">
-        <VStack>
-          <Box pb={"56px"}>
-            <Text fontSize={"36px"} fontWeight={"800"} color={"#FFFFFF"}>
+    <Box bg={"#186B53"} minH="100vh">
+      <Center w="full" h="100vh" alignItems={'center'} display={'flex'}>
+        <VStack w={{ base: "90%", md: "50%", lg: "40%" }}>
+          <Box pb={"30px"}>
+            <Text fontSize={{ base: "28px", md: "36px" }} fontWeight={"800"} color={"#FFFFFF"}>
               Admin Sign in
             </Text>
           </Box>
           <Box
-            w="md"
-            p={8}
+            w="full"
+            p={{ base: 6, md: 8 }}
             bg="white"
             borderRadius="md"
             boxShadow="lg"
@@ -90,7 +89,7 @@ export default function Login() {
             >
               {({ errors, touched, dirty, isValid }) => (
                 <Form>
-                  <SimpleGrid w={"full"} gap={"16px"} p={"40px"}>
+                  <SimpleGrid w={"full"} gap={6}>
                     <GridItem>
                       <FormControl isInvalid={!!errors.email && touched.email}>
                         <FormLabel fontSize={"16px"} fontWeight={"600"}>
@@ -121,9 +120,7 @@ export default function Login() {
                           />
                           <InputRightElement>
                             <IconButton
-                              aria-label={
-                                showPassword ? "Hide password" : "Show password"
-                              }
+                              aria-label={showPassword ? "Hide password" : "Show password"}
                               icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
                               onClick={togglePasswordVisibility}
                               variant="ghost"

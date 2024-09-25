@@ -11,7 +11,7 @@ import {
   Link
 } from "@chakra-ui/react";
 import React from "react";
-import Search from "./Search";
+import Search, { Search2 } from "./Search";
 import { IoOptionsOutline } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
 // import Link from "next/link";
@@ -67,7 +67,7 @@ export default function Transactionsearch() {
               </Box>
             </GridItem>
             <GridItem colSpan={[1, 2]}>
-              <Search placeholder={"Type to search"} />
+              <Search2 placeholder={"Type to search"} />
             </GridItem>
           </SimpleGrid>
         </CardBody>
