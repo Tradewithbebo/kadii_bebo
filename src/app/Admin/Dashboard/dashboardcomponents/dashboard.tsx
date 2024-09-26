@@ -43,14 +43,13 @@ export default function Dashboardcomponent() {
     const day = date.getDate();
     const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
     const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
-  
-    const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits for hours
-    const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits for minutes
-  
+
+    const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits for hours
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits for minutes
+
     return `${day}/${month}/${year} ${hours}:${minutes}`; // Format as DD/MM/YY HH:MM
   }
-  
-  
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
       style: "currency",
@@ -79,43 +78,51 @@ export default function Dashboardcomponent() {
   //   // If name contains only one part, return it as-is; otherwise, return the first two names
   //   return nameParts.length === 1 ? nameParts[0] : nameParts.slice(0, 2).join(" ");
   // };
+  const [buy_sell_all_state, setbuy_sell_all_state] = useState("ALL");
 
-  const [timeFilter, setTimeFilter] = useState("1day");
+  const onTap = (condition: any) => {
+    setbuy_sell_all_state(condition);
+  };
+  
   const data = transaction
     .map((status: any) => {
       const createdAt = new Date(status.createdAt);
       const today = new Date();
-
+  
       // Calculate days difference
       const timeInDays = Math.floor(
         (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
       );
       console.log("time", timeInDays);
-
+  
       return {
-        // icon: <GrStatusGood size={'20px'} />, // JSX for icon component
-
-        isPaid: status.isPaid === false ? 'Incomplete' : 'Completed', // Payment status condition
-      
-        Status: status.type, // Safely access status type
-      
+        isPaid: status.isPaid === false ? "Incomplete" : "Completed", // Payment status
+  
+        Status: status.type, // Access status type (BUY or SELL)
+  
         custo_info: status.bank?.accountName, // Safely access accountName if it exists
-      
+  
         Asset_received: formatCurrency(status.amountNaira), // Format currency for asset received
-        
+  
         Amount_sent: formatCurrency(status.amountNaira), // Format currency for amount sent
-      
+  
         Date: formatDate(status.createdAt), // Format the createdAt date
-      
+  
         timeInDays, // Include the calculated time in days for filtering
       };
     })
-
     .filter((item: any) =>
-      transactmnth === "" ? item : item.timeInDays <= transactmnth
-    ); 
+      buy_sell_all_state === "ALL"
+        ? true // Show all transactions if "ALL" is selected
+        : buy_sell_all_state === "SELL"
+        ? item.Status === "sell" // Show only SELL transactions
+        : buy_sell_all_state === "BUY"
+        ? item.Status === "buy" // Show only BUY transactions
+        : item.Status // Default case, fallback to showing all
+    );
+  
 
-  console.log("Filtered data:", data);
+  // console.log("Filtered data:", data);
 
   // Ensure that searchtr is a string and that it's not null or undefined
   // const filteredData = data.filter((row: any) =>
@@ -149,7 +156,6 @@ export default function Dashboardcomponent() {
     return matchesSearch;
   });
 
-
   const headers = [
     // eslint-disable-next-line react/jsx-key
     // <GrStatusGood size={'20px'}/>,
@@ -167,40 +173,48 @@ export default function Dashboardcomponent() {
       status: "Completed",
       orderType: "Sell order",
       customerInfo: "MATTHEW OLA",
-      assetAmountReceived: '200,000.04 USDT',
-      amountToBeSent: 'NGN 2,000,000,000.00',
+      assetAmountReceived: "200,000.04 USDT",
+      amountToBeSent: "NGN 2,000,000,000.00",
       date: "22/06/23  12:23PM",
     },
     {
-      icon: <GrStatusGood size={'20px'}/>,
+      icon: <GrStatusGood size={"20px"} />,
       status: "Completed",
       orderType: "Sell order",
       customerInfo: "MATTHEW OLA",
-      assetAmountReceived: '200,000.04 USDT',
-      amountToBeSent: 'NGN 2,000,000,000.00',
+      assetAmountReceived: "200,000.04 USDT",
+      amountToBeSent: "NGN 2,000,000,000.00",
       date: "22/06/23  12:23PM",
     },
     {
-      icon: <GrStatusGood size={'20px'}/>,
+      icon: <GrStatusGood size={"20px"} />,
       status: "Completed",
       orderType: "Buy order",
       customerInfo: "MATTHEW OLA",
-      assetAmountReceived: '200,000.04 USDT',
-      amountToBeSent: 'NGN 2,000,000,000.00',
+      assetAmountReceived: "200,000.04 USDT",
+      amountToBeSent: "NGN 2,000,000,000.00",
       date: "22/06/23  12:23PM",
     },
     // Add more data as needed
   ];
-  const banks=[
-    '3092764731 | FIRSTBANK PLC',
-    ' 3088908714 | FIRSTBANK PLC',
-    '3092764731 | FIRSTBANK PLC'
-    ]
+  const banks = [
+    "3092764731 | FIRSTBANK PLC",
+    " 3088908714 | FIRSTBANK PLC",
+    "3092764731 | FIRSTBANK PLC",
+  ];
+ 
+  // const buy_sell_all=[
+  //   'BUY',
+  //   'SELL',
+  //   'ALL'
+  // ]
   return (
-    <Box mt={"24px"} w={"100%"} mb={'19px'}>
-      <Card  
-      border="1px" borderColor="gray.200" borderRadius="md"
-      borderBottomRightRadius={"none"}
+    <Box mt={"24px"} w={"100%"} mb={"19px"}>
+      <Card
+        border="1px"
+        borderColor="gray.200"
+        borderRadius="md"
+        borderBottomRightRadius={"none"}
         borderBottomLeftRadius={"none"}
         cursor="pointer"
         transition="transform 0.5s ease-in-out, background-color 0.7s ease"
@@ -219,13 +233,19 @@ export default function Dashboardcomponent() {
               justifyContent={"start"}
             >
               <HStack>
-                <Box>
+                <Box onClick={() => onTap("ALL")}>
+                  {" "}
+                  <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
+                    All
+                  </Button>
+                </Box>
+                <Box onClick={() => onTap("BUY")}>
                   <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
                     Buy
                   </Button>
                 </Box>
 
-                <Box>
+                <Box onClick={() => onTap("SELL")}>
                   {" "}
                   <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
                     Sell
@@ -236,14 +256,17 @@ export default function Dashboardcomponent() {
             <GridItem colSpan={[1, 3]} display={"flex"} justifyContent={"end"}>
               <Box>
                 <Link color={"#4F46E5"} fontWeight={"500"} fontSize={"12px"}>
-                 <HStack> <Text>See All Order</Text> <IoIosArrowForward /></HStack>
+                  <HStack>
+                    {" "}
+                    <Text>See All Order</Text> <IoIosArrowForward />
+                  </HStack>
                 </Link>
               </Box>
             </GridItem>
           </SimpleGrid>
         </CardBody>
       </Card>
-      <TAble headers={headers} data={data} bank={bank}/>
+      <TAble headers={headers} data={data} bank={bank} />
     </Box>
   );
 }
