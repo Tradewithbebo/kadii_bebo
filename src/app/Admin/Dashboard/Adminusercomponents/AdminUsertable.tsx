@@ -1,14 +1,15 @@
 "use client";
 import React from "react";
-import TAbleuser from "./tableuser";
+// import TAbleuser from "./tableuser";
 import { useAdminContext } from "../../Admincontext";
+import TAbleuser from "./Admintableuser";
 
 export default function Usertable() {
   const headers = [
-    "Customer info",
-    "Email",
-    "KYC Level",
-    "No. of transactions",
+    "Admin Name",
+    "Admin Email",
+    "Created At",
+    
   ]
 
   const bank = [
@@ -18,17 +19,29 @@ export default function Usertable() {
   ];
 
   const {
-    Users,
-    searchUser,
+    
+    AdminUsers,
+    searchUser, 
+    setAdminUsers
   } = useAdminContext();
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
+    const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
+
+    const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits for hours
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits for minutes
+
+    return `${day}/${month}/${year} ${hours}:${minutes}`; // Format as DD/MM/YY HH:MM
+  }
 
   // Prepare user data from Users context
-  const userData = Users.map((status: any) => ({
+  const userData = AdminUsers.map((status: any) => ({
     _id: status._id,
-    fullName: status.fullName,
+    fullName: status.name,
     email: status.email,
-    kycStatus: status.kycStatus,
-    number_of_transactions: "10",
+    createdAt:formatDate (status.createdAt),
   }));
   
 

@@ -35,7 +35,7 @@ export default function TAbleuser({
   };
 
   const handleRowClick = (id: string) => {
-    router.push(`/Admin/Dashboard/User/${id}`);
+    router.push(`/Admin/Dashboard/AdminUser/${id}`);
   };
 
   return (

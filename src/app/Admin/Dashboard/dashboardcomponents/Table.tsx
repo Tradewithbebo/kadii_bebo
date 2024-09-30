@@ -29,7 +29,7 @@ export default function TransactionTable({
 }) {
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Adjust this value as needed
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
 
   // Handle copying bank details
@@ -140,7 +140,8 @@ export default function TransactionTable({
                          </Text>
                        </HStack>
                      </Box>
-                   ) : cellIndex === 6 ? null : (
+                   ) : cellIndex === 6 ? null :  
+                   (
                      value
                    )}
                    {cellIndex === 2 && (

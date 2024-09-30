@@ -23,6 +23,8 @@ interface Transaction {
   createdAt: string;
 }
 export const AdminContext = ({ children }: { children: React.ReactNode }) => {
+  const [LoadingAdminuser,setLoadingAdminuser]=useState(false)
+  const [ErrorMessage4,setErrorMessage4]=useState('')
   const [NetValue, setNetValue] = useState<Network[]>([]);
   const [Loadingtr, setLoadingtr] = useState(false);
   const [transactmnth, settransactionmnth] = useState("");
@@ -33,6 +35,7 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   const [custo_info, setcusto_info] = useState<any[]>([]);
 
   const [transaction, setTransaction] = useState([]);
+  const [transactionw, setTransactionw] = useState([]);
   const [searchtr, setsearchtr] = useState([]);
   const [searchUser, setsearchUser] = useState([]);
 
@@ -40,10 +43,11 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   const [errorMessage3, setErrorMessage3] = useState("");
   const [Loadinguser, setLoadinguser] = useState(false);
   const [Users, setUsers] = useState<User[]>([]);
+  const [AdminUsers, setAdminUsers] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [currentSlice, setCurrentSlice] = useState<Network[]>([]); // To hold the current 2 items to display
   const [sliceIndex, setSliceIndex] = useState(0); // To track the current slice index
-
+  const [ontapBuy_sell, setontapBuy_sell] = useState('Sell'); // To track the current slice index
   const url = "wallet/assets";
   const url2 = "transactions";
   const gettransaction = async () => {
@@ -168,6 +172,7 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   };
   useEffect(()=>{
     getusers();
+    getAdminusers()
   })
 
   const url3 = "users";
@@ -194,6 +199,31 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
       return false; // Return false on failure
     }
   };
+  const url4 = "admin";
+  
+  const getAdminusers = async (): Promise<boolean> => {
+    setLoadingAdminuser(true);
+    try {
+      const res = await AxiosGet(url4);
+      setLoadingAdminuser(false);
+      if (res) {
+        // console.log("Networks fetched:", res.data); // Log fetched networks
+        setAdminUsers(res.data);
+        setErrorMessage4("");
+        return true;
+      } else {
+        return false; // Return false if no response or empty data
+      }
+    } catch (err: any) {
+      setLoadingAdminuser(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage4(message);
+      return false; // Return false on failure
+    }
+  };
   return (
     <AdminCryptoContext.Provider
       value={{
@@ -215,6 +245,10 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         Users,
         searchUser,
         setsearchUser,
+        ontapBuy_sell,
+         setontapBuy_sell,
+         transactionw,
+         AdminUsers, setAdminUsers
       }}
     >
       {children}

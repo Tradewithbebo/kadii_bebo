@@ -65,6 +65,7 @@ export default function OrderCard() {
                 color={'#71717A'}
                 key={index}
                 border={'1px'}
+                size={'sm'}
               >
                 {month}
               </Button>

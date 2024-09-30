@@ -16,9 +16,10 @@ import {
 import React, { useEffect, useState } from "react";
 import { MdGppGood } from "react-icons/md";
 import SusPend from "../../UsersComponents/Suspenmodal";
-import DeleteUser from "../../UsersComponents/DeleteModal";
+// import DeleteUser from "../../UsersComponents/DeleteModal";
 import { AxiosGet } from "@/app/axios/axios";
 import { useParams } from "next/navigation";
+import DeleteUser from "../../AdminUsersComponents/DeleteModal";
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -39,32 +40,40 @@ export default function page() {
       number: "3,493",
     },
   ];
-  interface User {
+  interface AdminUser {
     // Define user properties here
-    id: string
+    _id: string
     name: string
+    email:string
     // Add other properties as needed
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [user, setUser] = useState<User | null>(null)
+  const [AdminUser, setAdminUser] = useState<AdminUser | null>(null)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [loadingUser, setLoadingUser] = useState(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [errorMessage, setErrorMessage] = useState('')
-const Url =`users/${userId}`
+const Url ="admin"
 
-  const getUserById = async (): Promise<boolean> => {
+  const getAdminUserById = async (): Promise<boolean> => {
     setLoadingUser(true)
     try {
       const response = await AxiosGet(Url)
-      setLoadingUser(false)
-     
       if (response.data) {
-        console.log('data',response.data)
-        setUser(response.data)
-        setErrorMessage('')
-        return true
+        console.log('data', response.data)
+        
+        const foundUser = response.data.find((user: AdminUser) => user._id === userId)
+        
+        if (foundUser) {
+          setAdminUser(foundUser)
+          setErrorMessage('')
+          return true
+        } else {
+          setErrorMessage('Admin user not found')
+          return false
+        }
       } else {
+        setErrorMessage('Invalid response data')
         return false
       }
     } catch (err: any) {
@@ -79,13 +88,13 @@ const Url =`users/${userId}`
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
-    getUserById()
+    getAdminUserById()
   }, [])
   return (
     <Box w={"full"}>
       <Box pb={"24px"} w={"full"}>
         <Text fontSize={"16px"} fontWeight={"700"}>
-          Users
+          Admin Users
         </Text>
       </Box>
       {/* <VStack w={"full"}> */}
@@ -106,12 +115,12 @@ const Url =`users/${userId}`
           <VStack w={"full"} gap={"1px"}>
             <Box w={"full"}>
               <Text fontWeight={"800"} fontSize={"18px"}>
-                Matthew Ola
+                {AdminUser?.name}
               </Text>
             </Box>
             <Box w={"full"}>
               <Text fontWeight={"400"} fontSize={"12px"}>
-                thematthewola@gmail.com
+              {AdminUser?.email}
               </Text>
             </Box>
           </VStack>
@@ -176,65 +185,25 @@ const Url =`users/${userId}`
           </Card>
         ))}
       </SimpleGrid>
-      {/* </VStack> */}
-      <Box w={"full"}>
-        <HStack w={"full"} display={"flex"} justifyContent={"space-between"}>
-          <VStack w={"full"}>
-            <Box w={"full"}>
-              <Text fontWeight={"500"} fontSize={"11px"} color={"#A1A1AA"}>
-                KYC LEVEL
-              </Text>
-            </Box>
-            <HStack w={"full"}>
-              <HStack gap={"1px"}>
-                <Text fontWeight={"500"} fontSize={"14px"} color={"#2F7F37"}>
-                  BVN
-                </Text>{" "}
-                <MdGppGood
-                  style={{
-                    display: "inline",
-                    marginLeft: "8px",
-                    color: "green",
-                  }}
-                />
-              </HStack>
-              <HStack gap={"1px"}>
-                <Text fontWeight={"500"} fontSize={"14px"} color={"#2F7F37"}>
-                  Identity
-                </Text>
-                <MdGppGood
-                  style={{
-                    display: "inline",
-                    marginLeft: "8px",
-                    color: "green",
-                  }}
-                />
-              </HStack>
-            </HStack>
-          </VStack>
-          <Box w={"full"} display={"flex"} justifyContent={"end"}>
-            <Link fontWeight={"500"} fontSize={"12px"} color={"#4F46E5"}>
-              View documents
-            </Link>
-          </Box>
-        </HStack>
-      </Box>
+     
       <SimpleGrid w={"40%"}>
         <GridItem w={"full"} pb={"16px"}>
           <Text fontWeight={"500"} fontSize={"11px"} color={"#A1A1AA"}>
-            BANK DETAILS
+            ADMIN DETAILS
           </Text>
         </GridItem>
         <GridItem w={"full"} pb={"24px"}>
             <VStack w={"full"}>
               <Box w={"full"}>
                 <Text fontWeight={"500"} fontSize={"12px"}>
-                  MATTHEW OLA OLUKOJU
+                {AdminUser?.name}
+
                 </Text>
               </Box>
               <HStack w={"full"}>
                 <Text fontWeight={"500"} fontSize={"12px"} color={"#A1A1AA"}>
-                  3092764731 | FIRSTBANK PLC
+                {AdminUser?.email}
+
                 </Text>
                 <Button
             // w={'full'}
@@ -246,29 +215,14 @@ const Url =`users/${userId}`
               fontWeight={"400"}
               fontSize={"10px"}
             >
-              Primary
+              Admin
             </Button>
               </HStack>
               
             </VStack>
         </GridItem>
 
-        <GridItem w={"full"} pb={"24px"}>
-            <VStack w={"full"}>
-              <Box w={"full"}>
-                <Text fontWeight={"500"} fontSize={"12px"}>
-                  MATTHEW OLA OLUKOJU
-                </Text>
-              </Box>
-              <Box w={"full"}>
-                <Text fontWeight={"500"} fontSize={"12px"} color={"#A1A1AA"}>
-                  3092764731 | FIRSTBANK PLC
-                </Text>
-              
-              </Box>
-              
-            </VStack>
-        </GridItem>
+      
 <SusPend isOpen={isSecondModalOpen} onClose={onSecondModalClose}/>
 <DeleteUser isOpen={Deleteisopen} onClose={DeleteoncloseModalclose}/>
       </SimpleGrid>

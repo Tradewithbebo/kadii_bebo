@@ -78,6 +78,10 @@ export default function Dashboardcomponent() {
   //   // If name contains only one part, return it as-is; otherwise, return the first two names
   //   return nameParts.length === 1 ? nameParts[0] : nameParts.slice(0, 2).join(" ");
   // };
+  const capitalize = (str:any) => {
+    if (!str) return '';
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+  };
   const [buy_sell_all_state, setbuy_sell_all_state] = useState("ALL");
 
   const onTap = (condition: any) => {
@@ -104,9 +108,10 @@ export default function Dashboardcomponent() {
   
         Asset_received: formatCurrency(status.amountNaira), // Format currency for asset received
   
-        Amount_sent: formatCurrency(status.amountNaira), // Format currency for amount sent
+         amountSent : `${status.amountBlockchain} ${capitalize(status.blockchain)}`, // Format currency for amount sent
   
         Date: formatDate(status.createdAt), // Format the createdAt date
+
   
         timeInDays, // Include the calculated time in days for filtering
       };
@@ -122,48 +127,25 @@ export default function Dashboardcomponent() {
     );
   
 
-  // console.log("Filtered data:", data);
 
-  // Ensure that searchtr is a string and that it's not null or undefined
-  // const filteredData = data.filter((row: any) =>
-  //   Object.values(row).some((value) =>
-  //     String(value).toLowerCase().includes(String(searchtr).toLowerCase())
-  //   )
-  // );
   const bank = transaction.map(
     (status: any) => `${status.bank?.accountNumber} | ${status.bank?.bankName}`
   );
-  // const matchesTimeFilter = (row:any) => {
-  //   if (timeFilter === "12months") return row.timeInDays <= 365;
-  //   if (timeFilter === "6months") return row.timeInDays <= 180;
-  //   if (timeFilter === "30days") return row.timeInDays <= 30;
-  //   return true; // "all" filter shows all transactions
-  // };
-  //   const filteredDataday = data.filter((row:any) => {
-  // ;
-  //     // const timeMatch = matchesTimeFilter(timeFilter, row);
 
-  //     // return   timeMatch; // Only return rows that match both filters
-  //   });
-
-  // const [timeFilter, setTimeFilter] = useState("all");
   const filteredData = data.filter((row: any) => {
     const matchesSearch = Object.values(row).some((value) =>
       String(value).toLowerCase().includes(String(searchtr).toLowerCase())
     );
 
-    // Time filter logic
     return matchesSearch;
   });
 
   const headers = [
-    // eslint-disable-next-line react/jsx-key
-    // <GrStatusGood size={'20px'}/>,
     "Status",
     "Order Type",
     "Customers’ Info",
-    "Asset Amount Received",
-    "Amount to be Sent",
+    " Amount sent",
+    "Blockchain sent",
     "Date",
   ];
 

@@ -62,6 +62,11 @@ const menuItems = [
           title: "Users",
           path: "/Admin/Dashboard/users",
           icon: <MdOutlineSettings />,
+        },
+        {
+          title: "Admin users",
+          path: "/Admin/Dashboard/Adminusers",
+          icon: <MdOutlineSettings />,
         }
       ],
     },

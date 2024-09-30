@@ -30,6 +30,8 @@ export default function Transaction_Table() {
     setsearchtr,
     transactmnth,
     settransactionmnth,
+    ontapBuy_sell,
+    setontapBuy_sell,
   } = useAdminContext();
   const [convertedDate, setconvertedDate] = useState("");
   // Transform data into an array of objects
@@ -75,7 +77,7 @@ export default function Transaction_Table() {
   //   return nameParts.length === 1 ? nameParts[0] : nameParts.slice(0, 2).join(" ");
   // };
 
-  const [timeFilter, setTimeFilter] = useState("1day");
+  // const [timeFilter, setTimeFilter] = useState("1day");
   const data = transaction
     .map((status: any) => {
       const createdAt = new Date(status.createdAt);

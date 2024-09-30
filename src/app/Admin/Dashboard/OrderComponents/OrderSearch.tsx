@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Box,
   Card,
@@ -8,15 +10,32 @@ import {
   SimpleGrid,
   Text,
   VStack,
-  Link
+  Link,
+  Button
 } from "@chakra-ui/react";
 import React from "react";
 import Search from "./Search";
 import { IoOptionsOutline } from "react-icons/io5";
 import { IoIosArrowForward } from "react-icons/io";
+import { useAdminContext } from "../../Admincontext";
 // import Link from "next/link";
 
 export default function Ordersearch() {
+  const {
+    Status,
+    custo_info,
+    Asset_received,
+    Amount_sent,
+    Dates,
+    transaction,
+    searchtr,
+    setsearchtr,
+    transactmnth,
+    settransactionmnth,
+    ontapBuy_sell,
+    setontapBuy_sell,
+  } = useAdminContext();
+// cosnt []
   return (
     <Box width={"100%"}>
       <Card
@@ -70,6 +89,38 @@ export default function Ordersearch() {
               <Search placeholder={"Type to search"} />
             </GridItem>
           </SimpleGrid>
+          <SimpleGrid columns={[1, 6]} w={"full"} columnGap={"7px"} pt={'10px'}>
+            
+            <GridItem
+              colSpan={[1, 2]}
+              display={"flex"}
+              justifyContent={"start"}
+            >
+             <HStack>
+  
+  <Box onClick={() => setontapBuy_sell("Sell")}>
+    <Button
+      bg={ontapBuy_sell === "Sell" ?  "#b3ecca":"#e5e7eb" }
+      fontWeight="700"
+      fontSize="13px"
+    >
+      Sell
+    </Button>
+  </Box>
+  <Box onClick={() => setontapBuy_sell("Buy")}>
+    <Button
+      bg={ontapBuy_sell === "Buy" ?"#b3ecca": "#e5e7eb" }
+      fontWeight="700"
+      fontSize="13px"
+    >
+      Buy
+    </Button>
+  </Box>
+
+</HStack>
+
+            </GridItem>
+            </SimpleGrid>
         </CardBody>
       </Card>
     </Box>
