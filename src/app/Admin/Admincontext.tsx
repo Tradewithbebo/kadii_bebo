@@ -23,6 +23,8 @@ interface Transaction {
   createdAt: string;
 }
 export const AdminContext = ({ children }: { children: React.ReactNode }) => {
+  const[adminId,setAdminId]=useState("")
+  const[usersId, setUsersId]=useState("")
   const [LoadingAdminuser,setLoadingAdminuser]=useState(false)
   const [ErrorMessage4,setErrorMessage4]=useState('')
   const [NetValue, setNetValue] = useState<Network[]>([]);
@@ -246,9 +248,13 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         searchUser,
         setsearchUser,
         ontapBuy_sell,
-         setontapBuy_sell,
-         transactionw,
-         AdminUsers, setAdminUsers
+        setontapBuy_sell,
+        transactionw,
+        AdminUsers,
+        setAdminUsers,
+        adminId,
+        setAdminId,
+        usersId, setUsersId
       }}
     >
       {children}

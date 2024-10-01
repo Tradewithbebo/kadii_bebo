@@ -19,6 +19,7 @@ import SusPend from "../../UsersComponents/Suspenmodal";
 import DeleteUser from "../../UsersComponents/DeleteModal";
 import { AxiosGet } from "@/app/axios/axios";
 import { useParams } from "next/navigation";
+import { useAdminContext } from "@/app/Admin/Admincontext";
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -51,6 +52,8 @@ export default function page() {
   const [loadingUser, setLoadingUser] = useState(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [errorMessage, setErrorMessage] = useState('')
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const {  usersId, setUsersId } = useAdminContext();
 const Url =`users/${userId}`
 
   const getUserById = async (): Promise<boolean> => {
@@ -61,6 +64,7 @@ const Url =`users/${userId}`
      
       if (response.data) {
         console.log('data',response.data)
+        setUsersId(userId)
         setUser(response.data)
         setErrorMessage('')
         return true

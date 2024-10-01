@@ -1,62 +1,89 @@
-import React, { useState } from "react";
+"use client";
+
+import React from "react";
+import { Formik, Form, Field } from "formik";
+import axios from "axios";
 import {
   Button,
   Text,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
-  ModalHeader,
   ModalOverlay,
-  useDisclosure,
   Modal,
   Box,
   SimpleGrid,
   GridItem,
-  Center,
   HStack,
-  CheckboxGroup,
   VStack,
   Checkbox,
-  extendTheme,
+  useToast,
 } from "@chakra-ui/react";
-// import Reject from "../Kycadminmodal/rejection";
-// import Reject from "./rejection";
-export default function DeleteUser({
-  isOpen,
-  onClose,
-}: {
-  isOpen: any;
-  onClose: any;
-}) {
+import { useAdminContext } from "../../Admincontext";
+import { AxiosDelete } from "@/app/axios/axios";
+import { useRouter } from 'next/navigation';
 
-  const [selectedValues, setSelectedValues] = useState([]);
-  const { isOpen: isSecondModalOpen, onOpen: onSecondModalOpen, onClose: onSecondModalClose } = useDisclosure();
+interface DeleteUserProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    alert("Selected values: " + selectedValues.join(", "));
-    setSelectedValues([]);
-    
-    
+export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
+  const { adminId, setAdminId } = useAdminContext();
+  const toast = useToast();
+  const router = useRouter();
+  const {  usersId, setUsersId } = useAdminContext();
+  const id = usersId;
+  const url = `users/admin/${id}`;
+
+
+  const initialValues = {
+    reasons: [],
   };
-//   const handleSecondaryAction = () => {
-//     // Handle form submission or other actions here
-//     onClose() // Close the current modal
-//     onSecondModalOpen(); // Open the new modal
-//   };
-  // const {onOpen} = useDisclosure()
-  //   const [close, setclose] = useState(false);
+
+  const handleSubmit = async (
+    values: { reasons: string[] },
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      const response = await AxiosDelete(url);
+      if (response) {
+        toast({
+          title: "User deleted.",
+          description: "The user has been successfully deleted.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        router.push('/users');
+        // resetForm();
+        onClose();
+      }
+    } catch (err: any) {
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <SimpleGrid>
-
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size={"md"}>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered size="md">
         <ModalOverlay />
         <ModalContent>
           <HStack>
-            <Box pt={"14px"} pb={"16px"} pl={"24px"}>
-              <Text fontSize={"16px"} fontWeight={"700"}>
-              Reason for Delete
+            <Box pt="14px" pb="16px" pl="24px">
+              <Text fontSize="16px" fontWeight="700">
+                Reason for Delete
               </Text>
             </Box>
             <Box>
@@ -64,60 +91,90 @@ export default function DeleteUser({
             </Box>
           </HStack>
           <ModalBody>
-            <SimpleGrid w={"full"} gap={"16px"} px={"24px"} pb={"24px"}>
-            <form onSubmit={handleSubmit}>
-              <GridItem>
-               
-                  <CheckboxGroup
-                    onChange={(values: any) => setSelectedValues(values)}
-                    defaultValue={[
-                      ''
-                    ]}
-                  >
-                    <VStack spacing={4} align="start">
-                      <Checkbox  colorScheme='green' value="Illegal transaction suspect">Illegal transaction suspect</Checkbox>
-                      <Checkbox colorScheme='green' value="Reason for Suspension">Reason for Suspension</Checkbox>
-                      <Checkbox  colorScheme='green'value="Incomplete KYC">Incomplete KYC</Checkbox>
-                      <Checkbox  colorScheme='green' value="KYC update required">KYC update required</Checkbox>
-                      <Checkbox  colorScheme='green' value="Security breach">Security breach</Checkbox>
-                    </VStack>
-                  </CheckboxGroup>
-              </GridItem>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+              {({ values, isSubmitting }) => (
+                <Form>
+                  <SimpleGrid w="full" gap="16px" px="24px" pb="24px">
+                    <GridItem>
+                      <VStack spacing={4} align="start">
+                        <Field
+                          as={Checkbox}
+                          name="reasons"
+                          value="Illegal transaction suspect"
+                          colorScheme="green"
+                        >
+                          Illegal transaction suspect
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          name="reasons"
+                          value="Reason for Suspension"
+                          colorScheme="green"
+                        >
+                          Reason for Suspension
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          name="reasons"
+                          value="Incomplete KYC"
+                          colorScheme="green"
+                        >
+                          Incomplete KYC
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          name="reasons"
+                          value="KYC update required"
+                          colorScheme="green"
+                        >
+                          KYC update required
+                        </Field>
+                        <Field
+                          as={Checkbox}
+                          name="reasons"
+                          value="Security breach"
+                          colorScheme="green"
+                        >
+                          Security breach
+                        </Field>
+                      </VStack>
+                    </GridItem>
 
-              <GridItem w={"full"} mt={'16px'}>
-                <Button
-                  w={"full"}
-                  fontSize={"16px"}
-                  fontWeight={"600"}
-                  bg={"#023436"}
-                  type="submit"
-                  color={'white'}
-                //   onClick={ handleSecondaryAction
-                //   }
-                >
-                Suspend user
-                </Button>
-              </GridItem>
-              </form>
-              <GridItem w={"full"}>
-                <Button
-                bg={'transparent'}
-                color={'#FF4834'}
-                border={'1px'}
-                borderColor={'#FF4834'}
-                  w={"full"}
-                  fontSize={"16px"}
-                  fontWeight={"600"}
-                  onClick={onClose}
-                >
-                  Cancel
-                </Button>
-              </GridItem>
-            </SimpleGrid>
+                    <GridItem w="full" mt="16px">
+                      <Button
+                        w="full"
+                        fontSize="16px"
+                        fontWeight="600"
+                        bg="#FF4834"
+                        type="submit"
+                        color="white"
+                        isDisabled={values.reasons.length === 0 || isSubmitting}
+                        isLoading={isSubmitting}
+                      >
+                        Delete user
+                      </Button>
+                    </GridItem>
+                    <GridItem w="full">
+                      <Button
+                        bg="transparent"
+                        color="#FF4834"
+                        border="1px"
+                        borderColor="#FF4834"
+                        w="full"
+                        fontSize="16px"
+                        fontWeight="600"
+                        onClick={onClose}
+                      >
+                        Cancel
+                      </Button>
+                    </GridItem>
+                  </SimpleGrid>
+                </Form>
+              )}
+            </Formik>
           </ModalBody>
         </ModalContent>
       </Modal>
-      {/* <Reject isOpen={isSecondModalOpen} onClose={onSecondModalClose}/> */}
     </SimpleGrid>
   );
 }

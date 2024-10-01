@@ -1,7 +1,8 @@
-'use client'
+"use client";
 
 import React from "react";
 import { Formik, Form, Field } from "formik";
+import axios from "axios";
 import {
   Button,
   Text,
@@ -16,7 +17,11 @@ import {
   HStack,
   VStack,
   Checkbox,
+  useToast,
 } from "@chakra-ui/react";
+import { useAdminContext } from "../../Admincontext";
+import { AxiosDelete } from "@/app/axios/axios";
+import { useRouter } from 'next/navigation';
 
 interface DeleteUserProps {
   isOpen: boolean;
@@ -24,14 +29,48 @@ interface DeleteUserProps {
 }
 
 export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
+  const { adminId, setAdminId } = useAdminContext();
+  const toast = useToast();
+  const router = useRouter();
+  const id = adminId;
+  const url = `admin/${id}`;
+
   const initialValues = {
     reasons: [],
   };
 
-  const handleSubmit = (values: { reasons: string[] }, { resetForm }: { resetForm: () => void }) => {
-    alert("Selected values: " + values.reasons.join(", "));
-    resetForm();
-    onClose();
+  const handleSubmit = async (
+    values: { reasons: string[] },
+    { resetForm }: { resetForm: () => void }
+  ) => {
+    try {
+      const response = await AxiosDelete(url);
+      if (response) {
+        toast({
+          title: "User deleted.",
+          description: "The user has been successfully deleted.",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+        router.push('/Adminusers');
+        // resetForm();
+        onClose();
+      }
+    } catch (err: any) {
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
   };
 
   return (
@@ -51,7 +90,7 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
           </HStack>
           <ModalBody>
             <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-              {({ values }) => (
+              {({ values, isSubmitting }) => (
                 <Form>
                   <SimpleGrid w="full" gap="16px" px="24px" pb="24px">
                     <GridItem>
@@ -107,7 +146,8 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
                         bg="#FF4834"
                         type="submit"
                         color="white"
-                        isDisabled={values.reasons.length === 0}
+                        isDisabled={values.reasons.length === 0 || isSubmitting}
+                        isLoading={isSubmitting}
                       >
                         Delete user
                       </Button>
