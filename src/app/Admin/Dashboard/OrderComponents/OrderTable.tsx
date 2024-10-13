@@ -1,4 +1,5 @@
 'use client';
+
 import {
   Box,
   Tbody,
@@ -20,13 +21,15 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Link,
+  IconButton,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
-import { MdCircle } from "react-icons/md";
+import { MdCircle, MdOpenInNew } from "react-icons/md";
 
 interface Transaction {
-  [key: string]: any; // Change this to a more specific type if possible
+  [key: string]: any;
 }
 
 interface Bank {
@@ -72,7 +75,7 @@ export default function TransactionTable({
 
   const handleOpenModal = (transaction: Transaction, bankData: Bank) => {
     setSelectedTransaction(transaction);
-    setSelectedBank(bankData); // Set the specific bank for the clicked transaction
+    setSelectedBank(bankData);
     onOpen();
   };
 
@@ -89,6 +92,13 @@ export default function TransactionTable({
     if (currentPage > 1) {
       setCurrentPage(prev => prev - 1);
     }
+  };
+
+  const truncateFileName = (fileName: string, maxLength: number = 20) => {
+    if (fileName.length <= maxLength) return fileName;
+    const extension = fileName.split('.').pop();
+    const name = fileName.substring(0, fileName.lastIndexOf('.'));
+    return `${name.substring(0, maxLength - 3 - extension!.length)}...${extension}`;
   };
 
   return (
@@ -127,21 +137,21 @@ export default function TransactionTable({
           <Tbody>
             {currentData.map((row, rowIndex) => (
               <Tr key={rowIndex} onClick={() => handleOpenModal(row, bank[rowIndex])} cursor="pointer">
-                {Object.values(row).map((value, cellIndex) => (
+                {Object.entries(row).map(([key, value], cellIndex) => (
                   <Td
                     key={cellIndex}
                     color={
-                      cellIndex === 1 && value === "sell"
+                      key === 'Transaction_type' && value === "sell"
                         ? "#D42620"
-                        : cellIndex === 1 && value === "buy"
+                        : key === 'Transaction_type' && value === "buy"
                         ? "#0F973D"
                         : "#000000"
                     }
                     fontSize={"12px"}
                     fontWeight={"600"}
-                    maxWidth={cellIndex === 2 ? "200px" : "auto"}
+                    maxWidth={key === 'custo_Name' ? "200px" : "auto"}
                   >
-                    {cellIndex === 1 && value === "Completed" ? (
+                    {key === 'Status' && value === "Completed" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#2F7F37" />
@@ -154,20 +164,22 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : cellIndex === 0 && value === "Incomplete" ? (
+                    ) : key === 'Status' && value === "Incomplete" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#FF4834" />
                           <Text color="#FF4834" fontSize={"12px"}>
-                            {" "}
                             {value}
                           </Text>
                         </HStack>
                       </Box>
-                    ) : cellIndex === 6 ? null : (
+                    ) : key === 'Proof_of_payment' ?  (
+                     
+                      null
+                    ) : (
                       value
                     )}
-                    {cellIndex === 2 && (
+                    {key === 'custo_Name' && (
                       <HStack>
                         <Text
                           color={"#71717A"}
@@ -178,7 +190,10 @@ export default function TransactionTable({
                         </Text>
                         <Box
                           as="button"
-                          onClick={() => handleCopy(bank[rowIndex]?.display || "N/A")}
+                          onClick={(e:any) => {
+                            e.stopPropagation();
+                            handleCopy(bank[rowIndex]?.display || "N/A");
+                          }}
                         >
                           <IoCopyOutline />
                         </Box>
@@ -226,9 +241,10 @@ export default function TransactionTable({
             Next
           </Button>
         </Flex>
-         {/* Modal for Transaction Details */}
-      <Box w={'full'}>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      </Box>
+
+      {/* Modal for Transaction Details */}
+      <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Transaction Details</ModalHeader>
@@ -239,19 +255,29 @@ export default function TransactionTable({
                 {Object.entries(selectedTransaction).map(([key, value]) => (
                   <HStack key={key} justifyContent="space-between" mb={2}>
                     <Text fontWeight="bold">{key}:</Text>
-                    <Text>{String(value)}</Text>
+                    {key === 'Proof_of_payment' ? (
+                      <Link href={value as string} isExternal color="blue.500">
+                        <Button
+                          rightIcon={<MdOpenInNew />}
+                          colorScheme="blue"
+                          variant="outline"
+                          size="sm"
+                        >
+                          {truncateFileName(value as string)}
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Text>{String(value)}</Text>
+                    )}
                   </HStack>
                 ))}
 
-                {/* Display Account Number from the clicked transaction */}
-                
-                {/* Display the selected bank */}
                 <HStack justifyContent="space-between" mb={2}>
                   <Text fontWeight="bold">Bank:</Text>
                   <HStack>
-                    <Text>{selectedBank.display}</Text> {/* Display the selected bank */}
+                    <Text>{selectedBank.display}</Text>
                     <Button
-                      onClick={() => handleCopy(selectedBank.fullWalletAddress)} // Copy the bank details
+                      onClick={() => handleCopy(selectedBank.fullWalletAddress)}
                       size="sm"
                       variant="ghost"
                       leftIcon={<IoCopyOutline />}
@@ -273,10 +299,6 @@ export default function TransactionTable({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      </Box>
-      </Box>
-
-     
     </>
   );
 }

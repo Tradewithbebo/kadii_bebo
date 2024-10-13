@@ -133,14 +133,15 @@ export default function Transaction_Table() {
           Asset_received:`${status.amountBlockchain} ${status.blockchain.toUpperCase()  || ''}`, // Format currency for asset received
           Amount_to_send: formatCurrency(status.amountNaira), // Format currency for amount sent
           Date: formatDate(status.createdAt), // Format date and time
-          // timeInDays, // Add timeInDays to the object for filtering
+          Proof_of_payment:status.paymentReferenceUrl,
+          timeInDays, // Add timeInDays to the object for filtering
           // custo_infos: status.bank?.accountNumber, // Safely access accountName
           // custo_infosb: status.bank?.bankName, // Safely access accountName
         };
       })
       // First filter based on transactmnth (days difference)
       .filter((item: any) =>
-        transactmnth === "" ? true : item.timeInDays <= transactmnth
+        transactmnth === "" ? item : item.timeInDays <= transactmnth
       )
     
       // Then filter based on ontapBuy_sell
@@ -178,7 +179,7 @@ export default function Transaction_Table() {
       let header =ontapBuy_sell==="Sell"?headers_For_Sell:headers_For_Buy
   return (
    <Box>
-    <OrderTable headers={header} data={data} bank={bank}/>
+    <OrderTable headers={header} data={searchtr.length >0?filteredData:data} bank={bank}/>
    </Box>
   )
 }
