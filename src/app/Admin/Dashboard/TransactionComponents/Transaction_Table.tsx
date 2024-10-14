@@ -6,10 +6,10 @@ import TransactionTable from "./TransactionTable";
 import { useAdminContext } from "../../Admincontext";
 
 const headers = [
-  "Status",
+  "Trnx Type",
   "Customers’ info",
-  "Asset received",
-  "Amount sent",
+  "Asset Trnx",
+  "Amount Trnx",
   "Date",
 ];
 // const bank = [
@@ -40,13 +40,12 @@ export default function Transaction_Table() {
     const day = date.getDate();
     const month = date.getMonth() + 1; // Months are zero-indexed, so add 1
     const year = date.getFullYear().toString().slice(-2); // Get last two digits of the year
-  
-    const hours = date.getHours().toString().padStart(2, '0'); // Ensure two digits for hours
-    const minutes = date.getMinutes().toString().padStart(2, '0'); // Ensure two digits for minutes
-  
+
+    const hours = date.getHours().toString().padStart(2, "0"); // Ensure two digits for hours
+    const minutes = date.getMinutes().toString().padStart(2, "0"); // Ensure two digits for minutes
+
     return `${day}/${month}/${year} ${hours}:${minutes}`; // Format as DD/MM/YY HH:MM
   }
-  
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat("en-NG", {
@@ -101,7 +100,7 @@ export default function Transaction_Table() {
 
     .filter((item: any) =>
       transactmnth === "" ? item : item.timeInDays <= transactmnth
-    ); 
+    );
 
   console.log("Filtered data:", data);
 

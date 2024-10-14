@@ -144,8 +144,8 @@ export default function Dashboardcomponent() {
     "Status",
     "Order Type",
     "Customers’ Info",
-    " Amount sent",
-    "Blockchain sent",
+    " Amount Trnx",
+    "Blockchain Trnx",
     "Date",
   ];
 
@@ -217,19 +217,19 @@ export default function Dashboardcomponent() {
               <HStack>
                 <Box onClick={() => onTap("ALL")}>
                   {" "}
-                  <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
+                  <Button bg={buy_sell_all_state==='ALL'?"#b3ecca":"#e5e7eb" } fontWeight={"700"} fontSize={"13px"}>
                     All
                   </Button>
                 </Box>
                 <Box onClick={() => onTap("BUY")}>
-                  <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
+                  <Button bg={buy_sell_all_state==='BUY'?"#b3ecca":"#e5e7eb"} fontWeight={"700"} fontSize={"13px"}>
                     Buy
                   </Button>
                 </Box>
 
                 <Box onClick={() => onTap("SELL")}>
                   {" "}
-                  <Button bg={"#b3ecca"} fontWeight={"700"} fontSize={"13px"}>
+                  <Button bg={buy_sell_all_state==='SELL'?"#b3ecca":"#e5e7eb"} fontWeight={"700"} fontSize={"13px"}>
                     Sell
                   </Button>
                 </Box>

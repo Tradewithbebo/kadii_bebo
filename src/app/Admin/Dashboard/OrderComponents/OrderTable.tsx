@@ -55,6 +55,8 @@ export default function TransactionTable({
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
+  const [Trnx_id, setTrnx_id] = useState('');
+
 
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -73,11 +75,13 @@ export default function TransactionTable({
       });
   };
 
+ 
   const handleOpenModal = (transaction: Transaction, bankData: Bank) => {
-    setSelectedTransaction(transaction);
-    setSelectedBank(bankData);
-    onOpen();
-  };
+    setSelectedTransaction(transaction)
+    setSelectedBank(bankData)
+    setTrnx_id(transaction.transaction_id || '') // Set Trnx_id to the transaction_id
+    onOpen()
+  }
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = data.slice(startIndex, startIndex + itemsPerPage);
@@ -176,6 +180,12 @@ export default function TransactionTable({
                     ) : key === 'Proof_of_payment' ?  (
                      
                       null
+                    ) : key === 'timeInDays' ?  (
+                     
+                      null
+                    ) : key === 'transaction_id' ?  (
+                     
+                      null
                     ) : (
                       value
                     )}
@@ -266,7 +276,7 @@ export default function TransactionTable({
                           {truncateFileName(value as string)}
                         </Button>
                       </Link>
-                    ) : (
+                    ) :(
                       <Text>{String(value)}</Text>
                     )}
                   </HStack>
