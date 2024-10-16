@@ -27,6 +27,7 @@ import {
 import React, { useState } from "react";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
 import { MdCircle, MdOpenInNew } from "react-icons/md";
+import { FaCheck } from "react-icons/fa";
 
 interface Transaction {
   [key: string]: any;
@@ -51,6 +52,7 @@ export default function TransactionTable({
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen:isOpenConfirmTrx, onOpen:onOpenConfirmTrx, onClose:onCloseConfirmTrx } = useDisclosure();
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
   const itemsPerPage = 10;
@@ -104,7 +106,10 @@ export default function TransactionTable({
     const name = fileName.substring(0, fileName.lastIndexOf('.'));
     return `${name.substring(0, maxLength - 3 - extension!.length)}...${extension}`;
   };
-
+ const handleConffirmation=()=>{
+  onOpenConfirmTrx()
+  onClose()
+ }
   return (
     <>
       <Box
@@ -303,9 +308,27 @@ export default function TransactionTable({
             <Button colorScheme="red" mr={3} onClick={() => alert('Transaction Declined!')}>
               Decline Transaction
             </Button>
-            <Button colorScheme="green" onClick={() => alert('Transaction Confirmed!')}>
+            <Button colorScheme="green" onClick={() => handleConffirmation()}>
               Confirm Transaction
             </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+      {/* modal for confirmtransaction */}
+      <Modal isOpen={isOpenConfirmTrx} onClose={onCloseConfirmTrx}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+           
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme='blue' mr={3} onClick={onCloseConfirmTrx}>
+              Close
+            </Button>
+            <Button variant='ghost'>Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

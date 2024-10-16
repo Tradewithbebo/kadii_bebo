@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'http://157.230.179.244/';
+const baseUrl = 'https://api.tradewithbebo.com/';
 
 interface Auth {
   authToken: string;
