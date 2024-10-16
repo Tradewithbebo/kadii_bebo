@@ -184,7 +184,7 @@ export default function AddBank({ setStep }: { setStep: any }) {
       const res = await AxiosAuthPost(url3, values); // Pass form values to the API call
       if (res) {
         toast({
-          title: "Error",
+          title: "success",
           description: "Bank added successfully",
           status: "success",
           duration: 2000,

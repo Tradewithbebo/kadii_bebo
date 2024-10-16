@@ -100,12 +100,49 @@ export default function TransactionTable({
     }
   };
 
-  const truncateFileName = (fileName: string, maxLength: number = 20) => {
+  const truncateFileName = (fileName: string | null | undefined, maxLength: number = 20): string => {
+    // Handle null or undefined fileName
+    if (!fileName) return '';
+  
     if (fileName.length <= maxLength) return fileName;
-    const extension = fileName.split('.').pop();
-    const name = fileName.substring(0, fileName.lastIndexOf('.'));
-    return `${name.substring(0, maxLength - 3 - extension!.length)}...${extension}`;
+  
+    const lastDotIndex = fileName.lastIndexOf('.');
+    
+    // If there's no dot or it's the first character, truncate without considering an extension
+    if (lastDotIndex <= 0) {
+      return `${fileName.substring(0, maxLength - 3)}...`;
+    }
+  
+    const name = fileName.substring(0, lastDotIndex);
+    const extension = fileName.substring(lastDotIndex + 1);
+  
+    // If name + extension is shorter than or equal to maxLength, return it as is
+    if (name.length + extension.length + 1 <= maxLength) return fileName;
+  
+    // Calculate how much space we have for the name
+    const availableLength = maxLength - extension.length - 4; // 4 for '....'
+  
+    // If we don't have enough space, truncate without the extension
+    if (availableLength <= 0) {
+      return `${fileName.substring(0, maxLength - 3)}...`;
+    }
+  
+    // Truncate the name and add the extension
+    return `${name.substring(0, availableLength)}...${extension}`;
   };
+  
+  // Test cases
+  console.log(truncateFileName("verylongfilename.txt", 20)); // "verylongfilenam...txt"
+  console.log(truncateFileName("short.txt", 20)); // "short.txt"
+  console.log(truncateFileName("verylongfilenamewithoutext", 20)); // "verylongfilenam..."
+  console.log(truncateFileName("short", 20)); // "short"
+  console.log(truncateFileName(".gitignore", 20)); // ".gitignore"
+  console.log(truncateFileName("verylongfilename.verylongextension", 20)); // "verylongfi...nsion"
+  console.log(truncateFileName("a".repeat(100), 20)); // "aaaaaaaaaaaaaaaaa..."
+  console.log(truncateFileName(null, 20)); // ""
+  console.log(truncateFileName(undefined, 20)); // ""
+  // Test cases
+ 
  const handleConffirmation=()=>{
   onOpenConfirmTrx()
   onClose()
