@@ -1,7 +1,8 @@
-'use client';
+"use client";
 
 import {
   Box,
+  Image,
   Tbody,
   Td,
   Thead,
@@ -21,13 +22,17 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Link,
+  // Link,
   IconButton,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
 import { MdCircle, MdOpenInNew } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
+import { Fade } from "react-awesome-reveal";
+import { AxiosAuthPost, AxiosGet, AxiosPost } from "@/app/axios/axios";
+import Link from "next/link";
 
 interface Transaction {
   [key: string]: any;
@@ -52,16 +57,22 @@ export default function TransactionTable({
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isOpen:isOpenConfirmTrx, onOpen:onOpenConfirmTrx, onClose:onCloseConfirmTrx } = useDisclosure();
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const[ loading, setloading]=useState(false)
+  const {
+    isOpen: isOpenConfirmTrx,
+    onOpen: onOpenConfirmTrx,
+    onClose: onCloseConfirmTrx,
+  } = useDisclosure();
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
-  const [Trnx_id, setTrnx_id] = useState('');
-
+  const [Trnx_id, setTrnx_id] = useState("");
 
   const handleCopy = (text: string) => {
-    navigator.clipboard.writeText(text)
+    navigator.clipboard
+      .writeText(text)
       .then(() => {
         toast({
           title: "Copied to clipboard.",
@@ -69,84 +80,101 @@ export default function TransactionTable({
           status: "success",
           duration: 2000,
           isClosable: true,
-          position: 'top-right',
+          position: "top-right",
         });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error("Could not copy text: ", err);
       });
   };
 
- 
   const handleOpenModal = (transaction: Transaction, bankData: Bank) => {
-    setSelectedTransaction(transaction)
-    setSelectedBank(bankData)
-    setTrnx_id(transaction.transaction_id || '') // Set Trnx_id to the transaction_id
-    onOpen()
-  }
+    setSelectedTransaction(transaction);
+    setSelectedBank(bankData);
+    setTrnx_id(transaction.transaction_id || ""); // Set Trnx_id to the transaction_id
+    onOpen();
+  };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentData = data.slice(startIndex, startIndex + itemsPerPage);
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage(prev => prev - 1);
+      setCurrentPage((prev) => prev - 1);
     }
   };
 
-  const truncateFileName = (fileName: string | null | undefined, maxLength: number = 20): string => {
+  const truncateFileName = (
+    fileName: string | null | undefined,
+    maxLength: number = 20
+  ): string => {
     // Handle null or undefined fileName
-    if (!fileName) return '';
-  
+    if (!fileName) return "";
+
     if (fileName.length <= maxLength) return fileName;
-  
-    const lastDotIndex = fileName.lastIndexOf('.');
-    
+
+    const lastDotIndex = fileName.lastIndexOf(".");
+
     // If there's no dot or it's the first character, truncate without considering an extension
     if (lastDotIndex <= 0) {
       return `${fileName.substring(0, maxLength - 3)}...`;
     }
-  
+
     const name = fileName.substring(0, lastDotIndex);
     const extension = fileName.substring(lastDotIndex + 1);
-  
+
     // If name + extension is shorter than or equal to maxLength, return it as is
     if (name.length + extension.length + 1 <= maxLength) return fileName;
-  
+
     // Calculate how much space we have for the name
     const availableLength = maxLength - extension.length - 4; // 4 for '....'
-  
+
     // If we don't have enough space, truncate without the extension
     if (availableLength <= 0) {
       return `${fileName.substring(0, maxLength - 3)}...`;
     }
-  
+
     // Truncate the name and add the extension
     return `${name.substring(0, availableLength)}...${extension}`;
   };
+  let transactionId =Trnx_id
   
-  // Test cases
-  console.log(truncateFileName("verylongfilename.txt", 20)); // "verylongfilenam...txt"
-  console.log(truncateFileName("short.txt", 20)); // "short.txt"
-  console.log(truncateFileName("verylongfilenamewithoutext", 20)); // "verylongfilenam..."
-  console.log(truncateFileName("short", 20)); // "short"
-  console.log(truncateFileName(".gitignore", 20)); // ".gitignore"
-  console.log(truncateFileName("verylongfilename.verylongextension", 20)); // "verylongfi...nsion"
-  console.log(truncateFileName("a".repeat(100), 20)); // "aaaaaaaaaaaaaaaaa..."
-  console.log(truncateFileName(null, 20)); // ""
-  console.log(truncateFileName(undefined, 20)); // ""
-  // Test cases
- 
- const handleConffirmation=()=>{
-  onOpenConfirmTrx()
-  onClose()
- }
+const url=`transactions/confirm/${transactionId}`
+  const handleConffirmation = async () => {
+
+    try {
+      setloading(true)
+      const res= await AxiosAuthPost(url,{})
+      console.log('response',res)
+      if( res){
+       setloading(false)
+        onOpenConfirmTrx();
+        onClose();
+      }
+    }  catch (err: any) {
+      setloading(false);
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom-left",
+      });
+    }
+  };
+    
+  
   return (
     <>
       <Box
@@ -157,9 +185,9 @@ export default function TransactionTable({
         borderTopRightRadius={"none"}
         borderTopLeftRadius={"none"}
         borderTop={"none"}
-        w={'full'}
+        w={"full"}
       >
-        <Table>
+        <Table justifyContent="space-between" w={'full'}>
           <Thead>
             <Tr>
               {headers.map((header, index) => (
@@ -168,6 +196,8 @@ export default function TransactionTable({
                   color={"#000000"}
                   fontSize={"10px"}
                   fontWeight={"700"}
+                   padding="20px"
+                      textAlign="left"
                 >
                   {header}{" "}
                   {header === "KYC Level" && (
@@ -182,22 +212,28 @@ export default function TransactionTable({
 
           <Tbody>
             {currentData.map((row, rowIndex) => (
-              <Tr key={rowIndex} onClick={() => handleOpenModal(row, bank[rowIndex])} cursor="pointer">
+              <Tr
+                key={rowIndex}
+                onClick={() => handleOpenModal(row, bank[rowIndex])}
+                cursor="pointer"
+              >
                 {Object.entries(row).map(([key, value], cellIndex) => (
                   <Td
-                    key={cellIndex}
+                  key={cellIndex}
+                  // color="#000000"
+                  fontSize="12px"
+                  fontWeight="600"
                     color={
-                      key === 'Transaction_type' && value === "sell"
+                      key === "Transaction_type" && value === "sell"
                         ? "#D42620"
-                        : key === 'Transaction_type' && value === "buy"
+                        : key === "Transaction_type" && value === "buy"
                         ? "#0F973D"
                         : "#000000"
                     }
-                    fontSize={"12px"}
-                    fontWeight={"600"}
-                    maxWidth={key === 'custo_Name' ? "200px" : "auto"}
+                    padding="20px"
+                     maxWidth={key === "custo_name" ? "200px" : "auto"}
                   >
-                    {key === 'Status' && value === "Completed" ? (
+                    {key === "Status" && value === "Completed" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#2F7F37" />
@@ -210,7 +246,7 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : key === 'Status' && value === "Incomplete" ? (
+                    ) : key === "Status" && value === "Incomplete" ? (
                       <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"}>
                         <HStack gap={"3px"}>
                           <MdCircle size={"10px"} color="#FF4834" />
@@ -219,20 +255,34 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : key === 'Proof_of_payment' ?  (
-                     
-                      null
-                    ) : key === 'timeInDays' ?  (
-                     
-                      null
-                    ) : key === 'transaction_id' ?  (
-                     
-                      null
-                    ) : (
+                    ) 
+                    : key === "Status" && value === "completed" ? (
+                      <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
+                        <HStack gap={"3px"}>
+                          <MdCircle size={"10px"} color="#2F7F37" />
+                          <Text color="#2F7F37" fontSize={"12px"}>
+                            {value}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    )
+                    : key === "Status" && value === "pending" ? (
+                      <Box rounded={"10px"} px={"5px"} bg={"#FCF2C1"}>
+                        <HStack gap={"3px"}>
+                          <MdCircle size={"10px"} color="ORANGE" />
+                          <Text color="ORANGE" fontSize={"12px"}>
+                            {value}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    )
+                    
+                    : key === "Proof_of_payment" ? null : key ===
+                      "timeInDays" ? null : key === "transaction_id" ? null : (
                       value
                     )}
-                    {key === 'custo_Name' && (
-                      <HStack>
+                    {key === "custo_Name" && (
+                     
                         <Text
                           color={"#71717A"}
                           fontSize={"9px"}
@@ -240,16 +290,8 @@ export default function TransactionTable({
                         >
                           {bank[rowIndex]?.display || "N/A"}
                         </Text>
-                        <Box
-                          as="button"
-                          onClick={(e:any) => {
-                            e.stopPropagation();
-                            handleCopy(bank[rowIndex]?.display || "N/A");
-                          }}
-                        >
-                          <IoCopyOutline />
-                        </Box>
-                      </HStack>
+                       
+                     
                     )}
                   </Td>
                 ))}
@@ -307,8 +349,8 @@ export default function TransactionTable({
                 {Object.entries(selectedTransaction).map(([key, value]) => (
                   <HStack key={key} justifyContent="space-between" mb={2}>
                     <Text fontWeight="bold">{key}:</Text>
-                    {key === 'Proof_of_payment' ? (
-                      <Link href={value as string} isExternal color="blue.500">
+                    {key === "Proof_of_payment" ? (
+                      <Link href={value as string}  color="blue.500" download >
                         <Button
                           rightIcon={<MdOpenInNew />}
                           colorScheme="blue"
@@ -318,7 +360,7 @@ export default function TransactionTable({
                           {truncateFileName(value as string)}
                         </Button>
                       </Link>
-                    ) :(
+                    ) : (
                       <Text>{String(value)}</Text>
                     )}
                   </HStack>
@@ -342,30 +384,56 @@ export default function TransactionTable({
             )}
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={() => alert('Transaction Declined!')}>
+            <Button
+              colorScheme="red"
+              mr={3}
+              onClick={() => alert("Transaction Declined!")}
+            >
               Decline Transaction
             </Button>
-            <Button colorScheme="green" onClick={() => handleConffirmation()}>
+            <Button colorScheme="green" onClick={() => handleConffirmation()} isLoading={loading}>
               Confirm Transaction
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
       {/* modal for confirmtransaction */}
-      <Modal isOpen={isOpenConfirmTrx} onClose={onCloseConfirmTrx}>
+      <Modal isOpen={isOpenConfirmTrx} onClose={onCloseConfirmTrx} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-           
+            <VStack width={"full"} justifyContent={"center"} display={"flex"}>
+              <Box
+                width={"full"}
+                justifyContent={"center"}
+                display={"flex"}
+                textAlign={"center"}
+              >
+                <Fade triggerOnce direction='up' >
+                <Image
+                  borderRadius="full"
+                  boxSize="50px"
+                  src="/image/Good.png"
+                  alt="Dan Abramov"
+                />
+                </Fade>
+              </Box>
+              <Box
+                width={"60%"}
+                justifyContent={"center"}
+                display={"flex"}
+                textAlign={"center"}
+              >
+                You have successfully confirmed this transaction
+              </Box>
+            </VStack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onCloseConfirmTrx}>
-              Close
+            <Button onClick={onCloseConfirmTrx} w={"full"} bg={"#0CBF94"}>
+              Done
             </Button>
-            <Button variant='ghost'>Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

@@ -1,9 +1,11 @@
 "use client";
 
-import { Box } from "@chakra-ui/react";
-import React, { useState } from "react";
+// import { Box } from "@chakra-ui/react";
+import { Box, HStack,Text} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import TransactionTable from "./TransactionTable";
 import { useAdminContext } from "../../Admincontext";
+import { Fade } from "react-awesome-reveal";
 
 const headers = [
   "Trnx Type",
@@ -32,7 +34,17 @@ export default function Transaction_Table() {
     settransactionmnth,
     ontapBuy_sell,
     setontapBuy_sell,
+    Loadingtr
   } = useAdminContext();
+  const [key, setKey] = useState(0);
+  const reanimationTime = 2000;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setKey((prevKey) => prevKey + 1);
+    }, reanimationTime);
+
+    return () => clearInterval(interval);
+  }, [reanimationTime]);
   const [convertedDate, setconvertedDate] = useState("");
   // Transform data into an array of objects
   function formatDate(dateString: string) {
@@ -86,7 +98,7 @@ export default function Transaction_Table() {
       const timeInDays = Math.floor(
         (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
       );
-      console.log("time", timeInDays);
+      // console.log("time", timeInDays);
 
       return {
         Status: status.type,
@@ -102,7 +114,7 @@ export default function Transaction_Table() {
       transactmnth === "" ? item : item.timeInDays <= transactmnth
     );
 
-  console.log("Filtered data:", data);
+  // console.log("Filtered data:", data);
 
   // Ensure that searchtr is a string and that it's not null or undefined
   // const filteredData = data.filter((row: any) =>
@@ -133,6 +145,84 @@ export default function Transaction_Table() {
     );
     return matchesSearch;
   });
+
+  if (Loadingtr) {
+    return (
+      <Box>
+        <HStack
+          gap={["15px", "40px"]}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Fade key={key} cascade damping={0.1}>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              E
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              O
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+          </Fade>
+        </HStack>
+      </Box>
+    );
+  }
 
   return (
     <Box>

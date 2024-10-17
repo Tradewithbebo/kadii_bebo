@@ -20,8 +20,20 @@ import DeleteUser from "../../UsersComponents/DeleteModal";
 import { AxiosGet } from "@/app/axios/axios";
 import { useParams } from "next/navigation";
 import { useAdminContext } from "@/app/Admin/Admincontext";
+import { Fade } from "react-awesome-reveal";
 
 export default function page() {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [key, setKey] = useState(0);
+  const reanimationTime = 2000;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setKey((prevKey) => prevKey + 1);
+    }, reanimationTime);
+
+    return () => clearInterval(interval);
+  }, [reanimationTime]);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const params = useParams()
   const userId = params.id as string
@@ -47,13 +59,16 @@ export default function page() {
     // Add other properties as needed
   }
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<Users | null>(null)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [loadingUser, setLoadingUser] = useState(false)
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [errorMessage, setErrorMessage] = useState('')
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const {  usersId, setUsersId } = useAdminContext();
+  interface Users {
+    [key: string]: any;
+  }
 const Url =`users/${userId}`
 
   const getUserById = async (): Promise<boolean> => {
@@ -85,6 +100,83 @@ const Url =`users/${userId}`
   useEffect(() => {
     getUserById()
   }, [])
+  if (loadingUser) {
+    return (
+      <Box>
+        <HStack
+          gap={["15px", "40px"]}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Fade key={key} cascade damping={0.1}>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              E
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              O
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+          </Fade>
+        </HStack>
+      </Box>
+    );
+  }
   return (
     <Box w={"full"}>
       <Box pb={"24px"} w={"full"}>
@@ -103,19 +195,19 @@ const Url =`users/${userId}`
           <Image
             boxSize="56px"
             rounded="100%"
-            src="https://bit.ly/dan-abramov"
+            src= {user?.email || "https://bit.ly/dan-abramov"}
             alt="Simon the pensive"
             mr="12px"
           />
           <VStack w={"full"} gap={"1px"}>
             <Box w={"full"}>
               <Text fontWeight={"800"} fontSize={"18px"}>
-                Matthew Ola
+              {user?.firstName}  {user?.lastName}
               </Text>
             </Box>
             <Box w={"full"}>
               <Text fontWeight={"400"} fontSize={"12px"}>
-                thematthewola@gmail.com
+              {user?.email}
               </Text>
             </Box>
           </VStack>
@@ -191,28 +283,28 @@ const Url =`users/${userId}`
             </Box>
             <HStack w={"full"}>
               <HStack gap={"1px"}>
-                <Text fontWeight={"500"} fontSize={"14px"} color={"#2F7F37"}>
-                  BVN
+                <Text fontWeight={"500"} fontSize={"14px"}>
+                KycStatus
                 </Text>{" "}
-                <MdGppGood
+                {/* <MdGppGood
                   style={{
                     display: "inline",
                     marginLeft: "8px",
                     color: "green",
                   }}
-                />
+                /> */}
               </HStack>
               <HStack gap={"1px"}>
-                <Text fontWeight={"500"} fontSize={"14px"} color={"#2F7F37"}>
-                  Identity
+                <Text fontWeight={"500"} fontSize={"14px"} color={user?.kycStatus==='NOT-STARTED'||'PENDING'?"ORANGE":'green'} >
+                 {user?.kycStatus}
                 </Text>
                 <MdGppGood
                   style={{
                     display: "inline",
                     marginLeft: "8px",
-                    color: "green",
-                  }}
-                />
+                    color: user?.kycStatus==='NOT-STARTED'||'PENDING'?"ORANGE":'green',
+                  }} 
+                 />
               </HStack>
             </HStack>
           </VStack>
@@ -233,7 +325,7 @@ const Url =`users/${userId}`
             <VStack w={"full"}>
               <Box w={"full"}>
                 <Text fontWeight={"500"} fontSize={"12px"}>
-                  MATTHEW OLA OLUKOJU
+                {user?.firstName}  {user?.lastName}
                 </Text>
               </Box>
               <HStack w={"full"}>

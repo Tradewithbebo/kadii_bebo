@@ -93,8 +93,12 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
               {({ values, isSubmitting }) => (
                 <Form>
                   <SimpleGrid w="full" gap="16px" px="24px" pb="24px">
-                    <GridItem>
-                      <VStack spacing={4} align="start">
+                    <GridItem display={'flex'} justifyContent={'center'} width={'full'}>
+                      <Text textAlign={'center'} w={'70%'}>
+                        Are you sure you want to delete this admin
+                        action cannot be reversed 
+                      </Text>
+                      {/* <VStack spacing={4} align="start">
                         <Field
                           as={Checkbox}
                           name="reasons"
@@ -135,7 +139,7 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
                         >
                           Security breach
                         </Field>
-                      </VStack>
+                      </VStack> */}
                     </GridItem>
 
                     <GridItem w="full" mt="16px">
@@ -146,7 +150,7 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
                         bg="#FF4834"
                         type="submit"
                         color="white"
-                        isDisabled={values.reasons.length === 0 || isSubmitting}
+                        isDisabled={ isSubmitting}
                         isLoading={isSubmitting}
                       >
                         Delete user

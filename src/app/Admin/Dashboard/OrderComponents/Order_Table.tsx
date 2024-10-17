@@ -1,8 +1,9 @@
 "use client";
-import { Box } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Box, HStack,Text} from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import OrderTable from "./OrderTable";
 import { useAdminContext } from "../../Admincontext";
+import { Fade } from "react-awesome-reveal";
 
 const orderTypeColors = {
   "Type 1": "blue.500",
@@ -62,9 +63,18 @@ export default function Transaction_Table() {
     settransactionmnth,
     ontapBuy_sell,
     setontapBuy_sell,
+    Loadingtr
   } = useAdminContext();
   const [Buy_Sell, setBuy_Sell] = useState();
+  const [key, setKey] = useState(0);
+  const reanimationTime = 2000;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setKey((prevKey) => prevKey + 1);
+    }, reanimationTime);
 
+    return () => clearInterval(interval);
+  }, [reanimationTime]);
   const headers_For_Sell = [
     "Status",
     "TXN TYPE",
@@ -118,10 +128,10 @@ export default function Transaction_Table() {
       const timeInDays = Math.floor(
         (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
       );
-      console.log("time", timeInDays);
+      // console.log("time", timeInDays);
 
       return {
-        Status: status.isPaid === false ? "Incomplete" : "Completed",
+        Status: status.status,
         Transaction_type: status.type,
         custo_Name: status.bank?.accountName, // Safely access accountName
 
@@ -131,10 +141,11 @@ export default function Transaction_Table() {
         Amount_to_send: formatCurrency(status.amountNaira), // Format currency for amount sent
         Date: formatDate(status.createdAt), // Format date and time
         Proof_of_payment: status.paymentReferenceUrl,
-        // timeInDays, // Add timeInDays to the object for filtering
+        transaction_id:status._id,
+        timeInDays, // Add timeInDays to the object for filtering
         // custo_infos: status.bank?.accountNumber, // Safely access accountName
         // custo_infosb: status.bank?.bankName, // Safely access accountName
-        transaction_id:status._id
+        
       };
     })
     // First filter based on transactmnth (days difference)
@@ -161,7 +172,7 @@ export default function Transaction_Table() {
     const timeInDays = Math.floor(
       (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
     );
-    console.log("time", timeInDays);
+    // console.log("time", timeInDays);
 
     return {
       Status: status.isPaid === false ? "Incomplete" : "Completed",
@@ -174,8 +185,8 @@ export default function Transaction_Table() {
       Amount_Recieved: formatCurrency(status.amountNaira), // Format currency for amount sent
       Date: formatDate(status.createdAt), // Format date and time
       Proof_of_payment: status.paymentReferenceUrl,
-      transaction_id:status._id
-      // timeInDays, // Add timeInDays to the object for filtering
+      transaction_id:status._id,
+      timeInDays, // Add timeInDays to the object for filtering
       // custo_infos: status.bank?.accountNumber, // Safely access accountName
       // custo_infosb: status.bank?.bankName, // Safely access accountName
     };
@@ -184,7 +195,6 @@ export default function Transaction_Table() {
   .filter((item: any) =>
     transactmnth === "" ? item : item.timeInDays <= transactmnth
   )
-
   // Then filter based on ontapBuy_sell
   .filter(
     (item: any) =>
@@ -230,6 +240,83 @@ let data = ontapBuy_sell === "Sell" ? dataSell : dataBuy;
   });
 
   let header = ontapBuy_sell === "Sell" ? headers_For_Sell : headers_For_Buy;
+  if (Loadingtr) {
+    return (
+      <Box>
+        <HStack
+          gap={["15px", "40px"]}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Fade key={key} cascade damping={0.1}>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              E
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              O
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+          </Fade>
+        </HStack>
+      </Box>
+    );
+  }
   return (
     <Box>
       <OrderTable

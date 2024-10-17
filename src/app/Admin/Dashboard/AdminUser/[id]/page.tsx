@@ -21,6 +21,7 @@ import { AxiosGet } from "@/app/axios/axios";
 import { useParams } from "next/navigation";
 import DeleteUser from "../../AdminUsersComponents/DeleteModal";
 import { useAdminContext } from "@/app/Admin/Admincontext";
+import { Fade } from "react-awesome-reveal";
 
 export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -57,7 +58,18 @@ export default function page() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { adminId, setAdminId } = useAdminContext();
 const Url ="admin"
+ // eslint-disable-next-line react-hooks/rules-of-hooks
+ const [key, setKey] = useState(0);
+ const reanimationTime = 2000;
+ // eslint-disable-next-line react-hooks/rules-of-hooks
+ useEffect(() => {
+   const interval = setInterval(() => {
+     setKey((prevKey) => prevKey + 1);
+   }, reanimationTime);
 
+   return () => clearInterval(interval);
+ }, [reanimationTime]);
+ // eslint-disable-next-line react-hooks/rules-of-hooks
   const getAdminUserById = async (): Promise<boolean> => {
     setLoadingUser(true)
     try {
@@ -68,6 +80,7 @@ const Url ="admin"
         const foundUser = response.data.find((user: AdminUser) => user._id === userId)
         
         if (foundUser) {
+          setLoadingUser(false)
           setAdminId(foundUser._id)
           setAdminUser(foundUser)
           setErrorMessage('')
@@ -94,11 +107,88 @@ const Url ="admin"
   useEffect(() => {
     getAdminUserById()
   }, [])
+  if (loadingUser) {
+    return (
+      <Box>
+        <HStack
+          gap={["15px", "40px"]}
+          display={"flex"}
+          justifyContent={"center"}
+        >
+          <Fade key={key} cascade damping={0.1}>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              E
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              B
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              O
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+            <Text
+              fontSize={["20px", "60px"]}
+              fontWeight={"700"}
+              color={"#0AA07C"}
+            >
+              .
+            </Text>
+          </Fade>
+        </HStack>
+      </Box>
+    );
+  }
   return (
     <Box w={"full"}>
       <Box pb={"24px"} w={"full"}>
         <Text fontSize={"16px"} fontWeight={"700"}>
-          Admin Users
+          Admin User
         </Text>
       </Box>
       {/* <VStack w={"full"}> */}

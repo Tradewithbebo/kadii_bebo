@@ -21,7 +21,7 @@ import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { AxiosPost } from "@/app/axios/axios";
+import { AxiosAuthPost, AxiosPost } from "@/app/axios/axios";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { IoEyeOutline } from "react-icons/io5";
 import Select from "react-select";
@@ -32,50 +32,59 @@ export default function Page() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const url = "auth/register";
+  const url = "Admin";
   const toast = useToast();
   const [Value, setValue] = useState("");
-  const networkOptions = [
-    { value: "SuperAdmin", label: "Super Admin" },
-    { value: "Admin", label: "Admin" },
-  ];
-  const handleValueChange = (
-    selectedOption: any,
-    setFieldValue: (
-      field: string,
-      value: any,
-      shouldValidate?: boolean | undefined
-    ) => void
-  ) => {
-    setFieldValue("Network", selectedOption ? selectedOption.value : "");
-    setValue(selectedOption);
-  };
+  // const networkOptions = [
+  //   { value: "SuperAdmin", label: "Super Admin" },
+  //   { value: "Admin", label: "Admin" },
+  // ];
+  // const handleValueChange = (
+  //   selectedOption: any,
+  //   setFieldValue: (
+  //     field: string,
+  //     value: any,
+  //     shouldValidate?: boolean | undefined
+  //   ) => void
+  // ) => {
+  //   setFieldValue("Network", selectedOption ? selectedOption.value : "");
+  //   setValue(selectedOption);
+  // };
 
   const PersonalDetailsSchema = Yup.object().shape({
-    firstName: Yup.string().required("First name is required"),
-    oldpassword: Yup.string().required("old password is required"),
-    password: Yup.string()
-      .min(8, "Password must be at least 8 characters")
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
-        "uppercase,lowercase,number,special character"
-      )
-      .required("Password is required"),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password")], "Passwords must match")
-      .required("Confirm password is required"),
+    // firstName: Yup.string().required("First name is required"),
+    email: Yup.string()
+    .required('Email is required')
+    .email('Invalid email format')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Invalid email format'
+    )
+    .test('no-consecutive-dots', 'Invalid email format', (value) => {
+      return !/\.{2,}/.test(value || '');
+    })
+    .test('no-consecutive-at', 'Invalid email format', (value) => {
+      return !/@{2,}/.test(value || '');
+    })
+    .max(254, 'Email must be at most 254 characters long')
+
   });
 
   const handleSubmit = async (values: any) => {
     if (values) {
       setLoading(true);
       try {
-        const res = await AxiosPost(url, values);
+        const res = await AxiosAuthPost(url, values);
         setLoading(false);
         if (res) {
-          localStorage.removeItem("email"); // Clear any existing email
-          localStorage.setItem("email", values.email); // Store the new email
-          router.push("/createAccount/verifyMail");
+          toast({
+            title: "success",
+            description: 'account created successfully',
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+            position: "top-left",
+          });
         }
       } catch (err: any) {
         setLoading(false);
@@ -102,10 +111,7 @@ export default function Page() {
         <CardBody>
           <Formik
             initialValues={{
-              firstName: "",
-              oldpassword: "",
-              password: "",
-              confirmPassword: "",
+              name: "",
               email: "",
             }}
             validationSchema={PersonalDetailsSchema}
@@ -129,34 +135,28 @@ export default function Page() {
 
                   <GridItem colSpan={1} width={"90%"}>
                     <FormControl
-                      isInvalid={!!errors.firstName && touched.firstName}
+                      // isInvalid={!!errors.firstName && touched.firstName}
                     >
                       <Field
                         as={Input}
                         type="text"
-                        name="fullName"
+                        name="name"
                         placeholder="Enter your fullName"
                       />
                     </FormControl>
                   </GridItem>
                   <GridItem colSpan={1} width={"100%"} mb={"40px"}>
                     <Field
-                      as={Select}
-                      id="Admin"
-                      name="Admin"
-                      options={networkOptions}
-                      isSearchable
-                      placeholder="Admin"
-                      value={Value}
-                      onChange={(selectedOption: any) => {
-                        handleValueChange(selectedOption, setFieldValue);
-                      }}
+                      as={Input}
+                      type="text"
+                      name="email"
+                      placeholder="Enter your email"
                     />
                   </GridItem>
                   <GridItem colSpan={1} width={"90%"} mb={"40px"} display={'flex'} justifyContent={'end'}>
-                   <Button bg={'#0CBF94'}>
-                   Add admin
-                   </Button>
+                    <Button bg={'#0CBF94'} isLoading={loading} type="submit">
+                      Add admin
+                    </Button>
                   </GridItem>
                 </SimpleGrid>
               </Form>

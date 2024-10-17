@@ -97,7 +97,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
     gettransaction(); // Initial fetch
     const intervalId = setInterval(() => {
       gettransaction(); // Fetch every 2 minutes
-    }, 120000); // 120000 milliseconds = 2 minutes
+    }, 120000
+  ); // 120000 milliseconds = 2 minutes
 
     return () => clearInterval(intervalId); // Cleanup interval on component unmount
   }, []);
@@ -254,7 +255,9 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         setAdminUsers,
         adminId,
         setAdminId,
-        usersId, setUsersId
+        usersId, 
+        setUsersId,
+        Loadingtr
       }}
     >
       {children}
