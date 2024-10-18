@@ -16,10 +16,11 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { FaPlus } from "react-icons/fa6";
 import React, { useEffect, useState } from "react";
-import { AxiosGet } from "@/app/axios/axios";
+import { AxiosDelete, AxiosGet } from "@/app/axios/axios";
 import { useCryptoContext } from "../Buy/usecontextbuy";
 
 interface Bank {
@@ -37,12 +38,16 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
     setbankName,
     setaccountNumber,
     setaccountid,
+    accountid
   } = useCryptoContext();
 
   const [loading3, setLoading3] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [existingBank, setExistingBank] = useState<Bank[]>([]);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage2, setErrorMessage2] = useState<string | null>(null);
+  const toast = useToast();
   const {
     isOpen: isOpendelete,
     onOpen: onOpendelete,
@@ -53,7 +58,47 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
     onOpendelete();
     onClose();
   };
-  const handleConfirmDelete = () => {
+  let bankId=accountid
+  const url2 =`banks/accounts/${bankId}`
+  
+  const handleConfirmDelete =async () => {
+    
+        setLoading(true);
+        try {
+         
+    
+          const res = await AxiosDelete(url2);
+    
+          setLoading(false);
+          if (res) {
+            toast({
+              title: "Success",
+              description: "Bank has been deleted",
+              status: "success",
+              duration: 2000,
+              isClosable: true,
+              position: "bottom-left",
+            })}
+          
+        } catch (err: any) {
+          setLoading(false);
+          let message = "Check your Network and try again.";
+          if (err.response && err.response.data && err.response.data.message) {
+            message = err.response.data.message;
+          }
+          setErrorMessage2(message);
+          toast({
+            title: "Error",
+            description: message,
+            status: "error",
+            duration: 2000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        }
+      
+    
+    
     onClose(); // Close the main modal
   };
 
@@ -254,7 +299,7 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
             undone.
           </ModalBody>
           <ModalFooter>
-            <Button colorScheme="red" mr={3} onClick={handleConfirmDelete}>
+            <Button colorScheme="red" mr={3} onClick={handleConfirmDelete} isLoading={loading}>
               Yes, Delete
             </Button>
             <Button bg="gray.200"  onClick={() => onClosedelete()}>

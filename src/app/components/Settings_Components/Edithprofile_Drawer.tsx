@@ -1,6 +1,6 @@
 "use client";
 
-import { AxiosGet, AxiosAuthPostfile } from "@/app/axios/axios";
+import { AxiosGet, AxiosAuthPostfile, AxiosAuthPatchfile } from "@/app/axios/axios";
 import {
   Text,
   Box,
@@ -29,12 +29,12 @@ import { AiOutlineCamera } from "react-icons/ai";
 import Router from "next/router"; // Ensure this is imported correctly
 
 interface FormValues {
+  avatar: File | null;
+  firstName: string;
+  lastName: string;
   username: string;
   phoneNumber: string;
   dateOfBirth: string;
-  avatar: File | null;
-  lastName: string;
-  firstName: string;
 }
 
 // Updated validation schema for partial updates
@@ -42,34 +42,32 @@ const PersonalDetailsSchema = Yup.object().shape({
   username: Yup.string()
     .min(3, "Username must be at least 3 characters")
     .required("Username is required"),
-  
+
   firstName: Yup.string()
     .min(3, "First name must be at least 3 characters")
     .required("First name is required"),
-  
+
   lastName: Yup.string()
     .min(3, "Last name must be at least 3 characters")
     .required("Last name is required"),
-  
+
   phoneNumber: Yup.string()
     .matches(/^[0-9]+$/, "Phone number must be digits only")
     .min(10, "Phone number must be at least 10 digits")
     .required("Phone number is required"),
-  
-  dateOfBirth: Yup.date()
-    .required("Date of birth is required"),
-  
+
+  dateOfBirth: Yup.date().required("Date of birth is required"),
+
   avatar: Yup.mixed()
     .nullable()
     // .required('Avatar is required')
-    .test('fileType', 'Unsupported File Format', (value) => {
+    .test("fileType", "Unsupported File Format", (value) => {
       // Check if the file type exists and matches allowed types
       return value && value instanceof File
-        ? ['image/jpeg', 'image/png', 'image/jpg'].includes(value.type)
+        ? ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
         : true;
     }),
 });
-
 
 interface Edith_profile {
   isOpen: boolean;
@@ -106,11 +104,11 @@ export default function Edithprofile_Drawer({
   }, []);
 
   const initialValues: FormValues = {
-    username: userDetails?.username || "",
-    lastName: userDetails?.lastName || "",
-    firstName: userDetails?.firstName || "",
-    phoneNumber: userDetails?.phoneNumber || "",
-    dateOfBirth: userDetails?.dateOfBirth || "",
+    username:  "",
+    lastName:  "",
+    firstName: "",
+    phoneNumber: "",
+    dateOfBirth:  "",
     avatar: null,
   };
 
@@ -133,19 +131,26 @@ export default function Edithprofile_Drawer({
       setLoading(true);
       try {
         const formData = new FormData();
+        
         if (values.username) formData.append("username", values.username);
         if (values.phoneNumber) formData.append("phoneNumber", values.phoneNumber);
-        if (values.dateOfBirth) formData.append("dateOfBirth", values.dateOfBirth);
+        
+        // Convert date to ISO 8601 format
+        if (values.dateOfBirth) {
+          const isoDate = new Date(values.dateOfBirth).toISOString().split('T')[0]; // Extract YYYY-MM-DD
+          formData.append("dateOfBirth", isoDate);
+        }
+        
         if (values.avatar) formData.append("photo", values.avatar);
         if (values.firstName) formData.append("firstName", values.firstName);
         if (values.lastName) formData.append("lastName", values.lastName);
-
-        const res = await AxiosAuthPostfile(url, formData, {
+  
+        const res = await AxiosAuthPatchfile(url, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-
+  
         setLoading(false);
         if (res && res.data) {
           toast({
@@ -175,6 +180,7 @@ export default function Edithprofile_Drawer({
       }
     }
   };
+  
 
   return (
     <Drawer
@@ -202,7 +208,7 @@ export default function Edithprofile_Drawer({
         <DrawerBody>
           <Formik
             initialValues={initialValues}
-            validationSchema={PersonalDetailsSchema}
+            // validationSchema={PersonalDetailsSchema}
             onSubmit={handleProceed}
           >
             {({ setFieldValue, errors, touched }) => (
