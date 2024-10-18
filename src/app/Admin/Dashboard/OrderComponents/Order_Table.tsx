@@ -318,7 +318,7 @@ let data = ontapBuy_sell === "Sell" ? dataSell : dataBuy;
     );
   }
   return (
-    <Box>
+    <Box w={'full'}>
       <OrderTable
         headers={header}
         data={searchtr.length > 0 ? filteredData : data}

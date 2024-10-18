@@ -22,6 +22,9 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Divider,
+  GridItem,
+  SimpleGrid,
 } from '@chakra-ui/react'
 import { useCryptoContext } from '../drawer/Buy/usecontextbuy'
 import { AxiosDelete, AxiosGet } from '@/app/axios/axios'
@@ -146,23 +149,65 @@ export default function Banks({ isOpen, onClose }: BanksProps) {
             ) : (
               <VStack spacing={4} align="stretch">
                 {banksToDisplay.map((bank) => (
-                  <Box
-                    key={bank._id}
-                    p={4}
-                    borderWidth={1}
-                    borderRadius="md"
-                    _hover={{ bg: 'gray.50' }}
-                    cursor="pointer"
-                    onClick={() => {
-                      setaccountid(bank._id)
-                      onOpendelete()
-                    }}
-                  >
-                    <Text fontWeight="bold">{bank.accountName}</Text>
-                    <Text fontSize="sm" color="gray.600">
-                      {bank.accountNumber} | {bank.bankName}
+                  <SimpleGrid
+                  key={bank._id}
+                  onClick={() => {
+                    setaccountid(bank._id)
+                    onOpendelete()
+                  }}
+                  mb="8px"
+                  columns={6}
+                  w="full"
+                  gap="40px"
+                  p="16px"
+                  border="1px"
+                  bgColor="#f3f4f6"
+                  borderColor="#e5e7eb"
+                  borderRadius="10px"
+                  cursor="pointer"
+                  _hover={{
+                    bg: "#E7F6EC",
+                    borderColor: "#0CBF94",
+                  }}
+                >
+                  <GridItem colSpan={6} display="flex" justifyContent="start">
+                    <Text fontWeight="600" fontSize="16px" isTruncated>
+                      {bank.accountName}
                     </Text>
-                  </Box>
+                  </GridItem>
+                  <GridItem
+                    colSpan={4}
+                    display="flex"
+                    alignItems="center"
+                    w={"full"}
+                  >
+                    <Box flexGrow={0} flexShrink={0} overflow="hidden">
+                      <Text fontWeight="400" fontSize="14px" isTruncated>
+                        {bank.accountNumber}
+                      </Text>
+                    </Box>
+                    <Box px={"4px"}>
+                      <Divider
+                        orientation="vertical"
+                        height="20px"
+                        borderColor="#d4d4d8"
+                        borderWidth="1px"
+                      />
+                    </Box>
+                    <Box
+                      flexGrow={0}
+                      minWidth="100px"
+                      flexShrink={0}
+                      overflow="hidden"
+                    >
+                      <Text fontWeight="400" fontSize="14px" isTruncated>
+                        {bank.bankName.length > 15
+                          ? `${bank.bankName.slice(0, 15)}...`
+                          : bank.bankName}
+                      </Text>
+                    </Box>
+                  </GridItem>
+                </SimpleGrid>
                 ))}
                 {existingBank.length > 2 && (
                   <Button onClick={() => setShowAll(!showAll)}  bg={"#0CBF94"} width="full" >

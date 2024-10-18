@@ -25,6 +25,7 @@ import {
   // Link,
   IconButton,
   VStack,
+  TableContainer,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
@@ -57,7 +58,7 @@ export default function TransactionTable({
   const toast = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const[ loading, setloading]=useState(false)
+  const [loading, setloading] = useState(false);
   const {
     isOpen: isOpenConfirmTrx,
     onOpen: onOpenConfirmTrx,
@@ -143,21 +144,20 @@ export default function TransactionTable({
     // Truncate the name and add the extension
     return `${name.substring(0, availableLength)}...${extension}`;
   };
-  let transactionId =Trnx_id
-  
-const url=`transactions/confirm/${transactionId}`
-  const handleConffirmation = async () => {
+  let transactionId = Trnx_id;
 
+  const url = `transactions/confirm/${transactionId}`;
+  const handleConffirmation = async () => {
     try {
-      setloading(true)
-      const res= await AxiosAuthPost(url,{})
-      console.log('response',res)
-      if( res){
-       setloading(false)
+      setloading(true);
+      const res = await AxiosAuthPost(url, {});
+      console.log("response", res);
+      if (res) {
+        setloading(false);
         onOpenConfirmTrx();
         onClose();
       }
-    }  catch (err: any) {
+    } catch (err: any) {
       setloading(false);
       let message = "Check your Network and try again.";
       if (err.response && err.response.data && err.response.data.message) {
@@ -173,31 +173,41 @@ const url=`transactions/confirm/${transactionId}`
       });
     }
   };
-    
-  
+
   return (
     <>
-      <Box
-        pb={"10px"}
-        border="1px"
-        borderColor="gray.200"
-        borderRadius="md"
-        borderTopRightRadius={"none"}
-        borderTopLeftRadius={"none"}
-        borderTop={"none"}
-        w={"full"}
-      >
-        <Table justifyContent="space-between" w={'full'}>
-          <Thead>
+      {/* <Box
+  pb={"10px"}
+  border="1px"
+  borderColor="gray.200"
+  borderRadius="md"
+  borderTopRightRadius={"none"}
+  borderTopLeftRadius={"none"}
+  borderTop={"none"}
+  w={"full"}  // Ensures the box takes full width
+> */}
+<TableContainer
+ pb={"10px"}
+ border="1px"
+ borderColor="gray.200"
+ borderRadius="md"
+ borderTopRightRadius={"none"}
+ borderTopLeftRadius={"none"}
+ borderTop={"none"}
+ w={"full"}  >
+<Table w={"full"} size='lg'>
+<Thead>
             <Tr>
               {headers.map((header, index) => (
                 <Th
-                  key={index}
-                  color={"#000000"}
-                  fontSize={"10px"}
-                  fontWeight={"700"}
-                   padding="20px"
-                      textAlign="left"
+                key={index}
+                color={"#000000"}
+                fontSize={"12px"}
+                fontWeight={"700"}
+                padding="10px" 
+                // pb={'15px'}
+                // Reduce padding to give more space
+                // textAlign="left"
                 >
                   {header}{" "}
                   {header === "KYC Level" && (
@@ -216,31 +226,40 @@ const url=`transactions/confirm/${transactionId}`
                 key={rowIndex}
                 onClick={() => handleOpenModal(row, bank[rowIndex])}
                 cursor="pointer"
+               
               >
                 {Object.entries(row).map(([key, value], cellIndex) => (
                   <Td
                   key={cellIndex}
-                  // color="#000000"
                   fontSize="12px"
                   fontWeight="600"
-                    color={
-                      key === "Transaction_type" && value === "sell"
-                        ? "#D42620"
-                        : key === "Transaction_type" && value === "buy"
-                        ? "#0F973D"
-                        : "#000000"
-                    }
-                    padding="20px"
-                     maxWidth={key === "custo_name" ? "200px" : "auto"}
+                  color={
+                    key === "Transaction_type" && value === "sell"
+                      ? "#D42620"
+                      : key === "Transaction_type" && value === "buy"
+                      ? "#0F973D"
+                      : "#000000"
+                  }
+                  
+                  padding="10px" // Adjust padding here too
+                  maxWidth={key === "custo_name" ? "200px" : "auto"}
+                  whiteSpace="nowrap" // Prevent text from overflowing
+                  overflow="hidden"  // Prevent text from overflowing
+                  textOverflow="ellipsis" // Add ellipsis if text overflow
                   >
                     {key === "Status" && value === "Completed" ? (
-                      <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
-                        <HStack gap={"3px"}>
-                          <MdCircle size={"10px"} color="#2F7F37" />
+                      <Box
+                        rounded="10px"
+                        px={{ base: "2px", sm: "5px", md: "10px" }}
+                        bg="#DCFCE7"
+                        w={"fit-content"}
+                      >
+                        <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                          <MdCircle size="10px" color="#2F7F37" />
                           <Text
                             color="#2F7F37"
-                            fontSize={"12px"}
-                            fontWeight={"500"}
+                            fontSize={{ base: "10px", sm: "12px", md: "14px" }}
+                            fontWeight="500"
                           >
                             {value}
                           </Text>
@@ -255,43 +274,51 @@ const url=`transactions/confirm/${transactionId}`
                           </Text>
                         </HStack>
                       </Box>
-                    ) 
-                    : key === "Status" && value === "completed" ? (
-                      <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
-                        <HStack gap={"3px"}>
-                          <MdCircle size={"10px"} color="#2F7F37" />
-                          <Text color="#2F7F37" fontSize={"12px"}>
-                            {value}
-                          </Text>
-                        </HStack>
-                      </Box>
-                    )
-                    : key === "Status" && value === "pending" ? (
-                      <Box rounded={"10px"} px={"5px"} bg={"#FCF2C1"}>
-                        <HStack gap={"3px"}>
-                          <MdCircle size={"10px"} color="ORANGE" />
-                          <Text color="ORANGE" fontSize={"12px"}>
-                            {value}
-                          </Text>
-                        </HStack>
-                      </Box>
-                    )
+                    ) : key === "Status" && value === "completed" ? (
+                      <Box rounded="10px"  py={"2px" } px={{ base: "2px", sm: "5px", md: "10px" }} bg="#DCFCE7" w={'fit-content'}>
+                      <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                        <MdCircle size="10px" color="#2F7F37" />
+                        <Text
+                          color="#2F7F37"
+                          fontSize={"12px"}
+                          fontWeight="500"
+                        >
+                          {value}
+                        </Text>
+                      </HStack>
+                    </Box>
                     
-                    : key === "Proof_of_payment" ? null : key ===
+                    ) : key === "Status" && value === "pending" ? (
+                      <Box
+                        rounded="10px"
+                        px={{ base: "2px", sm: "5px", md: "10px" }}
+                        py={"2px" }
+                        bg="#FCF2C1"
+                        w={'fit-content'}
+                      >
+                        <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                          <MdCircle size="10px" color="orange" />
+                          <Text
+                            color="orange"
+                            fontSize={ "12px"}
+                          >
+                            {value}
+                          </Text>
+                        </HStack>
+                      </Box>
+                    ) : key === "Proof_of_payment" ? null : key ===
                       "timeInDays" ? null : key === "transaction_id" ? null : (
                       value
                     )}
                     {key === "custo_Name" && (
-                     
-                        <Text
-                          color={"#71717A"}
-                          fontSize={"9px"}
-                          fontWeight={"500"}
-                        >
-                          {bank[rowIndex]?.display || "N/A"}
-                        </Text>
-                       
-                     
+                      <Text
+                      color={"#71717A"}
+                      fontSize={["8px", "9px", "12px"]} // Adjusts for small, medium, and large screens
+                      fontWeight={"500"}
+                    >
+                      {bank[rowIndex]?.display || "N/A"}
+                    </Text>
+                    
                     )}
                   </Td>
                 ))}
@@ -301,6 +328,7 @@ const url=`transactions/confirm/${transactionId}`
         </Table>
 
         {/* Pagination Buttons */}
+        
         <Flex justifyContent="space-between" mt={4} mx={"10px"}>
           <Button
             onClick={handlePrev}
@@ -335,7 +363,8 @@ const url=`transactions/confirm/${transactionId}`
             Next
           </Button>
         </Flex>
-      </Box>
+      {/* </Box> */}
+      </TableContainer>
 
       {/* Modal for Transaction Details */}
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -348,9 +377,9 @@ const url=`transactions/confirm/${transactionId}`
               <Box>
                 {Object.entries(selectedTransaction).map(([key, value]) => (
                   <HStack key={key} justifyContent="space-between" mb={2}>
-                    <Text fontWeight="bold">{key}:</Text>
+                    <Text>{key}:</Text>
                     {key === "Proof_of_payment" ? (
-                      <Link href={value as string}  color="blue.500" download >
+                      <Link href={String(value)} color="blue.500" download>
                         <Button
                           rightIcon={<MdOpenInNew />}
                           colorScheme="blue"
@@ -367,7 +396,7 @@ const url=`transactions/confirm/${transactionId}`
                 ))}
 
                 <HStack justifyContent="space-between" mb={2}>
-                  <Text fontWeight="bold">Bank:</Text>
+                  <Text>Bank:</Text>
                   <HStack>
                     <Text>{selectedBank.display}</Text>
                     <Button
@@ -391,7 +420,11 @@ const url=`transactions/confirm/${transactionId}`
             >
               Decline Transaction
             </Button>
-            <Button colorScheme="green" onClick={() => handleConffirmation()} isLoading={loading}>
+            <Button
+              colorScheme="green"
+              onClick={() => handleConffirmation()}
+              isLoading={loading}
+            >
               Confirm Transaction
             </Button>
           </ModalFooter>
@@ -410,13 +443,13 @@ const url=`transactions/confirm/${transactionId}`
                 display={"flex"}
                 textAlign={"center"}
               >
-                <Fade triggerOnce direction='up' >
-                <Image
-                  borderRadius="full"
-                  boxSize="50px"
-                  src="/image/Good.png"
-                  alt="Dan Abramov"
-                />
+                <Fade triggerOnce direction="up">
+                  <Image
+                    borderRadius="full"
+                    boxSize="50px"
+                    src="/image/Good.png"
+                    alt="Dan Abramov"
+                  />
                 </Fade>
               </Box>
               <Box
