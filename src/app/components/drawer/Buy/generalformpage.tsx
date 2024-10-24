@@ -127,10 +127,7 @@ export default function GeneralFormPage({
   
             // Update sell rate and selected network price
             settoprice(updatedNetwork.current_price);
-            // setSelectedsellNetwork((prevNetwork: any) => ({
-            //   ...prevNetwork!,
-            //   current_price: updatedNetwork.current_price,
-            // }));
+          
           }
           return true; // Return true for a successful update
         }

@@ -43,8 +43,6 @@ export default function SendMoney({
      sellConversion,
      sellConversion2,
      setsellConversion2,
-     selectedsellNetwork,
-     setSelectedsellNetwork,
      blockchain,
      currency,
      sellvalunaira,

@@ -49,8 +49,7 @@ export default function SelectUSDT({
     setsellsymbol,
     sellConversion2,
     setsellConversion2,
-    selectedsellNetwork,
-    setSelectedsellNetwork,
+    // selectedSellNetwork, setSelectedSellNetwork,
     blockchain,
     sellvalueusdt,
     setsellvalueusdt,
@@ -86,13 +85,13 @@ const url = "wallet/assets";
   
         // console.log('updatedNetwork',updatedNetwork);
         // console.log('selectedsellNetwork',selectedsellNetwork);
-        if (updatedNetwork && selectedsellNetwork) {
+        if (updatedNetwork && sellRate) {
           // Check if the price has changed
-          if (updatedNetwork.current_price !== selectedsellNetwork.current_price) {
+          if (updatedNetwork.current_price !== sellRate) {
             // Show toast if price has changed
             toast({
               title: "Rate Updated",
-              description: `${selectedsellNetwork.name}'s rate is now ${updatedNetwork.current_price}`,
+              description: `${sellRate}'s rate is now ${updatedNetwork.current_price}`,
               status: "success",
               duration: 5000,
               isClosable: true,
@@ -101,10 +100,10 @@ const url = "wallet/assets";
   
             // Update sell rate and selected network price
             setsellRate(updatedNetwork.current_price);
-            setSelectedsellNetwork((prevNetwork: any) => ({
-              ...prevNetwork!,
-              current_price: updatedNetwork.current_price,
-            }));
+            // setSelectedSellNetwork((prevNetwork: any) => ({
+            //   ...prevNetwork!,
+            //   current_price: updatedNetwork.current_price,
+            // }));
           }
           return true; // Return true for a successful update
         }
@@ -122,8 +121,8 @@ const url = "wallet/assets";
     let intervalId: NodeJS.Timeout | undefined;
   
     const fetchData = async () => {
-      if (selectedsellNetwork && selectedsellNetwork.name !== null) {
-        const success = await getUpdatedPrice(selectedsellNetwork.name);
+      if (sellRate !== "") {
+        const success = await getUpdatedPrice(sellRate);
         
         if (!success) {
           // Retry after 2 seconds if the fetch failed
@@ -132,7 +131,7 @@ const url = "wallet/assets";
       }
     };
   
-    if (selectedsellNetwork && selectedsellNetwork.name !== null) {
+    if (sellRate  !== "") {
       fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
   
       intervalId = setInterval(() => {
@@ -146,7 +145,7 @@ const url = "wallet/assets";
       if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
     };
   
-  }, [selectedsellNetwork]);
+  }, [sellRate]);
   // Re-run when selectedsellNetwork changes
   
   return (

@@ -29,8 +29,8 @@ export default function SelectAsset({ setStep }: { setStep: any }) {
     setsellRate,
     setsellimage,
     setsellsymbol,
-    selectedsellNetwork, 
-        setSelectedsellNetwork,
+   
+  
   } = useCryptoContext();
 
   const [NetValue, setNetValue] = useState<Network[]>([]);
@@ -124,12 +124,17 @@ return (
               w={"full"}
               key={index}
               onClick={() => {
-                console.log("Selected network:", network); // Log selected network
+                // console.log("Selected network:", network); // Log selected network
                 setblockchain(network.name);
                 setsellRate(network.current_price);
                 setsellimage(network.image);
                 setsellsymbol(network.symbol);
-                setSelectedsellNetwork(network); // Set selected network for price updates
+                // setSelectedSellNetwork(
+                // {  image: network.image,
+                //   symbol: network.symbol;
+                //   name: network.name;
+                //   current_price: any;}
+                // ); // Set selected network for price updates
                 setStep(3);
               }}
             >

@@ -19,7 +19,7 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [toprice, settoprice] = useState("");
   const [Symbols, setSymbols] = useState("");
   const [currentsImage, setcurrentsImage] = useState('');
-  const [currentsName, setcurrentsName] = useState("");
+  const [currentsName, setcurrentsName] = useState('');
   const [menucurrent_price, setmenucurrent_price] = useState('');
   const [menusymbol, setmenusymbol] = useState('');
   const [menuimage, setmenuimage] = useState('');
@@ -42,12 +42,14 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [sellRate, setsellRate] = useState('');
   const [sellimage, setsellimage] = useState('');
   const [sellsymbol, setsellsymbol] = useState('');
-  const [selectedsellNetwork, setSelectedsellNetwork] = useState<Network | null>(null);
+  // const [selectedSellNetwork, setSelectedSellNetwork] = useState<Network>();
   // const [currency,setcurrency]=useState(false)
   const [sellvalueusdt, setsellvalueusdt] = useState('');
   const [sellvalunaira, setsellvaluenaira] = useState('');
   const [Address, setAddress] = useState('');
   const [transactionId, settransactionid] = useState("");
+  
+  const [NetValue, setNetValue] = useState<Network[]>([]);
   
   
   interface Network {
@@ -205,8 +207,8 @@ useEffect(() => {
         sellWetrade,
         setsellWetrade,
         // selectedNetwork,
-        selectedsellNetwork,
-        setSelectedsellNetwork,
+        // selectedSellNetwork, 
+        // setSelectedSellNetwork,
         Refreshingprice,
         setmenucurrent_price,
         menucurrent_price,
@@ -259,7 +261,8 @@ useEffect(() => {
         setsellvalueusdt,
         transactionId,
         settransactionid,
-        networks
+        networks,
+        
       }}
     >
       {children}

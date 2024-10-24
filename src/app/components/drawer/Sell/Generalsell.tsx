@@ -20,7 +20,7 @@ import AddBank from "./addBank";
 import { IoIosArrowBack } from "react-icons/io";
 import SelectAsset from "./SelectAsset";
 import SendcryptoQrcode from "./SendcryptoQrcode";
-import Selectnaira from "./selectsellnaira";
+// import Selectnaira from "./selectsellnaira";`
 import SelectUSDT from "./selectsellusdt";
 import { ConfirmSell } from "../Buy/NotificationBuy";
 import ConfirmsellOrder from "./ConfirmSellOrder";
@@ -37,7 +37,7 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
- const {setSelectedsellNetwork} = useCryptoContext();
+ const {setsellRate} = useCryptoContext();
 
   const [step, setStep] = useState(1);
 // const handleclick=()=>{
@@ -71,7 +71,7 @@ const Backward = () => {
             <DrawerCloseButton
               onClick={() => {
                 setStep(1);
-                setSelectedsellNetwork(null)
+                setsellRate('')
                 
               }}
             />
