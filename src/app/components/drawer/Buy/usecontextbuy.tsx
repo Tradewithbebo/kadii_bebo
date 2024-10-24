@@ -16,10 +16,10 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [walletAddress, setWalletAddress] = useState('');
   const [Name, setName] = useState('');
   const [refreshName, setrefreshName] = useState('');
-  const [toprice, settoprice] = useState(0);
+  const [toprice, settoprice] = useState("");
   const [Symbols, setSymbols] = useState("");
   const [currentsImage, setcurrentsImage] = useState('');
-  const [currentsName, setcurrentsName] = useState('');
+  const [currentsName, setcurrentsName] = useState("");
   const [menucurrent_price, setmenucurrent_price] = useState('');
   const [menusymbol, setmenusymbol] = useState('');
   const [menuimage, setmenuimage] = useState('');
@@ -259,6 +259,7 @@ useEffect(() => {
         setsellvalueusdt,
         transactionId,
         settransactionid,
+        networks
       }}
     >
       {children}

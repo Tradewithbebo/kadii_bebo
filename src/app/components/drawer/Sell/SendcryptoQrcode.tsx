@@ -59,7 +59,7 @@ export default function SendcryptoQrcode({ setstep }: { setstep: any }) {
     blockchain: sellsymbol,
     address: Address,
     bank: String(accountid),
-    transactionType: "sell",
+    transactionType: "SELL",
   };
 
   const handleSubmit = async (values: any) => {

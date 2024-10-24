@@ -30,7 +30,7 @@ import SelectassetUSDT from "./SelectassetUSDT";
 import { IoIosArrowBack } from "react-icons/io";
 import ConfirmBuyOrder from "./ConfirmBuyOrder";
 import SendMoney from "./SendMoney";
-import { AxiosAuthPost, AxiosPost } from "@/app/axios/axios";
+import { AxiosAuthPost, AxiosGet, AxiosPost } from "@/app/axios/axios";
 import { useRouter } from "next/navigation";
 import SuccessBuy from "./success";
 import { useCryptoContext } from "./usecontextbuy";
@@ -98,6 +98,83 @@ export default function GeneralFormPage({
       : "";
       
   };
+  const url2 = "wallet/assets";
+  const [errorMessage2, setErrorMessage2] = useState("");
+  const getUpdatedPrice = async (
+  ): Promise<boolean> => {
+    try {
+      const res = await AxiosGet(url2);
+      console.log('update',res.data);
+      if (res) { // Check if the request was successful
+        const updatedNetwork = res.data.find(
+          (network: any) => network.name === currentsName
+        );
+  
+        // console.log('updatedNetwork',updatedNetwork);
+        // console.log('selectedsellNetwork',selectedsellNetwork);
+        if (updatedNetwork && toprice) {
+          // Check if the price has changed
+          if (updatedNetwork.current_price !== toprice) {
+            // Show toast if price has changed
+            toast({
+              title: "Rate Updated",
+              description: `${toprice}'s rate is now ${updatedNetwork.current_price}`,
+              status: "success",
+              duration: 5000,
+              isClosable: true,
+              position:"top-right"
+            });
+  
+            // Update sell rate and selected network price
+            settoprice(updatedNetwork.current_price);
+            // setSelectedsellNetwork((prevNetwork: any) => ({
+            //   ...prevNetwork!,
+            //   current_price: updatedNetwork.current_price,
+            // }));
+          }
+          return true; // Return true for a successful update
+        }
+      }
+      return false; // Return false if no matching network or no update occurred
+    } catch (err: any) {
+      console.log("Error updating price:", err);
+      setErrorMessage2("Failed to update rate. Please try again.");
+      return false; // Return false on error
+    }
+  };
+  
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined;
+    let intervalId: NodeJS.Timeout | undefined;
+  
+    const fetchData = async () => {
+      if (toprice && currentsName !== "") {
+        const success = await getUpdatedPrice();
+        
+        if (!success) {
+          // Retry after 2 seconds if the fetch failed
+          timeoutId = setTimeout(fetchData, 2000);
+        }
+      }
+    };
+  
+    if (toprice && currentsName !== "") {
+      fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
+  
+      intervalId = setInterval(() => {
+        fetchData();  // Fetch the updated price every 3 seconds
+      }, 3000);  // Set a more reasonable interval (e.g., 3 seconds)
+    }
+  
+    // Cleanup both interval and timeout when component unmounts or when selectedsellNetwork changes
+    return () => {
+      if (intervalId) clearInterval(intervalId); // Cleanup interval
+      if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
+    };
+  
+  }, [toprice]);
+  // Re-run when selectedsellNetwork changes
+  
 
   const handleProceed = async (values: any) => {
     if (values) {
@@ -136,6 +213,7 @@ export default function GeneralFormPage({
   };
 
   const resetInputs = () => {
+    setcurrentsName("")
     setValue("");
     setCurrentprice("");
     setNetwork("");
@@ -192,7 +270,7 @@ export default function GeneralFormPage({
     amountBlockchain: Currency ? Conversion : parseFloat(USDT),
     blockchain: Symbols,
     address: walletaddress,
-    transactionType: "buy",
+    transactionType: "BUY",
   };
 
   // const validationSchema = Yup.object().shape({
@@ -219,7 +297,7 @@ export default function GeneralFormPage({
             position={"absolute"}
             mt={["45px", "40px"]}
             ml={["15px", "10px"]}
-            display={step === 1 || step === 4 ? "none" : "block"}
+            display={step === 1 || step === 4  || step === 5?"none" : "block"}
           >
             <IoIosArrowBack size={"20px"} />
           </Box>

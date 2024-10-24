@@ -213,7 +213,7 @@ const Url =`users/${userId}`
           </VStack>
         </HStack>
         <HStack>
-          <Box>
+          {/* <Box>
             <Button
               fontSize={"14px"}
               fontWeight={"500"}
@@ -223,7 +223,7 @@ const Url =`users/${userId}`
             >
               Suspend user
             </Button>
-          </Box>
+          </Box> */}
           <Box>
             <Button
               fontSize={"14px"}
@@ -234,7 +234,7 @@ const Url =`users/${userId}`
               borderColor={"#FF4834"}
               onClick={DeleteonopenModalOpen}
             >
-              Delete account
+              Suspend user
             </Button>
           </Box>
         </HStack>

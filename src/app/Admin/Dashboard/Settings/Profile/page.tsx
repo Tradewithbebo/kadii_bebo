@@ -90,9 +90,9 @@ export default function Page() {
               oldpassword: "",
               password: "",
               confirmPassword: "",
-              email: "",
+              // email: "",
             }}
-            validationSchema={PersonalDetailsSchema}
+            // validationSchema={PersonalDetailsSchema}
             onSubmit={handleSubmit}
           >
             {({ errors, touched, isValid, dirty }) => (
@@ -153,7 +153,7 @@ export default function Page() {
                     </FormControl>
                   </GridItem>
                   <GridItem colSpan={1} width={"90%"} mb={"40px"}>
-                    <FormControl isInvalid={!!errors.email && touched.email}>
+                    {/* <FormControl isInvalid={!!errors.email && touched.email}> */}
                       <FormLabel fontSize={"16px"} fontWeight={"600"}>
                         Email
                       </FormLabel>
@@ -164,8 +164,8 @@ export default function Page() {
                         placeholder="Enter your email"
                         disabled={!isEditing}
                       />
-                      <FormErrorMessage>{errors.email}</FormErrorMessage>
-                    </FormControl>
+                      {/* <FormErrorMessage>{errors.email}</FormErrorMessage> */}
+                    {/* </FormControl> */}
                   </GridItem>
                   <GridItem colSpan={1} mb={"24px"}>
                     <Text fontSize={"16px"} fontWeight={"700"}>

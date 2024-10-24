@@ -322,6 +322,7 @@ export default function SendMoney({
                   fontWeight="600"
                   color="#021D17"
                   h={['50px','50px','44px']}
+                  isLoading={loading}
                 >
                   I have paid
                 </Button>

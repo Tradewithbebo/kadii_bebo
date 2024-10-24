@@ -58,7 +58,7 @@ const handleProceed = async (values: any) => {
       if (res && res.data) {
       //  console.log( res.data);
         
-        Router.push("/createAccount/Login");
+        Router.push("/");
       }
     } catch (err: any) {
       setLoading(false);

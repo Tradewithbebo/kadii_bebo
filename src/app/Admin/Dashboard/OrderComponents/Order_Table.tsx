@@ -157,9 +157,9 @@ export default function Transaction_Table() {
     .filter(
       (item: any) =>
         ontapBuy_sell === "Sell"
-          ? item.Transaction_type.toLowerCase() === "sell" // Show only SELL transactions
+          ? item.Transaction_type === "SELL" // Show only SELL transactions
           : ontapBuy_sell === "Buy"
-          ? item.Transaction_type.toLowerCase() === "buy" // Show only BUY transactions
+          ? item.Transaction_type === "BUY" // Show only BUY transactions
           : true // Show all if no specific filter is selected
     );
   // console.log("Filtered data:", data);
@@ -175,7 +175,7 @@ export default function Transaction_Table() {
     // console.log("time", timeInDays);
 
     return {
-      Status: status.isPaid === false ? "Incomplete" : "Completed",
+      Status: status.status,
       Transaction_type: status.type,
       custo_Name: status.bank?.accountName, // Safely access accountName
 
@@ -199,9 +199,9 @@ export default function Transaction_Table() {
   .filter(
     (item: any) =>
       ontapBuy_sell === "Sell"
-        ? item.Transaction_type.toLowerCase() === "sell" // Show only SELL transactions
+        ? item.Transaction_type === "SELL" // Show only SELL transactions
         : ontapBuy_sell === "Buy"
-        ? item.Transaction_type.toLowerCase() === "buy" // Show only BUY transactions
+        ? item.Transaction_type === "BUY" // Show only BUY transactions
         : true // Show all if no specific filter is selected
   );
 // console.log("Filtered data:", data);

@@ -37,7 +37,7 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
-//  const {setcurrency,currency} = useCryptoContext();
+ const {setSelectedsellNetwork} = useCryptoContext();
 
   const [step, setStep] = useState(1);
 // const handleclick=()=>{
@@ -64,13 +64,15 @@ const Backward = () => {
               position={"absolute"}
               mt={["45px", "40px"]}
               ml={["15px", "10px"]}
-              display={step === 1 ? "none" : "block"}
+              display={step === 1 || step === 7?"none" : "block"}
             >
               <IoIosArrowBack size={"20px"} />
             </Box>
             <DrawerCloseButton
               onClick={() => {
-                step === 7 && setStep(1);
+                setStep(1);
+                setSelectedsellNetwork(null)
+                
               }}
             />
           </HStack>

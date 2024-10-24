@@ -26,6 +26,9 @@ import {
   IconButton,
   VStack,
   TableContainer,
+  GridItem,
+  CheckboxGroup,
+  Checkbox,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
@@ -34,6 +37,13 @@ import { FaCheck } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
 import { AxiosAuthPost, AxiosGet, AxiosPost } from "@/app/axios/axios";
 import Link from "next/link";
+import { Form, Formik } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object({
+  status: Yup.array().min(1, 'At least one status must be selected').required('Status is required'),
+  comment: Yup.array().min(1, 'At least one comment must be selected').required('Comment is required'),
+});
 
 interface Transaction {
   [key: string]: any;
@@ -64,6 +74,7 @@ export default function TransactionTable({
     onOpen: onOpenConfirmTrx,
     onClose: onCloseConfirmTrx,
   } = useDisclosure();
+  const { isOpen:isOpenStatus, onOpen:onOpenStatus, onClose:onCloseStatus } = useDisclosure();
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
@@ -146,16 +157,22 @@ export default function TransactionTable({
   };
   let transactionId = Trnx_id;
 
-  const url = `transactions/confirm/${transactionId}`;
-  const handleConffirmation = async () => {
+  const url = "transactions/update-status";
+  const handleConffirmation1 =async  ()=>{
+    onClose();
+    onOpenStatus()
+  }
+  const [selectedStatusValues, setSelectedStatusValues] = useState<string[]>([]);
+  const [selectedCommentValues, setSelectedCommentValues] = useState<string[]>([]);
+  const handleConffirmation = async (values:any) => {
     try {
       setloading(true);
-      const res = await AxiosAuthPost(url, {});
+      const res = await AxiosAuthPost(url, values);
       console.log("response", res);
       if (res) {
         setloading(false);
         onOpenConfirmTrx();
-        onClose();
+        onCloseStatus();
       }
     } catch (err: any) {
       setloading(false);
@@ -367,7 +384,7 @@ export default function TransactionTable({
       </TableContainer>
 
       {/* Modal for Transaction Details */}
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
+      <Modal isOpen={isOpen} onClose={onClose} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Transaction Details</ModalHeader>
@@ -422,7 +439,7 @@ export default function TransactionTable({
             </Button>
             <Button
               colorScheme="green"
-              onClick={() => handleConffirmation()}
+              onClick={() => handleConffirmation1()}
               isLoading={loading}
             >
               Confirm Transaction
@@ -468,6 +485,82 @@ export default function TransactionTable({
               Done
             </Button>
           </ModalFooter>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={isOpenStatus} onClose={onCloseStatus}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Form Modal</ModalHeader>
+          <ModalCloseButton />
+          <Formik
+          validationSchema={validationSchema}
+            initialValues={{
+              transactionId:String(transactionId),
+              status: [],
+              comment: [],
+            }}
+            onSubmit={(values)=>
+            {  handleConffirmation(values),
+              onClose() // Close modal after submit}
+            
+            }}
+          >
+            {({ setFieldValue , touched,errors,isValid,isSubmitting}) => (
+              <Form>
+                <ModalBody>
+                  {/* Status Checkboxes */}
+                  <GridItem>
+                    <CheckboxGroup
+                      onChange={(values: string[]) => {
+                        setSelectedStatusValues(values);
+                        setFieldValue('status', values);
+                      }}
+                      value={selectedStatusValues}
+                    >
+                      <VStack spacing={4} align="start">
+                        <Checkbox colorScheme="green" value="PENDING">PENDING</Checkbox>
+                        <Checkbox colorScheme="green" value="COMPLETED">COMPLETED</Checkbox>
+                        <Checkbox colorScheme="green" value="FAILED">FAILED</Checkbox>
+                      </VStack>
+                    </CheckboxGroup>
+                    {touched.status && errors.status && (
+                      <Text color="red.500" fontSize="sm">{errors.status}</Text>
+                    )}
+                  </GridItem>
+
+                  {/* Comment Checkboxes */}
+                  <GridItem mt={4}>
+                    <CheckboxGroup
+                      onChange={(values: string[]) => {
+                        setSelectedCommentValues(values);
+                        setFieldValue('comment', values);
+                      }}
+                      value={selectedCommentValues}
+                    >
+                      <VStack spacing={4} align="start">
+                        <Checkbox colorScheme="red" value="invalid details">invalid details</Checkbox>
+                        <Checkbox colorScheme="red" value="wrong wallet address">wrong wallet address</Checkbox>
+                        <Checkbox colorScheme="red" value="invalid Bank details">invalid Bank details</Checkbox>
+                        <Checkbox colorScheme="red" value="transaction confirmed">transaction confirmed</Checkbox>
+                      </VStack>
+                    </CheckboxGroup>
+                     {/* Error Message for Comment */}
+                     {touched.comment && errors.comment && (
+                      <Text color="red.500" fontSize="sm">{errors.comment}</Text>
+                    )}
+                  </GridItem>
+                </ModalBody>
+
+                <ModalFooter>
+                  <Button colorScheme="blue" mr={3} type="submit"   isDisabled={!isValid || isSubmitting}
+                  isLoading={loading || isSubmitting}>
+                    Submit
+                  </Button>
+                  <Button onClick={onCloseStatus}>Cancel</Button>
+                </ModalFooter>
+              </Form>
+            )}
+          </Formik>
         </ModalContent>
       </Modal>
     </>

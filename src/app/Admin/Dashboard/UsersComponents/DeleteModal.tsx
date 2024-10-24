@@ -22,6 +22,7 @@ import {
 import { useAdminContext } from "../../Admincontext";
 import { AxiosDelete } from "@/app/axios/axios";
 import { useRouter } from 'next/navigation';
+import SusPend from '../AdminUsersComponents/Suspenmodal';
 
 interface DeleteUserProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
   const router = useRouter();
   const {  usersId, setUsersId } = useAdminContext();
   const id = usersId;
-  const url = `users/admin/${id}`;
+  const url = `users/suspend/${id}`;
 
 
   const initialValues = {
@@ -49,13 +50,13 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
       const response = await AxiosDelete(url);
       if (response) {
         toast({
-          title: "User deleted.",
+          title: "User suspended.",
           description: "The user has been successfully deleted.",
           status: "success",
           duration: 5000,
           isClosable: true,
         });
-        router.push('/users');
+        router.push('/Admin/Dashboard/users');
         // resetForm();
         onClose();
       }
@@ -83,7 +84,7 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
           <HStack>
             <Box pt="14px" pb="16px" pl="24px">
               <Text fontSize="16px" fontWeight="700">
-                Reason for Delete
+                Reason for suspension
               </Text>
             </Box>
             <Box>
@@ -95,9 +96,13 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
               {({ values, isSubmitting }) => (
                 <Form>
                   <SimpleGrid w="full" gap="16px" px="24px" pb="24px">
-                    <GridItem>
-                      <VStack spacing={4} align="start">
-                        <Field
+                  <GridItem display={'flex'} justifyContent={'center'} width={'full'}>
+                    <Text textAlign={'center'} w={'70%'}>
+                        Are you sure you want to SusPend this User
+                        
+                      </Text>
+                      {/* <VStack spacing={4} align="start"> */}
+                        {/* <Field
                           as={Checkbox}
                           name="reasons"
                           value="Illegal transaction suspect"
@@ -136,9 +141,9 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
                           colorScheme="green"
                         >
                           Security breach
-                        </Field>
-                      </VStack>
-                    </GridItem>
+                        </Field>*/}
+                      {/* </VStack> */}
+                    </GridItem> 
 
                     <GridItem w="full" mt="16px">
                       <Button
@@ -148,10 +153,10 @@ export default function DeleteUser({ isOpen, onClose }: DeleteUserProps) {
                         bg="#FF4834"
                         type="submit"
                         color="white"
-                        isDisabled={values.reasons.length === 0 || isSubmitting}
+                        // isDisabled={values.reasons.length === 0 || isSubmitting}
                         isLoading={isSubmitting}
                       >
-                        Delete user
+                        SusPend user
                       </Button>
                     </GridItem>
                     <GridItem w="full">

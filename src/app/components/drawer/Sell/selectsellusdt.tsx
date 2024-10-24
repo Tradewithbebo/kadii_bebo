@@ -70,35 +70,35 @@ export default function SelectUSDT({
     setsellvalueusdt(values.USDT)
     setStep(4);
   };
-  const url = "wallet/assets"; // API URL
+const url = "wallet/assets";
   const [errorMessage, setErrorMessage] = useState("");
   const getUpdatedPrice = async (
-    networkName: string,
+    // networkName: string,
     retryCount: number = 0
-  ): Promise<void> => {
-    // const maxRetries = 10; // Set maximum number of retries
-    // const retryInterval = 2000; // 2 seconds
-
+  ): Promise<boolean> => {
     try {
       const res = await AxiosGet(url);
-      if (res) {
+      console.log('update',res.data);
+      if (res) { // Check if the request was successful
         const updatedNetwork = res.data.find(
-          (network: any) => network.name === networkName
+          (network: any) => network.name === blockchain
         );
+  
+        // console.log('updatedNetwork',updatedNetwork);
+        // console.log('selectedsellNetwork',selectedsellNetwork);
         if (updatedNetwork && selectedsellNetwork) {
           // Check if the price has changed
-          if (
-            updatedNetwork.current_price !== selectedsellNetwork.current_price
-          ) {
+          if (updatedNetwork.current_price !== selectedsellNetwork.current_price) {
             // Show toast if price has changed
             toast({
               title: "Rate Updated",
               description: `${selectedsellNetwork.name}'s rate is now ${updatedNetwork.current_price}`,
-              status: "info",
+              status: "success",
               duration: 5000,
               isClosable: true,
+              position:"top-right"
             });
-
+  
             // Update sell rate and selected network price
             setsellRate(updatedNetwork.current_price);
             setSelectedsellNetwork((prevNetwork: any) => ({
@@ -106,23 +106,49 @@ export default function SelectUSDT({
               current_price: updatedNetwork.current_price,
             }));
           }
-          return; // Exit after successful update
+          return true; // Return true for a successful update
         }
       }
+      return false; // Return false if no matching network or no update occurred
     } catch (err: any) {
       console.log("Error updating price:", err);
       setErrorMessage("Failed to update rate. Please try again.");
+      return false; // Return false on error
     }
   };
+  
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout | undefined;
+    let intervalId: NodeJS.Timeout | undefined;
+  
+    const fetchData = async () => {
+      if (selectedsellNetwork && selectedsellNetwork.name !== null) {
+        const success = await getUpdatedPrice(selectedsellNetwork.name);
+        
+        if (!success) {
+          // Retry after 2 seconds if the fetch failed
+          timeoutId = setTimeout(fetchData, 2000);
+        }
+      }
+    };
+  
     if (selectedsellNetwork && selectedsellNetwork.name !== null) {
-      const interval = setInterval(() => {
-        getUpdatedPrice(selectedsellNetwork.name);
-      }, 6000);
-
-      return () => clearInterval(interval); // Cleanup the interval
+      fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
+  
+      intervalId = setInterval(() => {
+        fetchData();  // Fetch the updated price every 3 seconds
+      }, 3000);  // Set a more reasonable interval (e.g., 3 seconds)
     }
+  
+    // Cleanup both interval and timeout when component unmounts or when selectedsellNetwork changes
+    return () => {
+      if (intervalId) clearInterval(intervalId); // Cleanup interval
+      if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
+    };
+  
   }, [selectedsellNetwork]);
+  // Re-run when selectedsellNetwork changes
+  
   return (
     <Formik
       initialValues={{

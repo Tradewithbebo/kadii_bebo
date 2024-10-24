@@ -12,6 +12,7 @@ import {
   Flex,
   Text,
   useToast,
+  TableContainer,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { GrStatusGood } from "react-icons/gr";
@@ -68,7 +69,7 @@ export default function TransactionTable({
 
   return (
     <>
-      <Box
+      <TableContainer
         pb={"10px"}
         border="1px"
         borderColor="gray.200"
@@ -76,16 +77,18 @@ export default function TransactionTable({
         borderTopRightRadius={"none"}
         borderTopLeftRadius={"none"}
         borderTop={"none"}
+        w={"full"}  
       >
         <Table>
           <Thead>
             <Tr>
               {headers.map((header: any, index: any) => (
                 <Th
-                  key={index}
-                  color={"#000000"}
-                  fontSize={"10px"}
-                  fontWeight={"700"}
+                key={index}
+                color={"#000000"}
+                fontSize={"12px"}
+                fontWeight={"700"}
+                padding="10px" 
                 >
                   {header}{" "}
                   {header === "KYC Level" && (
@@ -117,19 +120,23 @@ export default function TransactionTable({
                    maxWidth={cellIndex === 2 ? "200px" : "auto"}  // Optional: set a max width
                  >
                    {cellIndex === 1 && value === "Completed" ? (
-                     <Box rounded={"10px"} px={"5px"} bg={"#C7EED5"}>
-                       <HStack gap={"3px"} >
-                         <MdCircle size={"10px"} color="#2F7F37" />
-                         <Text
-                           color="#2F7F37"
-                           fontSize={"12px"}
-                           fontWeight={"500"}
-                          
-                         >
-                           {value}
-                         </Text>
-                       </HStack>
-                     </Box>
+                      <Box
+                      rounded="10px"
+                      px={{ base: "2px", sm: "5px", md: "10px" }}
+                      bg="#DCFCE7"
+                      w={"fit-content"}
+                    >
+                      <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                        <MdCircle size="10px" color="#2F7F37" />
+                        <Text
+                          color="#2F7F37"
+                          fontSize={{ base: "10px", sm: "12px", md: "14px" }}
+                          fontWeight="500"
+                        >
+                          {value}
+                        </Text>
+                      </HStack>
+                    </Box>
                    ) : cellIndex === 0 && value === "Incomplete" ? (
                      <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"} >
                        <HStack gap={"3px"} >
@@ -204,7 +211,7 @@ export default function TransactionTable({
             Next
           </Button>
         </Flex>
-      </Box>
+      </TableContainer>
     </>
   );
 }

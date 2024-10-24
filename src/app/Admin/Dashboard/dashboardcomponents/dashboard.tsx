@@ -100,7 +100,7 @@ export default function Dashboardcomponent() {
       console.log("time", timeInDays);
   
       return {
-        isPaid: status.isPaid === false ? "Incomplete" : "Completed", // Payment status
+        isPaid: status.status, // Payment status
   
         Status: status.type, // Access status type (BUY or SELL)
   

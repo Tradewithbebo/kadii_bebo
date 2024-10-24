@@ -55,7 +55,8 @@ export default function InputReceiverDetails({
     setrefreshName,
     setName,
     Wetrade, 
-    setWetrade
+    setWetrade,
+    networks
   } = useCryptoContext();
   const [Value, setValue] = useState(null);
   const [NetValue, setNetValue] = useState([]);
@@ -108,7 +109,11 @@ export default function InputReceiverDetails({
   setcurrentSymbol(option.symbol);
   setcurrentImage(option.image);
   setcurrentName(option.name);
-  setrefreshName( option.name)
+  // setrefreshName( option.name);
+  const selectedNetwork = networks.find((item:any )=> item.cryptocurrency === option.name);
+  setWetrade(
+    selectedNetwork.network
+  )
 };
 
 

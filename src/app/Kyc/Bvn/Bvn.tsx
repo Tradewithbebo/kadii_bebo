@@ -77,7 +77,7 @@ export default function Bvn() {
         if (res && res.data) {
         //  console.log( res.data);
           
-          Router.push("/createAccount/Login");
+          Router.push("/");
         }
       } catch (err: any) {
         setLoading(false);

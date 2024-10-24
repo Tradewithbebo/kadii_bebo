@@ -13,6 +13,7 @@ import {
   Button,
   Flex,
   useToast,
+  TableContainer,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
@@ -64,14 +65,16 @@ export default function TransactionTable({
   };
 
   return (
-    <Box
-      pb="10px"
-      border="1px"
-      borderColor="gray.200"
-      borderRadius="md"
-      borderTopRadius="none"
-      borderTop="none"
-    >
+    <TableContainer
+    pb={"10px"}
+    border="1px"
+    borderColor="gray.200"
+    borderRadius="md"
+    borderTopRightRadius={"none"}
+    borderTopLeftRadius={"none"}
+    borderTop={"none"}
+    w={"full"}  >
+    
       <Table>
         <Thead>
           <Tr  cursor="pointer"
@@ -79,9 +82,10 @@ export default function TransactionTable({
             {headers.map((header: string, index: number) => (
               <Th
                 key={index}
-                color="#000000"
-                fontSize="10px"
-                fontWeight="700"
+                color={"#000000"}
+                fontSize={"12px"}
+                fontWeight={"700"}
+                padding="10px" 
               >
                 {header}{" "}
                 {header === "KYC Level" && (
@@ -102,6 +106,7 @@ export default function TransactionTable({
                 <Td
                   key={cellIndex}
                   color="#000000"
+                  // key={cellIndex}
                   fontSize="12px"
                   fontWeight="600"
                 >
@@ -175,6 +180,6 @@ export default function TransactionTable({
           Next
         </Button>
       </Flex>
-    </Box>
+    </TableContainer>
   );
 }
