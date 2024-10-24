@@ -121,7 +121,7 @@ const url = "wallet/assets";
     let intervalId: NodeJS.Timeout | undefined;
   
     const fetchData = async () => {
-      if (sellRate !== "") {
+      if (sellRate !== 50) {
         const success = await getUpdatedPrice(sellRate);
         
         if (!success) {
@@ -131,7 +131,7 @@ const url = "wallet/assets";
       }
     };
   
-    if (sellRate  !== "") {
+    if (sellRate  !== 50) {
       fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
   
       intervalId = setInterval(() => {

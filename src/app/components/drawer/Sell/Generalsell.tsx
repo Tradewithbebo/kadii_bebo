@@ -37,7 +37,7 @@ export default function Generalsell({
     onClose: any;
     onOpen:any;
   }) {
- const {setsellRate} = useCryptoContext();
+//  const {setsellRate} = useCryptoContext();
 
   const [step, setStep] = useState(1);
 // const handleclick=()=>{
@@ -71,7 +71,7 @@ const Backward = () => {
             <DrawerCloseButton
               onClick={() => {
                 setStep(1);
-                setsellRate('')
+                // setsellRate(50)
                 
               }}
             />

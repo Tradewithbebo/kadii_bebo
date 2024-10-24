@@ -39,7 +39,7 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   const [bankName, setbankName] = useState('');
   const [accountNumber, setaccountNumber] = useState('');
   const [blockchain, setblockchain] = useState('');
-  const [sellRate, setsellRate] = useState('');
+  const [sellRate, setsellRate] = useState(50);
   const [sellimage, setsellimage] = useState('');
   const [sellsymbol, setsellsymbol] = useState('');
   // const [selectedSellNetwork, setSelectedSellNetwork] = useState<Network>();
