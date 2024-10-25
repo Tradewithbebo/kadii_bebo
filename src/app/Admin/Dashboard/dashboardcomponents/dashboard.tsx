@@ -35,6 +35,13 @@ export default function Dashboardcomponent() {
     setsearchtr,
     transactmnth,
     settransactionmnth,
+    ontapBuy_sell,
+    setontapBuy_sell,
+    Loadingtr,
+    transactionBUY,
+        setTransactionBUY,
+        transactionSELL,
+        setTransactionSELL,
   } = useAdminContext();
   const [convertedDate, setconvertedDate] = useState("");
   // Transform data into an array of objects
@@ -88,49 +95,240 @@ export default function Dashboardcomponent() {
     setbuy_sell_all_state(condition);
   };
   
-  const data = transaction
-    .map((status: any) => {
-      const createdAt = new Date(status.createdAt);
-      const today = new Date();
-  
-      // Calculate days difference
-      const timeInDays = Math.floor(
-        (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
-      );
-      console.log("time", timeInDays);
-  
-      return {
-        isPaid: status.status, // Payment status
-  
-        Status: status.type, // Access status type (BUY or SELL)
-  
-        custo_info: status.bank?.accountName, // Safely access accountName if it exists
-  
-        Asset_received: formatCurrency(status.amountNaira), // Format currency for asset received
-  
-         amountSent : `${status.amountBlockchain} ${capitalize(status.blockchain)}`, // Format currency for amount sent
-  
-        Date: formatDate(status.createdAt), // Format the createdAt date
+  const dataSell = transactionSELL
+  .map((status: any) => {
+    const createdAt = new Date(status.createdAt);
+    const today = new Date();
 
-  
-        timeInDays, // Include the calculated time in days for filtering
-      };
-    })
-    .filter((item: any) =>
-      buy_sell_all_state === "ALL"
-        ? true // Show all transactions if "ALL" is selected
-        : buy_sell_all_state === "SELL"
-        ? item.Status === "sell" // Show only SELL transactions
-        : buy_sell_all_state === "BUY"
-        ? item.Status === "buy" // Show only BUY transactions
-        : item.Status // Default case, fallback to showing all
+    // Calculate days difference
+    const timeInDays = Math.floor(
+      (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
     );
+    // console.log("time", timeInDays);
+
+    return {
+      Status: status.status,
+      Transaction_type: status.type,
+      custo_Name: status.bank?.accountName, // Safely access accountName
+
+      Asset_received: `${status.amountBlockchain} ${
+        status.blockchain.toUpperCase() || ""
+      }`, // Format currency for asset received
+      Amount_to_send: formatCurrency(status.amountNaira), // Format currency for amount sent
+      Date: formatDate(status.createdAt), // Format date and time
+      Proof_of_payment: status.paymentReferenceUrl,
+      // transaction_id:status._id,
+      // timeInDays, // Add timeInDays to the object for filtering
+      // custo_infos: status.bank?.accountNumber, // Safely access accountName
+      // custo_infosb: status.bank?.bankName, // Safely access accountName
+      
+    };
+  })
+  // First filter based on transactmnth (days difference)
+  .filter((item: any) =>
+    transactmnth === "" ? item : item.timeInDays <= transactmnth
+  )
+
+  // Then filter based on ontapBuy_sell
+ 
+// console.log("Filtered data:", data);
+const dataALL = transaction
+  .map((status: any) => {
+    const createdAt = new Date(status.createdAt);
+    const today = new Date();
+
+    // Calculate days difference
+    const timeInDays = Math.floor(
+      (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
+    );
+    // console.log("time", timeInDays);
+
+    return {
+      Status: status.status,
+      Transaction_type: status.type,
+      custo_Name: status.bank?.accountName, // Safely access accountName
+
+      Asset_received: `${status.amountBlockchain} ${
+        status.blockchain.toUpperCase() || ""
+      }`, // Format currency for asset received
+      Amount_to_send: formatCurrency(status.amountNaira), // Format currency for amount sent
+      Date: formatDate(status.createdAt), // Format date and time
+      Proof_of_payment: status.paymentReferenceUrl,
+      // transaction_id:status._id,
+      // timeInDays, // Add timeInDays to the object for filtering
+      // custo_infos: status.bank?.accountNumber, // Safely access accountName
+      // custo_infosb: status.bank?.bankName, // Safely access accountName
+      
+    };
+  })
+  // First filter based on transactmnth (days difference)
+  .filter((item: any) =>
+    transactmnth === "" ? item : item.timeInDays <= transactmnth
+  )
+
+  // Then filter based on ontapBuy_sell
   
+// console.log("Filtered data:", data);
+const dataBuy = transactionBUY
+.map((status: any) => {
+  const createdAt = new Date(status.createdAt);
+  const today = new Date();
 
-
-  const bank = transaction.map(
-    (status: any) => `${status.bank?.accountNumber} | ${status.bank?.bankName}`
+  // Calculate days difference
+  const timeInDays = Math.floor(
+    (today.getTime() - createdAt.getTime()) / (1000 * 60 * 60 * 24)
   );
+  // console.log("time", timeInDays);
+
+  return {
+    Status: status.status,
+    Transaction_type: status.type,
+    custo_Name: status.bank?.accountName, // Safely access accountName
+
+    Asset_to_send: `${status.amountBlockchain} ${
+      status.blockchain.toUpperCase() || ""
+    }`, // Format currency for asset received
+    Amount_Recieved: formatCurrency(status.amountNaira), // Format currency for amount sent
+    Date: formatDate(status.createdAt), // Format date and time
+    Proof_of_payment: status.paymentReferenceUrl,
+    // transaction_id:status._id,
+    // timeInDays, // Add timeInDays to the object for filtering
+    // custo_infos: status.bank?.accountNumber, // Safely access accountName
+    // custo_infosb: status.bank?.bankName, // Safely access accountName
+  };
+})
+// First filter based on transactmnth (days difference)
+.filter((item: any) =>
+  transactmnth === "" ? item : item.timeInDays <= transactmnth
+)
+// Then filter based on ontapBuy_sell
+
+// console.log("Filtered data:", data);
+let data = buy_sell_all_state === "SELL" ? dataSell :buy_sell_all_state === "BUY" ? dataBuy:dataALL
+
+
+const bankSELL = transactionSELL.map((status: any) => {
+// console.log(status); // Log the current status
+
+const walletAddress = status.walletAddress || "No Wallet Address";
+const bank = status.bank || {}; // Default to an empty object if bank is null/undefined
+const BankNo = bank.accountNumber || "No Account Number"; // Handle null/undefined accountNumber
+const bankName = bank.bankName || "No Bank Name"; // Handle null/undefined bankName
+
+const displayWalletAddress =
+  walletAddress.length > 5
+    ? `${walletAddress.slice(0, 5)}...`
+    : walletAddress;
+
+return {
+  display: `${
+    buy_sell_all_state === "SELL"
+      ? BankNo
+      : buy_sell_all_state === "BUY"
+      ? displayWalletAddress
+      : "No Wallet Address"
+  } | ${buy_sell_all_state === "SELL" ? bankName : "address"}`,
+  fullWalletAddress:
+  buy_sell_all_state === "SELL"
+      ? BankNo
+      : buy_sell_all_state === "BUY"
+      ? walletAddress
+      : "",
+};
+});
+const bankBUY = transactionBUY.map((status: any) => {
+// console.log(status); // Log the current status
+
+const walletAddress = status.walletAddress || "No Wallet Address";
+const bank = status.bank || {}; // Default to an empty object if bank is null/undefined
+const BankNo = bank.accountNumber || "No Account Number"; // Handle null/undefined accountNumber
+const bankName = bank.bankName || "No Bank Name"; // Handle null/undefined bankName
+
+const displayWalletAddress =
+  walletAddress.length > 5
+    ? `${walletAddress.slice(0, 5)}...`
+    : walletAddress;
+
+return {
+  display: `${
+    buy_sell_all_state === "SELL"
+      ? BankNo
+      : buy_sell_all_state === "BUY"
+      ? displayWalletAddress
+      : "No Wallet Address"
+  } | ${buy_sell_all_state === "SELL" ? bankName : "address"}`,
+  fullWalletAddress:
+  buy_sell_all_state === "SELL"
+      ? BankNo
+      : buy_sell_all_state === "BUY"
+      ? walletAddress
+      : "",
+};
+});
+const bankALL = transaction.map((status: any) => {
+  // console.log(status); // Log the current status
+  
+  const walletAddress = status.walletAddress || "No Wallet Address";
+  const bank = status.bank || {}; // Default to an empty object if bank is null/undefined
+  const BankNo = bank.accountNumber || "No Account Number"; // Handle null/undefined accountNumber
+  const bankName = bank.bankName || "No Bank Name"; // Handle null/undefined bankName
+  
+  const displayWalletAddress =
+    walletAddress.length > 5
+      ? `${walletAddress.slice(0, 5)}...`
+      : walletAddress;
+  
+  return {
+    display: `${
+      status.type === "SELL"
+        ? BankNo
+        : status.type === "BUY"
+        ? displayWalletAddress
+        : "No Wallet Address"
+    } | ${ status.type === "SELL" ? bankName : "address"}`,
+    fullWalletAddress:
+    status.type=== "SELL"
+        ? BankNo
+        :  status.type === "BUY"
+        ? walletAddress
+        : "",
+  };
+  });
+
+let bank = buy_sell_all_state === "SELL" ? bankSELL : buy_sell_all_state === "BUY" ? bankBUY:bankALL
+
+// const filteredData = data.filter((row: any) => {
+//   const matchesSearch = Object.values(row).some((value) =>
+//     String(value).toLowerCase().includes(String(searchtr).toLowerCase())
+//   );
+//   return matchesSearch;
+// });
+const headerss = [
+  "Status",
+  "Order Type",
+  "Customers’ Info",
+  " Amount Trnx",
+  "Blockchain Trnx",
+  "Date",
+];
+
+const headers_For_Sell = [
+  "Status",
+  "TXN TYPE",
+  "CUST INFO ",
+  "ASSET RCVD",
+  "AMT TO SEND",
+  "DATE",
+];
+const headers_For_Buy = [
+  "Status",
+  "TXN TYPE",
+  "CUST INFO ",
+  "ASSET TO SEND",
+  "AMT RCVD",
+  "DATE",
+];
+let headers = ontapBuy_sell === "Sell" ? headers_For_Sell :ontapBuy_sell === "Buy" ?  headers_For_Buy :headerss
 
   const filteredData = data.filter((row: any) => {
     const matchesSearch = Object.values(row).some((value) =>
@@ -140,15 +338,7 @@ export default function Dashboardcomponent() {
     return matchesSearch;
   });
 
-  const headers = [
-    "Status",
-    "Order Type",
-    "Customers’ Info",
-    " Amount Trnx",
-    "Blockchain Trnx",
-    "Date",
-  ];
-
+  
   const datas = [
     {
       // icon: <GrStatusGood size={'20px'}/>,

@@ -35,14 +35,14 @@ import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
 import { MdCircle, MdOpenInNew } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { Fade } from "react-awesome-reveal";
-import { AxiosAuthPost, AxiosGet, AxiosPost } from "@/app/axios/axios";
+import { AxiosAuthPatch, AxiosAuthPatchfile, AxiosAuthPost, AxiosGet, AxiosPost } from "@/app/axios/axios";
 import Link from "next/link";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
-  status: Yup.array().min(1, 'At least one status must be selected').required('Status is required'),
-  comment: Yup.array().min(1, 'At least one comment must be selected').required('Comment is required'),
+  status: Yup.string().required('Status is required'), // Expecting a single string
+  comment: Yup.string().required('Comment is required'), // Expecting a single string
 });
 
 interface Transaction {
@@ -81,7 +81,18 @@ export default function TransactionTable({
   const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const [Trnx_id, setTrnx_id] = useState("");
-
+  const getStatusStyle = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'buy':
+        return { bg: "#C7EED5", color: "#2F7F37" };
+      case 'in-progress':
+        return { bg: "#FCF2C1", color: "#B59803" };
+      case 'sell':
+        return { bg: "#FF48341A", color: "#FF4834" };
+      default:
+        return { bg: "transparent", color: "#000000" };
+    }
+  };
   const handleCopy = (text: string) => {
     navigator.clipboard
       .writeText(text)
@@ -162,12 +173,12 @@ export default function TransactionTable({
     onClose();
     onOpenStatus()
   }
-  const [selectedStatusValues, setSelectedStatusValues] = useState<string[]>([]);
-  const [selectedCommentValues, setSelectedCommentValues] = useState<string[]>([]);
+  const [selectedStatusValue, setSelectedStatusValue] = useState<string>('');
+  const [selectedCommentValue, setSelectedCommentValue] = useState<string>('');
   const handleConffirmation = async (values:any) => {
     try {
       setloading(true);
-      const res = await AxiosAuthPost(url, values);
+      const res = await AxiosAuthPatch(url, values);
       console.log("response", res);
       if (res) {
         setloading(false);
@@ -264,7 +275,7 @@ export default function TransactionTable({
                   overflow="hidden"  // Prevent text from overflowing
                   textOverflow="ellipsis" // Add ellipsis if text overflow
                   >
-                    {key === "Status" && value === "Completed" ? (
+                    {key === "Status" && value === "COMPLETED" ? (
                       <Box
                         rounded="10px"
                         px={{ base: "2px", sm: "5px", md: "10px" }}
@@ -282,30 +293,26 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : key === "Status" && value === "Incomplete" ? (
-                      <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"}>
-                        <HStack gap={"3px"}>
-                          <MdCircle size={"10px"} color="#FF4834" />
-                          <Text color="#FF4834" fontSize={"12px"}>
-                            {value}
-                          </Text>
-                        </HStack>
-                      </Box>
-                    ) : key === "Status" && value === "completed" ? (
-                      <Box rounded="10px"  py={"2px" } px={{ base: "2px", sm: "5px", md: "10px" }} bg="#DCFCE7" w={'fit-content'}>
+                    ) : key === "Status" && value === "FAILED" ? (
+                      <Box
+                      rounded="10px"
+                      px={{ base: "2px", sm: "5px", md: "10px" }}
+                      py={"2px" }
+                      bg="#FF48341A"
+                      w={'fit-content'}
+                    >
                       <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
-                        <MdCircle size="10px" color="#2F7F37" />
+                        <MdCircle size="10px" color="#FF4834" />
                         <Text
-                          color="#2F7F37"
-                          fontSize={"12px"}
-                          fontWeight="500"
+                          color="#FF4834"
+                          fontSize={ "12px"}
                         >
                           {value}
                         </Text>
                       </HStack>
                     </Box>
-                    
-                    ) : key === "Status" && value === "pending" ? (
+                    ) 
+                     : key === "Status" && value === "PENDING" ? (
                       <Box
                         rounded="10px"
                         px={{ base: "2px", sm: "5px", md: "10px" }}
@@ -323,7 +330,25 @@ export default function TransactionTable({
                           </Text>
                         </HStack>
                       </Box>
-                    ) : key === "Proof_of_payment" ? null : key ===
+                    ) :key === "Transaction_type" ? (
+                      <Box
+                        rounded="10px"
+                        px="5px"
+                        bg={getStatusStyle(value as string).bg}
+                        display="inline-block"
+                      >
+                        <HStack gap="3px">
+                          <MdCircle size="10px" color={getStatusStyle(value as string).color} />
+                          <Text
+                            color={getStatusStyle(value as string).color}
+                            fontSize="12px"
+                            fontWeight="500"
+                          >
+                            {value}
+                          </Text>
+                        </HStack>
+                      </Box>
+                     ): key === "Proof_of_payment" ? null : key ===
                       "timeInDays" ? null : key === "transaction_id" ? null : (
                       value
                     )}
@@ -430,13 +455,13 @@ export default function TransactionTable({
             )}
           </ModalBody>
           <ModalFooter>
-            <Button
+            {/* <Button
               colorScheme="red"
               mr={3}
               onClick={() => alert("Transaction Declined!")}
             >
               Decline Transaction
-            </Button>
+            </Button> */}
             <Button
               colorScheme="green"
               onClick={() => handleConffirmation1()}
@@ -487,80 +512,133 @@ export default function TransactionTable({
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Modal isOpen={isOpenStatus} onClose={onCloseStatus}>
+      <Modal isOpen={isOpenStatus} onClose={onCloseStatus} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Form Modal</ModalHeader>
+          {/* <ModalHeader>CONFIRM ORDER</ModalHeader> */}
           <ModalCloseButton />
           <Formik
-          validationSchema={validationSchema}
-            initialValues={{
-              transactionId:String(transactionId),
-              status: [],
-              comment: [],
-            }}
-            onSubmit={(values)=>
-            {  handleConffirmation(values),
-              onClose() // Close modal after submit}
-            
-            }}
-          >
-            {({ setFieldValue , touched,errors,isValid,isSubmitting}) => (
-              <Form>
-                <ModalBody>
-                  {/* Status Checkboxes */}
-                  <GridItem>
-                    <CheckboxGroup
-                      onChange={(values: string[]) => {
-                        setSelectedStatusValues(values);
-                        setFieldValue('status', values);
-                      }}
-                      value={selectedStatusValues}
-                    >
-                      <VStack spacing={4} align="start">
-                        <Checkbox colorScheme="green" value="PENDING">PENDING</Checkbox>
-                        <Checkbox colorScheme="green" value="COMPLETED">COMPLETED</Checkbox>
-                        <Checkbox colorScheme="green" value="FAILED">FAILED</Checkbox>
-                      </VStack>
-                    </CheckboxGroup>
-                    {touched.status && errors.status && (
-                      <Text color="red.500" fontSize="sm">{errors.status}</Text>
-                    )}
-                  </GridItem>
+      validationSchema={validationSchema}
+      initialValues={{
+        transactionId: String(transactionId),
+        status: '',
+        comment: '',
+      }}
+      onSubmit={(values) => {
+        handleConffirmation(values);
+        onClose(); // Close modal after submit
+      }}
+    >
+      {({ setFieldValue, touched, errors, isValid, isSubmitting }) => (
+        <Form>
+          <ModalBody>
+            {/* Status Checkboxes */}
+            <GridItem>
+              <VStack spacing={4} align="start">
+                <ModalHeader>CHANGE ORDER STATUS</ModalHeader>
+                <Checkbox 
+                  colorScheme="green" 
+                  isChecked={selectedStatusValue === "PENDING"}
+                  onChange={() => {
+                    const value = "PENDING";
+                    setSelectedStatusValue(value);
+                    setFieldValue('status', value);
+                  }}
+                >
+                  PENDING
+                </Checkbox>
+                <Checkbox 
+                  colorScheme="green" 
+                  isChecked={selectedStatusValue === "COMPLETED"}
+                  onChange={() => {
+                    const value = "COMPLETED";
+                    setSelectedStatusValue(value);
+                    setFieldValue('status', value);
+                  }}
+                >
+                  COMPLETED
+                </Checkbox>
+                <Checkbox 
+                  colorScheme="green" 
+                  isChecked={selectedStatusValue === "FAILED"}
+                  onChange={() => {
+                    const value = "FAILED";
+                    setSelectedStatusValue(value);
+                    setFieldValue('status', value);
+                  }}
+                >
+                  FAILED
+                </Checkbox>
+              </VStack>
+              {touched.status && errors.status && (
+                <Text color="red.500" fontSize="sm">{errors.status}</Text>
+              )}
+            </GridItem>
 
-                  {/* Comment Checkboxes */}
-                  <GridItem mt={4}>
-                    <CheckboxGroup
-                      onChange={(values: string[]) => {
-                        setSelectedCommentValues(values);
-                        setFieldValue('comment', values);
-                      }}
-                      value={selectedCommentValues}
-                    >
-                      <VStack spacing={4} align="start">
-                        <Checkbox colorScheme="red" value="invalid details">invalid details</Checkbox>
-                        <Checkbox colorScheme="red" value="wrong wallet address">wrong wallet address</Checkbox>
-                        <Checkbox colorScheme="red" value="invalid Bank details">invalid Bank details</Checkbox>
-                        <Checkbox colorScheme="red" value="transaction confirmed">transaction confirmed</Checkbox>
-                      </VStack>
-                    </CheckboxGroup>
-                     {/* Error Message for Comment */}
-                     {touched.comment && errors.comment && (
-                      <Text color="red.500" fontSize="sm">{errors.comment}</Text>
-                    )}
-                  </GridItem>
-                </ModalBody>
+            {/* Comment Checkboxes */}
+            <GridItem mt={4}>
+              <VStack spacing={4} align="start">
+                <ModalHeader>REASON FOR ORDER STATUS</ModalHeader>
+                <Checkbox 
+                  colorScheme="red" 
+                  isChecked={selectedCommentValue === "invalid details"}
+                  onChange={() => {
+                    const value = "invalid details";
+                    setSelectedCommentValue(value);
+                    setFieldValue('comment', value);
+                  }}
+                >
+                  Invalid Details
+                </Checkbox>
+                <Checkbox 
+                  colorScheme="red" 
+                  isChecked={selectedCommentValue === "wrong wallet address"}
+                  onChange={() => {
+                    const value = "wrong wallet address";
+                    setSelectedCommentValue(value);
+                    setFieldValue('comment', value);
+                  }}
+                >
+                  Wrong Wallet Address
+                </Checkbox>
+                <Checkbox 
+                  colorScheme="red" 
+                  isChecked={selectedCommentValue === "invalid Bank details"}
+                  onChange={() => {
+                    const value = "invalid Bank details";
+                    setSelectedCommentValue(value);
+                    setFieldValue('comment', value);
+                  }}
+                >
+                  Invalid Bank Details
+                </Checkbox>
+                <Checkbox 
+                  colorScheme="red" 
+                  isChecked={selectedCommentValue === "transaction confirmed"}
+                  onChange={() => {
+                    const value = "transaction confirmed";
+                    setSelectedCommentValue(value);
+                    setFieldValue('comment', value);
+                  }}
+                >
+                  Transaction Confirmed
+                </Checkbox>
+              </VStack>
+              {touched.comment && errors.comment && (
+                <Text color="red.500" fontSize="sm">{errors.comment}</Text>
+              )}
+            </GridItem>
+          </ModalBody>
 
-                <ModalFooter>
-                  <Button colorScheme="blue" mr={3} type="submit"   isDisabled={!isValid || isSubmitting}
-                  isLoading={loading || isSubmitting}>
-                    Submit
-                  </Button>
-                  <Button onClick={onCloseStatus}>Cancel</Button>
-                </ModalFooter>
-              </Form>
-            )}
-          </Formik>
+          <ModalFooter>
+            <Button colorScheme="green" mr={3} type="submit" isDisabled={!isValid || isSubmitting} isLoading={loading || isSubmitting}>
+              Submit
+            </Button>
+            <Button onClick={onCloseStatus}>Cancel</Button>
+          </ModalFooter>
+        </Form>
+      )}
+    </Formik>
         </ModalContent>
       </Modal>
     </>

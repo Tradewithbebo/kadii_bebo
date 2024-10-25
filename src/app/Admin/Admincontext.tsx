@@ -21,10 +21,7 @@ interface User {
 }
 
 interface Transaction {
-  status: string;
-  amountNaira: number;
-  amountBlockchain: number;
-  createdAt: string;
+ [key:string]:any
 }
 
 // Helper function for error handling
@@ -51,6 +48,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   const [Status, setStatus] = useState<string[]>([]);
   const [custo_info, setcusto_info] = useState<any[]>([]);
   const [transaction, setTransaction] = useState<Transaction[]>([]);
+  const [transactionBUY, setTransactionBUY] = useState<Transaction[]>([]);
+  const [transactionSELL, setTransactionSELL] = useState<Transaction[]>([]);
   const [transactionw, setTransactionw] = useState<Transaction[]>([]);
   const [searchtr, setsearchtr] = useState<Transaction[]>([]);
   const [searchUser, setsearchUser] = useState<User[]>([]);
@@ -67,6 +66,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   // URLs
   const url = "wallet/assets";
   const url2 = "transactions";
+  const url5 = "transactions?type=BUY";
+  const url6 = "transactions?type=SELL";
   const url3 = "users";
   const url4 = "admin";
 
@@ -79,27 +80,44 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
       if (res) {
         const fetchedTransactions = res.data.items;
         console.log('fetchedTransactions',fetchedTransactions);
-        
-        const newDates: string[] = [];
-        const newAmountSent: number[] = [];
-        const newAssetReceived: number[] = [];
-        const newStatus: string[] = [];
-        const newCustoInfo: string[] = [];
-
-        fetchedTransactions.forEach((item: any) => {
-          newAmountSent.push(item.amountNaira);
-          newDates.push(item.createdAt);
-          newAssetReceived.push(item.amountNaira);
-          newStatus.push(item.type);
-          newCustoInfo.push(item.bank.accountName);
-        });
-
         setTransaction(fetchedTransactions);
-        // setAmount_sent(newAmountSent);
-        // setDates(newDates);
-        // setAsset_received(newAssetReceived);
-        // setStatus(newStatus);
-        // setcusto_info(newCustoInfo);
+        console.log('fetchedTransactions',transaction);
+      } else {
+        console.error("No data found");
+      }
+    } catch (err: any) {
+      setLoadingtr(false);
+      handleNetworkError(err, setErrorMessage);
+    }
+  };
+  const gettransactionBUY = async () => {
+    setLoadingtr(true);
+    try {
+      const res = await AxiosGet(url5);
+      setLoadingtr(false);
+      if (res) {
+        const fetchedTransactions = res.data.items;
+        console.log('fetchedTransactions',fetchedTransactions);
+        setTransactionBUY(fetchedTransactions);
+        console.log('fetchedTransactions',transaction);
+      } else {
+        console.error("No data found");
+      }
+    } catch (err: any) {
+      setLoadingtr(false);
+      handleNetworkError(err, setErrorMessage);
+    }
+  };
+  const gettransactionSELL= async () => {
+    setLoadingtr(true);
+    try {
+      const res = await AxiosGet(url6);
+      setLoadingtr(false);
+      if (res) {
+        const fetchedTransactions = res.data.items;
+        // console.log('fetchedTransactions',fetchedTransactions);
+        setTransactionSELL(fetchedTransactions);
+        // console.log('fetchedTransactions',transaction);
       } else {
         console.error("No data found");
       }
@@ -186,9 +204,11 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
 
   // Effects
   useEffect(() => {
-    console.log("useEffect running on mount...");
+    // console.log("useEffect running on mount...");
     gettransaction(); // Fetch transactions initially
-    console.log("useEffect running on mount...");
+    gettransactionSELL()
+    gettransactionBUY()
+    // console.log("useEffect running on mount...");
   
     const intervalId = setInterval(gettransaction, 120000); // Every 2 minutes
     return () => clearInterval(intervalId);
@@ -225,6 +245,10 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         getnetwork,
         transaction,
         setTransaction,
+        transactionBUY,
+        setTransactionBUY,
+        transactionSELL,
+        setTransactionSELL,
         // Amount_sent,
         Dates,
         Asset_received,

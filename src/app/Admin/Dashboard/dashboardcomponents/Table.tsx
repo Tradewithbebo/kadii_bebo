@@ -32,7 +32,18 @@ export default function TransactionTable({
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const totalPages = Math.ceil(data.length / itemsPerPage);
-
+  const getStatusStyle = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'buy':
+        return { bg: "#C7EED5", color: "#2F7F37" };
+      case 'in-progress':
+        return { bg: "#FCF2C1", color: "#B59803" };
+      case 'sell':
+        return { bg: "#FF48341A", color: "#FF4834" };
+      default:
+        return { bg: "transparent", color: "#000000" };
+    }
+  };
   // Handle copying bank details
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text)
@@ -119,34 +130,79 @@ export default function TransactionTable({
                   //  width={cellIndex === 3 ? "100%" : "40px"}  // Making the third cell larger
                    maxWidth={cellIndex === 2 ? "200px" : "auto"}  // Optional: set a max width
                  >
-                   {cellIndex === 1 && value === "Completed" ? (
-                      <Box
+                   {cellIndex === 0 && value === "FAILED" ? (
+                    <Box
+                    rounded="10px"
+                    px={{ base: "2px", sm: "5px", md: "10px" }}
+                    py={"2px" }
+                    bg="#FF48341A"
+                    w={'fit-content'}
+                  >
+                    <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                      <MdCircle size="10px" color="#FF4834" />
+                      <Text
+                        color="#FF4834"
+                        fontSize={ "12px"}
+                      >
+                        {value}
+                      </Text>
+                    </HStack>
+                  </Box>
+                   ):cellIndex === 0 && value === "COMPLETED" ? (
+                    <Box
+                    rounded="10px"
+                    px={{ base: "2px", sm: "5px", md: "10px" }}
+                    bg="#DCFCE7"
+                    w={"fit-content"}
+                  >
+                    <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                      <MdCircle size="10px" color="#2F7F37" />
+                      <Text
+                        color="#2F7F37"
+                        fontSize={{ base: "10px", sm: "12px", md: "14px" }}
+                        fontWeight="500"
+                      >
+                        {value}
+                      </Text>
+                    </HStack>
+                  </Box>
+                   ) : cellIndex === 0 && value === "PENDING" ? (
+                    <Box
+                    rounded="10px"
+                    px={{ base: "2px", sm: "5px", md: "10px" }}
+                    py={"2px" }
+                    bg="#FCF2C1"
+                    w={'fit-content'}
+                  >
+                    <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
+                      <MdCircle size="10px" color="orange" />
+                      <Text
+                        color="orange"
+                        fontSize={ "12px"}
+                      >
+                        {value}
+                      </Text>
+                    </HStack>
+                  </Box>
+
+                   ):cellIndex === 1 ? (
+                    <Box
                       rounded="10px"
-                      px={{ base: "2px", sm: "5px", md: "10px" }}
-                      bg="#DCFCE7"
-                      w={"fit-content"}
+                      px="5px"
+                      bg={getStatusStyle(value as string).bg}
+                      display="inline-block"
                     >
-                      <HStack gap={{ base: "1px", sm: "3px", md: "5px" }}>
-                        <MdCircle size="10px" color="#2F7F37" />
+                      <HStack gap="3px">
+                        <MdCircle size="10px" color={getStatusStyle(value as string).color} />
                         <Text
-                          color="#2F7F37"
-                          fontSize={{ base: "10px", sm: "12px", md: "14px" }}
+                          color={getStatusStyle(value as string).color}
+                          fontSize="12px"
                           fontWeight="500"
                         >
                           {value}
                         </Text>
                       </HStack>
                     </Box>
-                   ) : cellIndex === 0 && value === "Incomplete" ? (
-                     <Box rounded={"10px"} px={"5px"} bg={"#FF48341A"} >
-                       <HStack gap={"3px"} >
-                         <MdCircle size={"10px"} color="#FF4834" />
-                         <Text color="#FF4834" fontSize={"12px"}>
-                           {" "}
-                           {value}
-                         </Text>
-                       </HStack>
-                     </Box>
                    ) : cellIndex === 6 ? null :  
                    (
                      value
@@ -158,7 +214,7 @@ export default function TransactionTable({
                          fontSize={"9px"}
                          fontWeight={"500"}
                        >
-                         {bank[rowIndex]}
+                         {bank[rowIndex]?.display}
                        </Text>
                        <Box
                          as="button"

@@ -63,7 +63,11 @@ export default function Transaction_Table() {
     settransactionmnth,
     ontapBuy_sell,
     setontapBuy_sell,
-    Loadingtr
+    Loadingtr,
+    transactionBUY,
+        setTransactionBUY,
+        transactionSELL,
+        setTransactionSELL,
   } = useAdminContext();
   const [Buy_Sell, setBuy_Sell] = useState();
   const [key, setKey] = useState(0);
@@ -118,8 +122,8 @@ export default function Transaction_Table() {
     // / Takes the first two names
   };
  
-
-  const dataSell = transaction
+// console.log('transactions',transaction)
+  const dataSell = transactionSELL
     .map((status: any) => {
       const createdAt = new Date(status.createdAt);
       const today = new Date();
@@ -163,7 +167,7 @@ export default function Transaction_Table() {
           : true // Show all if no specific filter is selected
     );
   // console.log("Filtered data:", data);
-  const dataBuy = transaction
+  const dataBuy = transactionBUY
   .map((status: any) => {
     const createdAt = new Date(status.createdAt);
     const today = new Date();
@@ -207,30 +211,67 @@ export default function Transaction_Table() {
 // console.log("Filtered data:", data);
 let data = ontapBuy_sell === "Sell" ? dataSell : dataBuy;
 
-  const bank = transaction.map((status: any) => {
-    const walletAddress = status.walletAddress;
-    const BankNo = status.bank.accountNumber;
-    const displayWalletAddress =
-      walletAddress.length > 5
-        ? `${walletAddress.slice(0, 5)}...`
-        : walletAddress;
 
-    return {
-      display: `${
-        ontapBuy_sell === "Sell"
-          ? status.bank.accountNumber
-          : ontapBuy_sell === "Buy"
-          ? displayWalletAddress
-          : "No Wallet Address"
-      } | ${ontapBuy_sell === "Sell" ? status.bank?.bankName : "address"}`,
-      fullWalletAddress:
-        ontapBuy_sell === "Sell"
-          ? BankNo
-          : ontapBuy_sell === "Buy"
-          ? walletAddress
-          : "",
-    };
-  });
+const bankSELL = transactionSELL.map((status: any) => {
+  // console.log(status); // Log the current status
+
+  const walletAddress = status.walletAddress || "No Wallet Address";
+  const bank = status.bank || {}; // Default to an empty object if bank is null/undefined
+  const BankNo = bank.accountNumber || "No Account Number"; // Handle null/undefined accountNumber
+  const bankName = bank.bankName || "No Bank Name"; // Handle null/undefined bankName
+  
+  const displayWalletAddress =
+    walletAddress.length > 5
+      ? `${walletAddress.slice(0, 5)}...`
+      : walletAddress;
+
+  return {
+    display: `${
+      ontapBuy_sell === "Sell"
+        ? BankNo
+        : ontapBuy_sell === "Buy"
+        ? displayWalletAddress
+        : "No Wallet Address"
+    } | ${ontapBuy_sell === "Sell" ? bankName : "address"}`,
+    fullWalletAddress:
+      ontapBuy_sell === "Sell"
+        ? BankNo
+        : ontapBuy_sell === "Buy"
+        ? walletAddress
+        : "",
+  };
+});
+const bankBUY = transactionBUY.map((status: any) => {
+  // console.log(status); // Log the current status
+
+  const walletAddress = status.walletAddress || "No Wallet Address";
+  const bank = status.bank || {}; // Default to an empty object if bank is null/undefined
+  const BankNo = bank.accountNumber || "No Account Number"; // Handle null/undefined accountNumber
+  const bankName = bank.bankName || "No Bank Name"; // Handle null/undefined bankName
+  
+  const displayWalletAddress =
+    walletAddress.length > 5
+      ? `${walletAddress.slice(0, 5)}...`
+      : walletAddress;
+
+  return {
+    display: `${
+      ontapBuy_sell === "Sell"
+        ? BankNo
+        : ontapBuy_sell === "Buy"
+        ? displayWalletAddress
+        : "No Wallet Address"
+    } | ${ontapBuy_sell === "Sell" ? bankName : "address"}`,
+    fullWalletAddress:
+      ontapBuy_sell === "Sell"
+        ? BankNo
+        : ontapBuy_sell === "Buy"
+        ? walletAddress
+        : "",
+  };
+});
+
+let bank = ontapBuy_sell === "Sell" ? bankSELL : bankBUY;
 
   const filteredData = data.filter((row: any) => {
     const matchesSearch = Object.values(row).some((value) =>

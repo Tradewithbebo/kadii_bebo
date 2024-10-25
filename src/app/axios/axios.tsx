@@ -219,3 +219,19 @@ export async function AxiosAuthPatchfile(url: string, dataObject: any, p0: { hea
     throw err;
   }
 }
+export async function AxiosAuthPatch(url: string, dataObject: any) {
+  const token = getAuthToken(); // Ensure this function is defined and working
+  const authConfig = {
+    headers: {
+      "Content-Type": "application/json", // Use application/json for JSON data
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  try {
+    const res = await axios.patch(`${baseUrl}${url}`, dataObject, authConfig);
+    return res.data; // Return the response data
+  } catch (err) {
+    throw err; // Throw error to be handled by the calling function
+  }
+}

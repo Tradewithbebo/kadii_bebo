@@ -167,7 +167,7 @@ export default function SendcryptoQrcode({ setstep }: { setstep: any }) {
             fontSize={["14px", "16px"]}
             fontWeight={"600"}
             type="submit"
-            isDisabled={sellWetrade === "not available"}
+            // isDisabled={sellWetrade === "not available"}
             onClick={() => handleSubmit(values)}
             isLoading={loading}
           >

@@ -95,7 +95,7 @@ const url = "wallet/assets";
               status: "success",
               duration: 5000,
               isClosable: true,
-              position:"top-right"
+              position:"top-left"
             });
   
             // Update sell rate and selected network price
