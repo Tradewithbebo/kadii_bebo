@@ -99,7 +99,7 @@ export default function TransactionTable({
                 color={"#000000"}
                 fontSize={"12px"}
                 fontWeight={"700"}
-                padding="10px" 
+                // padding="10px" 
                 >
                   {header}{" "}
                   {header === "KYC Level" && (
