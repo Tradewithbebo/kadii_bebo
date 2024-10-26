@@ -39,6 +39,7 @@ import { AxiosAuthPatch, AxiosAuthPatchfile, AxiosAuthPost, AxiosGet, AxiosPost 
 import Link from "next/link";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
+import { useAdminContext } from "../../Admincontext";
 
 const validationSchema = Yup.object({
   status: Yup.string().required('Status is required'), // Expecting a single string
@@ -65,8 +66,46 @@ export default function TransactionTable({
   data,
   bank,
 }: TransactionTableProps) {
+
+  const {
+    currentPage,
+    setCurrentPage,
+    totalItems,
+    settotalItems,
+    totalPages,
+    settotalPages,
+    currentPageSELL,
+    setCurrentPageSELL,
+    totalPagesSELL,
+    settotalPagesSELL,
+    currentPageBUY,
+    setCurrentPageBUY,
+    totalPagesBUY,
+    settotalPagesBUY,
+    ontapBuy_sell,
+    setTransactionBUY,
+    // ontapBuy_sell,
+    setbuy_sell_all_state,
+  } = useAdminContext();
+      // Dynamic pagination variables based on `ontapBuy_sell`
+  const currentpages =
+  ontapBuy_sell === "Sell" ? currentPageSELL :
+  ontapBuy_sell === "Buy" ? currentPageBUY :
+  currentPage;
+
+const totalpage =
+ontapBuy_sell === "Sell" ? totalPagesSELL :
+ontapBuy_sell === "Buy" ? totalPagesBUY :
+  totalPages;
+
+const setcurrent =
+ontapBuy_sell === "Sell" ? setCurrentPageSELL :
+ontapBuy_sell === "Buy" ? setCurrentPageBUY :
+  setCurrentPage;
+
+
   const toast = useToast();
-  const [currentPage, setCurrentPage] = useState(1);
+  
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setloading] = useState(false);
   const {
@@ -79,7 +118,7 @@ export default function TransactionTable({
     useState<Transaction | null>(null);
   const [selectedBank, setSelectedBank] = useState<Bank | null>(null);
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  // const totalPages = Math.ceil(data.length / itemsPerPage);
   const [Trnx_id, setTrnx_id] = useState("");
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
@@ -119,17 +158,17 @@ export default function TransactionTable({
   };
 
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+  const currentData = data
 
   const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
+    if (currentpages < totalpage) {
+      setcurrent((prev:any) => prev + 1);
     }
   };
 
   const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+    if (currentpages > 1) {
+      setcurrent((prev:any) => prev - 1);
     }
   };
 
@@ -374,7 +413,7 @@ export default function TransactionTable({
         <Flex justifyContent="space-between" mt={4} mx={"10px"}>
           <Button
             onClick={handlePrev}
-            isDisabled={currentPage === 1}
+            isDisabled={currentpages === 1}
             color={"#3F3F46"}
             fontWeight={"500"}
             fontSize={"13px"}
@@ -392,11 +431,11 @@ export default function TransactionTable({
             display={"flex"}
             alignItems={"center"}
           >
-            Page {currentPage} of {totalPages}
+            Page {currentPage} of {totalpage}
           </Text>
           <Button
             onClick={handleNext}
-            isDisabled={currentPage === totalPages}
+            isDisabled={currentpages === totalpage}
             color={"#3F3F46"}
             fontWeight={"500"}
             fontSize={"13px"}

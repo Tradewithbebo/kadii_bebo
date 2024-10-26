@@ -36,6 +36,7 @@ const handleNetworkError = (err: any, setErrorMessage: (msg: string) => void) =>
 // Main AdminContext Component
 export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   // States
+  const [buy_sell_all_state, setbuy_sell_all_state] = useState("SELL")
   const [adminId, setAdminId] = useState("");
   const [usersId, setUsersId] = useState("");
   const [LoadingAdminuser, setLoadingAdminuser] = useState(false);
@@ -62,13 +63,25 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   const [currentSlice, setCurrentSlice] = useState<Network[]>([]);
   const [sliceIndex, setSliceIndex] = useState(0);
   const [ontapBuy_sell, setontapBuy_sell] = useState("Sell");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages,settotalPages]=useState()
+  const [totalItems,settotalItems]=useState()
+
+
+  const [currentPageSELL, setCurrentPageSELL] = useState(1);
+  const [totalPagesSELL,settotalPagesSELL]=useState()
+  const [totalItemsSELL,settotalItemsSELL]=useState()
+  const [currentPageBUY, setCurrentPageBUY] = useState(1);
+  const [totalPagesBUY,settotalPagesBUY]=useState()
+  const [totalItemsBUY,settotalItemsBUY]=useState()
+
 
   // URLs
   const url = "wallet/assets";
-  const url2 = "transactions";
-  const url5 = "transactions?type=BUY";
-  const url6 = "transactions?type=SELL";
-  const url3 = "users";
+  const url2 = `transactions?page=${currentPage}`;
+  const url5 = `transactions?page=${currentPageBUY}&type=BUY`;
+  const url6 = `transactions?page=${currentPageSELL}&type=SELL`;
+  const url3 = `users?page=${currentPage}`;
   const url4 = "admin";
 
   // Fetch Transactions
@@ -81,6 +94,9 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         const fetchedTransactions = res.data.items;
         console.log('fetchedTransactions',fetchedTransactions);
         setTransaction(fetchedTransactions);
+        settotalPages(res.data.meta.totalPages)
+        settotalItems(res.data.meta.totalItems)
+        console.log('fetchedTransactions',totalPages);
         console.log('fetchedTransactions',transaction);
       } else {
         console.error("No data found");
@@ -99,6 +115,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         const fetchedTransactions = res.data.items;
         console.log('fetchedTransactions',fetchedTransactions);
         setTransactionBUY(fetchedTransactions);
+        settotalPagesBUY(res.data.meta.totalPages)
+        settotalItemsBUY(res.data.meta.totalItems)
         console.log('fetchedTransactions',transaction);
       } else {
         console.error("No data found");
@@ -117,6 +135,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         const fetchedTransactions = res.data.items;
         // console.log('fetchedTransactions',fetchedTransactions);
         setTransactionSELL(fetchedTransactions);
+        settotalPagesSELL(res.data.meta.totalPages)
+        settotalItemsSELL(res.data.meta.totalItems)
         // console.log('fetchedTransactions',transaction);
       } else {
         console.error("No data found");
@@ -155,6 +175,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
       setLoadinguser(false);
       if (res) {
         setUsers(res.data.items);
+        settotalPages(res.data.meta.totalPages)
+        settotalItems(res.data.meta.totalItems)
         setErrorMessage3("");
         return true;
       } else {
@@ -203,16 +225,20 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   };
 
   // Effects
+ 
+
   useEffect(() => {
-    // console.log("useEffect running on mount...");
-    gettransaction(); // Fetch transactions initially
-    gettransactionSELL()
-    gettransactionBUY()
-    // console.log("useEffect running on mount...");
+    // Fetch transactions when the component mounts or currentPage changes
+    gettransaction();
+    gettransactionSELL();
+    gettransactionBUY();
   
-    const intervalId = setInterval(gettransaction, 120000); // Every 2 minutes
+    // Set up an interval to fetch transactions every 2 minutes
+    const intervalId = setInterval(gettransaction, 120000);
+  
+    // Clear the interval when the component unmounts or currentPage changes
     return () => clearInterval(intervalId);
-  }, []);
+  }, [currentPage,currentPageBUY,currentPageSELL]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -271,6 +297,22 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         usersId,
         setUsersId,
         Loadingtr,
+        currentPage,
+        setCurrentPage,
+        totalItems,
+        settotalItems,
+        totalPages,
+        settotalPages,
+        currentPageSELL,
+        setCurrentPageSELL,
+        totalPagesSELL,
+        settotalPagesSELL,
+        currentPageBUY,
+        setCurrentPageBUY,
+        totalPagesBUY,
+        settotalPagesBUY,
+        buy_sell_all_state,
+        setbuy_sell_all_state,
       }}
     >
       {children}

@@ -42,6 +42,23 @@ export default function Dashboardcomponent() {
         setTransactionBUY,
         transactionSELL,
         setTransactionSELL,
+        currentPage, 
+        setCurrentPage,
+        totalItems,
+        settotalItems,
+        totalPages,
+        settotalPages,
+        currentPageSELL, 
+        setCurrentPageSELL,
+        totalPagesSELL,
+        settotalPagesSELL,
+        currentPageBUY, 
+        setCurrentPageBUY,
+        totalPagesBUY,
+        settotalPagesBUY,
+        buy_sell_all_state,
+         setbuy_sell_all_state
+
   } = useAdminContext();
   const [convertedDate, setconvertedDate] = useState("");
   // Transform data into an array of objects
@@ -89,7 +106,7 @@ export default function Dashboardcomponent() {
     if (!str) return '';
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
-  const [buy_sell_all_state, setbuy_sell_all_state] = useState("ALL");
+  //;
 
   const onTap = (condition: any) => {
     setbuy_sell_all_state(condition);
@@ -328,7 +345,7 @@ const headers_For_Buy = [
   "AMT RCVD",
   "DATE",
 ];
-let headers = ontapBuy_sell === "Sell" ? headers_For_Sell :ontapBuy_sell === "Buy" ?  headers_For_Buy :headerss
+let headers = buy_sell_all_state === "Sell" ? headers_For_Sell :buy_sell_all_state === "Buy" ?  headers_For_Buy :headerss
 
   const filteredData = data.filter((row: any) => {
     const matchesSearch = Object.values(row).some((value) =>
@@ -380,6 +397,7 @@ let headers = ontapBuy_sell === "Sell" ? headers_For_Sell :ontapBuy_sell === "Bu
   //   'SELL',
   //   'ALL'
   // ]
+ 
   return (
     <Box mt={"24px"} w={"100%"} mb={"19px"}>
       <Card
@@ -438,7 +456,8 @@ let headers = ontapBuy_sell === "Sell" ? headers_For_Sell :ontapBuy_sell === "Bu
           </SimpleGrid>
         </CardBody>
       </Card>
-      <TAble headers={headers} data={data} bank={bank} />
+
+      <TAble headers={headers} data={data} bank={bank}  />
     </Box>
   );
 }

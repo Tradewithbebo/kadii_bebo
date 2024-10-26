@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { MdGppGood } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useAdminContext } from "../../Admincontext";
 
 export default function TAbleuser({
   headers,
@@ -15,7 +16,9 @@ export default function TAbleuser({
 }) {
   const toast = useToast();
   const router = useRouter();
-  const [currentPage, setCurrentPage] = useState(1);
+  const { currentPage, 
+    setCurrentPage } = useAdminContext();
+  // const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const totalPages = Math.ceil(data.length / itemsPerPage);
@@ -24,13 +27,13 @@ export default function TAbleuser({
 
   const handleNext = () => {
     if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
+      setCurrentPage((prev:any) => prev + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+      setCurrentPage((prev:any) => prev - 1);
     }
   };
 

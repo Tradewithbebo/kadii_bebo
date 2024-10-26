@@ -18,6 +18,7 @@ import React, { useState } from "react";
 import { GrStatusGood } from "react-icons/gr";
 import { IoCopyOutline, IoFilterSharp } from "react-icons/io5";
 import { MdCircle } from "react-icons/md";
+import { useAdminContext } from "../../Admincontext";
 
 export default function TransactionTable({
   headers,
@@ -29,9 +30,45 @@ export default function TransactionTable({
   bank: any;
 }) {
   const toast = useToast();
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
+  const {
+    currentPage,
+    setCurrentPage,
+    totalItems,
+    settotalItems,
+    totalPages,
+    settotalPages,
+    currentPageSELL,
+    setCurrentPageSELL,
+    totalPagesSELL,
+    settotalPagesSELL,
+    currentPageBUY,
+    setCurrentPageBUY,
+    totalPagesBUY,
+    settotalPagesBUY,
+    ontapBuy_sell,
+    setTransactionBUY,
+    buy_sell_all_state,
+    setbuy_sell_all_state,
+  } = useAdminContext();
+      // Dynamic pagination variables based on `ontapBuy_sell`
+  const currentpages =
+  buy_sell_all_state === "SELL" ? currentPageSELL :
+  buy_sell_all_state === "BUY" ? currentPageBUY :
+  currentPage;
+
+const totalpage =
+buy_sell_all_state === "SELL" ? totalPagesSELL :
+buy_sell_all_state === "BUY" ? totalPagesBUY :
+  totalPages;
+
+const setcurrent =
+buy_sell_all_state === "SELL" ? setCurrentPageSELL :
+buy_sell_all_state === "BUY" ? setCurrentPageBUY :
+  setCurrentPage;
+  
   const itemsPerPage = 10;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  // const totalPages = Math.ceil(data.length / itemsPerPage);
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
       case 'buy':
@@ -63,20 +100,23 @@ export default function TransactionTable({
   };
 
   // Get the current items for the current page
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentData = data.slice(startIndex, startIndex + itemsPerPage);
+  // const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentData = data
 
+  
+  // Handlers for pagination buttons
   const handleNext = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage((prev) => prev + 1);
+    if (currentpages < totalpage) {
+      setcurrent((prev:any)=> prev + 1);
     }
   };
 
   const handlePrev = () => {
-    if (currentPage > 1) {
-      setCurrentPage((prev) => prev - 1);
+    if (currentpages > 1) {
+      setcurrent((prev:any) => prev - 1);
     }
   };
+
 
   return (
     <>
@@ -234,9 +274,9 @@ export default function TransactionTable({
 
         {/* Pagination Buttons */}
         <Flex justifyContent="space-between" mt={4} mx={"10px"}>
-          <Button
+        <Button
             onClick={handlePrev}
-            isDisabled={currentPage === 1}
+            isDisabled={currentpages === 1}
             color={"#3F3F46"}
             fontWeight={"500"}
             fontSize={"13px"}
@@ -254,11 +294,11 @@ export default function TransactionTable({
             display={"flex"}
             alignItems={"center"}
           >
-            Page {currentPage} of {totalPages}
+            Page {currentpages} of {totalpage}
           </Text>
           <Button
             onClick={handleNext}
-            isDisabled={currentPage === totalPages}
+            isDisabled={currentpages === totalpage}
             color={"#3F3F46"}
             fontWeight={"500"}
             fontSize={"13px"}
