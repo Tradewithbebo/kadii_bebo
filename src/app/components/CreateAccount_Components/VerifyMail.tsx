@@ -50,44 +50,42 @@ const AutoSubmitToken = () => {
 };
 
 export default function VerifyMail() {
-  const [initialEmail, setInitialEmail] = useState<string | null>(null);
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const toast = useToast();
+  const [initialEmail, setInitialEmail] = useState<string | null>(null)
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
+  const toast = useToast()
   const url = "auth/verify-email";
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
 
   useEffect(() => {
-    const storedEmail = localStorage.getItem("email");
-    if (storedEmail) setInitialEmail(storedEmail);
-  }, []);
+    const storedEmail = localStorage.getItem("email")
+    if (storedEmail) {
+      setInitialEmail(storedEmail)
+    }
+  }, [])
 
-  const handleSubmit = async (values: any) => {
-    const code = values.pin.join("");
-    const email = values.email;
-    const payload = { email, code };
-    console.log("payload", payload);
+  const handleSubmit = async (values: { pin: string[]; email: string }) => {
+    const code = values.pin.join("")
+    const email = values.email
+    const payload = { email, code }
+    console.log("payload", payload)
 
-    setLoading(true);
+    setLoading(true)
     try {
-      const res = await AxiosPost(url, payload);
-      setLoading(false);
+      const res = await AxiosPost(url, payload)
+      setLoading(false)
       if (res) {
-        router.push("/createAccount/Login");
-        localStorage.removeItem("email");
+        router.push("/createAccount/Login")
+        localStorage.removeItem("email")
       }
     } catch (err: any) {
-      setLoading(false);
-      let message = "Check your Network and try again.";
-      if (err.response && err.response.data && err.response.data.message) {
-        message = err.response.data.message;
+      setLoading(false)
+      let message = "Check your Network and try again."
+      if (err.response?.data?.message) {
+        message = err.response.data.message
       }
-      setErrorMessage(
-        (message = err.response.data.message
-          ? "Invalid verification code"
-          : message)
-      );
+      setErrorMessage(message)
       toast({
         title: "Error",
         description: message,
@@ -95,20 +93,18 @@ export default function VerifyMail() {
         duration: 4000,
         isClosable: true,
         position: "bottom-left",
-      });
+      })
     }
-  };
+  }
 
   return (
     <Box w={"full"} pb={["205px", "465px"]}>
       <Center>
         <Formik
-          initialValues={{ pin: ["", "", "", "", "", ""], email: initialEmail }}
-          validationSchema={VerifyMailSchema}
-           
-          onSubmit={(values) => {
-            if (initialEmail !== null) handleSubmit(values);
-          }}
+         initialValues={{ pin: ["", "", "", "", "", ""], email: initialEmail || "" }}
+         validationSchema={VerifyMailSchema}
+         onSubmit={handleSubmit}
+         enableReinitialize
         >
           {({ errors, touched, setFieldValue, values, isValid, dirty }) => (
             <Form id="verifyMailForm">
