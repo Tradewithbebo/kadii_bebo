@@ -1,19 +1,32 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavbarTwo from '../navbar/navbarTwo'
 import HomePageBody from '../incompleteKyc/HomepageForIncompletekyc'
 import { useRouter } from 'next/navigation'
 export default function Homeincoplete() {
 
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    const auth = localStorage.getItem("stk-apk");
-    if (!auth) {
-      router.replace("/createAccount/Login");
+    setIsMounted(true); // Ensure client-side rendering only
+  }, []);
+  
+  useEffect(() => {
+    if (isMounted) {
+      try {
+        const auth = localStorage.getItem("stk-apk");
+        if (!auth) {
+          router.replace("/createAccount/Login");
+        }
+      } catch (error) {
+        console.error("Error accessing localStorage:", error);
+      }
     }
-  }, [router]);
+  }, [isMounted, router]);
+  
+  if (!isMounted) return null; // Prevent rendering on server-side
   return (
     <><NavbarTwo/>
 <HomePageBody/></>
