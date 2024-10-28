@@ -1,13 +1,13 @@
 'use client'
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import React from 'react';
 import NavbarTwo from "./navbar/navbarTwo";
 import HomePageBody from "./components/homePageBody";
 import { CryptoProvider } from "./components/drawer/Buy/usecontextbuy";
 
 export default function Home() {
-   const router = useRouter();
+  //  const router = useRouter();
 
   //  useEffect(() => {
   //    const auth = localStorage.getItem("stk-apk");
@@ -38,12 +38,27 @@ export default function Home() {
 // eslint-disable-next-line react-hooks/rules-of-hooks
 // const router = useRouter();
 // eslint-disable-next-line react-hooks/rules-of-hooks
+const router = useRouter();
+const [isMounted, setIsMounted] = useState(false);
+
 useEffect(() => {
-  const auth = localStorage.getItem("stk-apk");
-  if (!auth) {
-    router.replace("/createAccount/Login");
+  setIsMounted(true); // Ensure client-side rendering only
+}, []);
+
+useEffect(() => {
+  if (isMounted) {
+    try {
+      const auth = localStorage.getItem("stk-apk");
+      if (!auth) {
+        router.replace("/createAccount/Login");
+      }
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+    }
   }
-}, [router]);
+}, [isMounted, router]);
+
+if (!isMounted) return null; // Prevent rendering on server-side
    return (
      <>
        <NavbarTwo />

@@ -44,12 +44,14 @@ import Banks from "./Banks";
 interface user {
   firstName: any;
   lastName: any;
-  email:any;
+  email: any;
 }
 export default function Settings() {
-  const {  isOpen: isopenDelete,
+  const {
+    isOpen: isopenDelete,
     onOpen: onopenDelete,
-    onClose: oncloseDelete, } = useDisclosure();
+    onClose: oncloseDelete,
+  } = useDisclosure();
   const cancelRef = React.useRef(null);
   const handleDelete = () => {
     // Add your delete account logic here
@@ -77,8 +79,10 @@ export default function Settings() {
     onClose: oncloseUpdatePin,
   } = useDisclosure();
   const capitalizeFirstLetter = (name: any) => {
+    if (!name) return ""; // Handle undefined or empty values
     return name.charAt(0).toUpperCase() + name.slice(1);
   };
+
   const url = "auth/me";
   const [userDetails, setUserDetails] = useState<user>();
   const fetchUserDetails = async () => {
@@ -187,15 +191,13 @@ export default function Settings() {
                                     color={"#021D17"}
                                   >
                                     {userDetails?.firstName
-                                      ? capitalizeFirstLetter(
-                                          userDetails.firstName
-                                        )
-                                      : ""}
-                                    &nbsp;
-                                    {userDetails?.lastName
-                                      ? capitalizeFirstLetter(
-                                          userDetails.lastName
-                                        )
+                                      ? userDetails.firstName.length > 12
+                                        ? `${capitalizeFirstLetter(
+                                            userDetails.firstName
+                                          ).slice(0, 13)}...`
+                                        : capitalizeFirstLetter(
+                                            userDetails.firstName
+                                          )
                                       : ""}
                                   </Text>
                                 </Box>
@@ -206,7 +208,10 @@ export default function Settings() {
                                     fontWeight={"600"}
                                     color={"#808080"}
                                   >
-                                    {userDetails?.email}
+                                    {userDetails?.email &&
+                                    userDetails.email > 12
+                                      ? `userDetails?.email.slice(0,13)...`
+                                      : userDetails?.email}
                                   </Text>
                                 </Box>
                               </VStack>
@@ -248,7 +253,11 @@ export default function Settings() {
                     >
                       {/* list */}
                       <GridItem w={"full"} colSpan={[1, 1, 3]}>
-                        <Button w={"full"} py={"35px"}  onClick={() => onopenBank()}>
+                        <Button
+                          w={"full"}
+                          py={"35px"}
+                          onClick={() => onopenBank()}
+                        >
                           <HStack w={"full"}>
                             <HStack w={"full"}>
                               <Box>
@@ -269,9 +278,7 @@ export default function Settings() {
                             </Box>
                           </HStack>
                         </Button>
-                        <Banks  isOpen={isopenBank}
-
-                        onClose={oncloseBank} />
+                        <Banks isOpen={isopenBank} onClose={oncloseBank} />
                       </GridItem>
                       {/* secondsettings */}
                       <GridItem w={"full"} colSpan={[1, 1, 3]}>
@@ -395,60 +402,66 @@ export default function Settings() {
                       </GridItem>
                       {/* sixtysettingslist */}
                       <GridItem w={"full"} colSpan={[1, 1, 3]}>
-        <Button w={"full"} py={"35px"} onClick={onopenDelete}>
-          <HStack w={"full"}>
-            <HStack w={"full"}>
-              <Box>
-                <MdDeleteOutline color={"#ef4444"} size={"30px"} />
-              </Box>
-              <Box>
-                <Text color={"#000000"} fontSize={"16px"} fontWeight={"600"}>
-                  Delete Account
-                </Text>
-              </Box>
-            </HStack>
-            <Box>
-              <IoIosArrowForward />
-            </Box>
-          </HStack>
-        </Button>
-      </GridItem>
+                        <Button w={"full"} py={"35px"} onClick={onopenDelete}>
+                          <HStack w={"full"}>
+                            <HStack w={"full"}>
+                              <Box>
+                                <MdDeleteOutline
+                                  color={"#ef4444"}
+                                  size={"30px"}
+                                />
+                              </Box>
+                              <Box>
+                                <Text
+                                  color={"#000000"}
+                                  fontSize={"16px"}
+                                  fontWeight={"600"}
+                                >
+                                  Delete Account
+                                </Text>
+                              </Box>
+                            </HStack>
+                            <Box>
+                              <IoIosArrowForward />
+                            </Box>
+                          </HStack>
+                        </Button>
+                      </GridItem>
 
-      {/* Alert Dialog for Deleting Account */}
-      <AlertDialog
-        isOpen={isopenDelete}
-        leastDestructiveRef={cancelRef}
-        onClose={oncloseDelete}
-        size={['sm','sm','md']}
-        isCentered
-      >
-        <AlertDialogOverlay>
-          <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Account
-            </AlertDialogHeader>
+                      {/* Alert Dialog for Deleting Account */}
+                      <AlertDialog
+                        isOpen={isopenDelete}
+                        leastDestructiveRef={cancelRef}
+                        onClose={oncloseDelete}
+                        size={["sm", "sm", "md"]}
+                        isCentered
+                      >
+                        <AlertDialogOverlay>
+                          <AlertDialogContent>
+                            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                              Delete Account
+                            </AlertDialogHeader>
 
-            <AlertDialogBody>
-              Are you sure you want to delete your account? This action cannot
-              be reversed.
-            </AlertDialogBody>
+                            <AlertDialogBody>
+                              Are you sure you want to delete your account? This
+                              action cannot be reversed.
+                            </AlertDialogBody>
 
-            <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={oncloseDelete}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="red"
-                onClick={handleDelete}
-                ml={3}
-              >
-                Delete
-              </Button>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialogOverlay>
-      </AlertDialog>
-    
+                            <AlertDialogFooter>
+                              <Button ref={cancelRef} onClick={oncloseDelete}>
+                                Cancel
+                              </Button>
+                              <Button
+                                colorScheme="red"
+                                onClick={handleDelete}
+                                ml={3}
+                              >
+                                Delete
+                              </Button>
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialogOverlay>
+                      </AlertDialog>
                     </SimpleGrid>
                   </Box>
                 </Box>
