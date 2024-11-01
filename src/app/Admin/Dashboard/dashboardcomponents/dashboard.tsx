@@ -163,7 +163,7 @@ const dataALL = transaction
     return {
       Status: status.status,
       Transaction_type: status.type,
-      custo_Name: status.bank?.accountName, // Safely access accountName
+    custo_Name:  status.type==='SELL'?  status.bank?.accountName:status.user.firstName.toUpperCase(), // Safely access accountName
 
       Asset_received: `${status.amountBlockchain} ${
         status.blockchain.toUpperCase() || ""
@@ -200,7 +200,7 @@ const dataBuy = transactionBUY
   return {
     Status: status.status,
     Transaction_type: status.type,
-    custo_Name: status.bank?.accountName, // Safely access accountName
+    custo_Name: status.user.firstName.toUpperCase(), // Safely access accountName
 
     Asset_to_send: `${status.amountBlockchain} ${
       status.blockchain.toUpperCase() || ""

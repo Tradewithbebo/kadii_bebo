@@ -314,9 +314,7 @@ export default function SelectUSDT({
                   fontWeight={"600"}
                   color={isValid ? "#021D17" : "gray.600"}
                   isDisabled={!isValid || !dirty}
-                  _hover={{
-                    bg: isValid ? "#0CBF94" : "gray.400",
-                  }}
+                
                 >
                   Swap
                 </Button>

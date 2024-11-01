@@ -18,8 +18,9 @@ import {
   useDisclosure,
   Fade,
   Spinner,
+  useOutsideClick,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsChevronDown, BsExclamationCircle } from "react-icons/bs";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { MenuItems } from "./menuitem";
@@ -51,7 +52,11 @@ export function SellCrypto() {
 
   const { onOpen } = useDisclosure();
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
-
+  const ref = useRef<HTMLDivElement | null>(null); 
+  useOutsideClick({
+    ref: ref,
+    handler: () => onClose(),
+  });
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const {
@@ -204,6 +209,7 @@ export function SellCrypto() {
                 zIndex={1000}
                 position="absolute"
                 spacing={0}
+                ref={ref}
               >
                 {networkOptions.map((item) => (
                   <Box
@@ -371,8 +377,21 @@ export function BuyCrypto() {
   const [networkOptions, setNetworkOptions] = useState<NetworkOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  // const ref = useRef();
 
-  const handleCryptoSelect = (crypto: string, image: any, rates: any,symbol:any) => {
+  const ref = useRef<HTMLDivElement | null>(null);  // Specify ref type as HTMLDivElement or null
+
+  // Close the component when clicking outside
+  useOutsideClick({
+    ref: ref,
+    handler: () => close(),
+  });
+  const handleCryptoSelect = (
+    crypto: string,
+    image: any,
+    rates: any,
+    symbol: any
+  ) => {
     setSelectedCrypto(crypto);
     setselectedimage(image);
     setRate(
@@ -388,14 +407,13 @@ export function BuyCrypto() {
     close();
   };
   // const { isOpen, onOpen, onClose } = useDisclosure();
- 
 
   const url = "wallet/assets";
   type NetworkOption = {
     title: string;
     current_price: any;
     name: string;
-    symbol:any;
+    symbol: any;
     // menu: JSX.Element;
     image?: string; // Optional if you have an image property
   };
@@ -441,7 +459,7 @@ export function BuyCrypto() {
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined;
-  
+
     const fetchData = async () => {
       const success = await getnetwork();
       if (success) {
@@ -450,12 +468,12 @@ export function BuyCrypto() {
         timeoutId = setTimeout(fetchData, 2000); // Retry after 2 seconds if failed
       }
     };
-  
+
     // Fetch data only if success has not been achieved
     if (!isSuccess) {
       fetchData(); // Initial call to fetch data
     }
-  
+
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId); // Clear timeout on unmount
@@ -532,6 +550,7 @@ export function BuyCrypto() {
 
               <Fade in={opentwo}>
                 <VStack
+                  ref={ref}
                   mt="4"
                   bg="white"
                   rounded="md"
@@ -554,7 +573,7 @@ export function BuyCrypto() {
                           item.name,
                           item.image,
                           item.current_price,
-                          item.symbol,
+                          item.symbol
                         )
                       }
                     >

@@ -17,9 +17,10 @@ import {
   Center,
   Fade,
   useDisclosure,
+  useOutsideClick,
   
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BsChevronDown, BsExclamationCircle } from "react-icons/bs";
 import { TbCurrencyNaira } from "react-icons/tb";
 // import { MenuItems } from "./menuitem";
@@ -35,7 +36,11 @@ export function SellCrypto() {
   const [selectedimage, setselectedimage] = useState("/image/crypto.png");
   const [BTCrate, setBTCRate] = useState("");
   const [rate, setRate] = useState('');
- 
+  const ref = useRef<HTMLDivElement | null>(null); 
+  useOutsideClick({
+    ref: ref,
+    handler: () => onClose(),
+  });
   const handleCryptoSelect = (crypto: string,image:any,rates:any) => {
     setSelectedCrypto(crypto);
     setselectedimage (image)
@@ -181,6 +186,7 @@ export function SellCrypto() {
               zIndex={1000}
               position="absolute"
               spacing={0}
+              ref={ref}
             >
               {networkOptions.map((item) => (
                 <Box
@@ -362,7 +368,13 @@ export function BuyCrypto() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   
-  
+  const ref = useRef<HTMLDivElement | null>(null);  // Specify ref type as HTMLDivElement or null
+
+  // Close the component when clicking outside
+  useOutsideClick({
+    ref: ref,
+    handler: () => close(),
+  });
   const url = 'wallet/assets';
   type NetworkOption = {
     title: string;
@@ -488,6 +500,7 @@ export function BuyCrypto() {
                   zIndex={1000}
                   position="absolute"
                   spacing={0}
+                  ref={ref}
                 >
                   {networkOptions.map((item) => (
                     <Box

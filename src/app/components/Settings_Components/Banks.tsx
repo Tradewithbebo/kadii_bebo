@@ -87,7 +87,9 @@ export default function Banks({ isOpen, onClose }: BanksProps) {
           isClosable: true,
           position: "bottom-left",
         })
+        onClosedelete()
         getDetails() // Refresh the list after deletion
+       
       }
     } catch (err: any) {
       setLoading(false)
@@ -136,94 +138,82 @@ export default function Banks({ isOpen, onClose }: BanksProps) {
 
   return (
     <>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}  size={["xs", "xs", "sm"]} >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Your Banks</DrawerHeader>
-          <DrawerBody>
-            {loading3 ? (
-              <Box display="flex" justifyContent="center" alignItems="center" height="100%">
-                <Spinner size="xl" />
-              </Box>
-            ) : (
-              <VStack spacing={4} align="stretch">
-                {banksToDisplay.map((bank) => (
-                  <SimpleGrid
-                  key={bank._id}
-                  onClick={() => {
-                    setaccountid(bank._id)
-                    onOpendelete()
-                  }}
-                  mb="8px"
-                  columns={6}
-                  w="full"
-                  gap="40px"
-                  p="16px"
-                  border="1px"
-                  bgColor="#f3f4f6"
-                  borderColor="#e5e7eb"
-                  borderRadius="10px"
-                  cursor="pointer"
-                  _hover={{
-                    bg: "#E7F6EC",
-                    borderColor: "#0CBF94",
-                  }}
-                >
-                  <GridItem colSpan={6} display="flex" justifyContent="start">
-                    <Text fontWeight="600" fontSize="16px" isTruncated>
-                      {bank.accountName}
+     <Drawer isOpen={isOpen} placement="right" onClose={onClose} size={["xs", "xs", "sm"]}>
+  <DrawerOverlay />
+  <DrawerContent>
+    <DrawerCloseButton />
+    <DrawerHeader>Your Banks</DrawerHeader>
+    <DrawerBody>
+      {loading3 ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+          <Spinner size="xl" />
+        </Box>
+      ) : (
+        <VStack spacing={4} align="stretch">
+          {banksToDisplay.length > 0 ? (
+            banksToDisplay.map((bank) => (
+              <SimpleGrid
+                key={bank._id}
+                onClick={() => {
+                  setaccountid(bank._id);
+                  onOpendelete();
+                }}
+                mb="8px"
+                columns={6}
+                w="full"
+                gap="40px"
+                p="16px"
+                border="1px"
+                bgColor="#f3f4f6"
+                borderColor="#e5e7eb"
+                borderRadius="10px"
+                cursor="pointer"
+                _hover={{
+                  bg: "#E7F6EC",
+                  borderColor: "#0CBF94",
+                }}
+              >
+                <GridItem colSpan={6} display="flex" justifyContent="start">
+                  <Text fontWeight="600" fontSize="16px" isTruncated>
+                    {bank.accountName}
+                  </Text>
+                </GridItem>
+                <GridItem colSpan={4} display="flex" alignItems="center" w={"full"}>
+                  <Box flexGrow={0} flexShrink={0} overflow="hidden">
+                    <Text fontWeight="400" fontSize="14px" isTruncated>
+                      {bank.accountNumber}
                     </Text>
-                  </GridItem>
-                  <GridItem
-                    colSpan={4}
-                    display="flex"
-                    alignItems="center"
-                    w={"full"}
-                  >
-                    <Box flexGrow={0} flexShrink={0} overflow="hidden">
-                      <Text fontWeight="400" fontSize="14px" isTruncated>
-                        {bank.accountNumber}
-                      </Text>
-                    </Box>
-                    <Box px={"4px"}>
-                      <Divider
-                        orientation="vertical"
-                        height="20px"
-                        borderColor="#d4d4d8"
-                        borderWidth="1px"
-                      />
-                    </Box>
-                    <Box
-                      flexGrow={0}
-                      minWidth="100px"
-                      flexShrink={0}
-                      overflow="hidden"
-                    >
-                      <Text fontWeight="400" fontSize="14px" isTruncated>
-                        {bank.bankName.length > 15
-                          ? `${bank.bankName.slice(0, 15)}...`
-                          : bank.bankName}
-                      </Text>
-                    </Box>
-                  </GridItem>
-                </SimpleGrid>
-                ))}
-                {existingBank.length > 2 && (
-                  <Button onClick={() => setShowAll(!showAll)}  bg={"#0CBF94"} width="full" >
-                    {showAll ? 'Show Less' : 'Show All My Banks'}
-                  </Button>
-                )}
-              </VStack>
-            )}
-          </DrawerBody>
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Close
+                  </Box>
+                  <Box px={"4px"}>
+                    <Divider orientation="vertical" height="20px" borderColor="#d4d4d8" borderWidth="1px" />
+                  </Box>
+                  <Box flexGrow={0} minWidth="100px" flexShrink={0} overflow="hidden">
+                    <Text fontWeight="400" fontSize="14px" isTruncated>
+                      {bank.bankName.length > 15 ? `${bank.bankName.slice(0, 15)}...` : bank.bankName}
+                    </Text>
+                  </Box>
+                </GridItem>
+              </SimpleGrid>
+            ))
+          ) : (
+            <Text textAlign="center" color="gray.500">You are yet to add any Bank</Text>
+          )}
+          {existingBank.length > 2 && banksToDisplay.length > 0 && (
+            <Button onClick={() => setShowAll(!showAll)} bg={"#0CBF94"} width="full">
+              {showAll ? 'Show Less' : 'Show All My Banks'}
             </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+          )}
+        </VStack>
+      )}
+    </DrawerBody>
+    <DrawerFooter>
+      <Button variant="outline" mr={3} onClick={onClose}>
+        Close
+      </Button>
+    </DrawerFooter>
+  </DrawerContent>
+</Drawer>
+
 
       <AlertDialog
         isOpen={isOpendelete}

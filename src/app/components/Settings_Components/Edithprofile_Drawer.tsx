@@ -367,17 +367,9 @@ export default function Edithprofile_Drawer({
                       )}
                     </FormControl>
                   </GridItem>
-                  <Button
-                    w={"full"}
-                    bg={"#0CBF94"}
-                    color={"white"}
-                    _hover={{ bg: "#0CBF94" }}
-                    type="submit"
-                    isLoading={loading}
-                    h={["50px", "50px", "44px"]}
-                  >
-                    Save Changes
-                  </Button>
+                  <Button  h={["50px", "50px", "44px"]} type="submit" bg={"#0CBF94"} w={"full"} isLoading={loading}>
+                      Save changes
+                    </Button>
                 </SimpleGrid>
 
                 <DrawerFooter></DrawerFooter>

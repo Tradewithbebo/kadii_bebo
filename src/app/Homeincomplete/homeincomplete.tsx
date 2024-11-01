@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import NavbarTwo from '../navbar/navbarTwo'
 import HomePageBody from '../incompleteKyc/HomepageForIncompletekyc'
 import { useRouter } from 'next/navigation'
+import { Fade } from 'react-awesome-reveal'
 export default function Homeincoplete() {
 
   const router = useRouter();
@@ -29,7 +30,7 @@ export default function Homeincoplete() {
   if (!isMounted) return null; // Prevent rendering on server-side
   return (
     <><NavbarTwo/>
-<HomePageBody/></>
+<Fade direction="up" triggerOnce><HomePageBody/></Fade></>
   )
 }
 

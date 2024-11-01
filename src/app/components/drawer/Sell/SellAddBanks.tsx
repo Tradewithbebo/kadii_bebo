@@ -78,7 +78,9 @@ export default function SellAddBank({ Setstep }: { Setstep: any }) {
               duration: 2000,
               isClosable: true,
               position: "bottom-left",
-            })}
+            })
+             onClosedelete()
+             getDetails()}
           
         } catch (err: any) {
           setLoading(false);

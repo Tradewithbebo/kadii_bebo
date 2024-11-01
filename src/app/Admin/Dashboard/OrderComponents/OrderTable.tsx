@@ -40,10 +40,11 @@ import Link from "next/link";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import { useAdminContext } from "../../Admincontext";
+import Decline from "./decline-transaction";
 
 const validationSchema = Yup.object({
   status: Yup.string().required('Status is required'), // Expecting a single string
-  comment: Yup.string().required('Comment is required'), // Expecting a single string
+  // comment: Yup.string().required('Comment is required'), // Expecting a single string
 });
 
 interface Transaction {
@@ -113,6 +114,16 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
     onOpen: onOpenConfirmTrx,
     onClose: onCloseConfirmTrx,
   } = useDisclosure();
+
+  const {
+    isOpen: declineOpen,
+    onOpen: declineonOpen,
+    onClose: declineClose,
+  } = useDisclosure();
+  const resetSelections = () => {
+    setSelectedStatusValue("");
+    // setSelectedCommentValue("");
+  };
   const { isOpen:isOpenStatus, onOpen:onOpenStatus, onClose:onCloseStatus } = useDisclosure();
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
@@ -494,13 +505,15 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
             )}
           </ModalBody>
           <ModalFooter>
-            {/* <Button
+             <Button
               colorScheme="red"
               mr={3}
-              onClick={() => alert("Transaction Declined!")}
+              onClick={async () =>{declineonOpen()
+              onClose()
+              }}
             >
               Decline Transaction
-            </Button> */}
+            </Button> 
             <Button
               colorScheme="green"
               onClick={() => handleConffirmation1()}
@@ -551,7 +564,10 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
           </ModalFooter>
         </ModalContent>
       </Modal>
-      <Modal isOpen={isOpenStatus} onClose={onCloseStatus} isCentered>
+      <Modal isOpen={isOpenStatus} onClose={() => {
+          onCloseStatus();
+          resetSelections(); // Reset selections on modal close
+        }} isCentered> 
         <ModalOverlay />
         <ModalContent>
           {/* <ModalHeader>CONFIRM ORDER</ModalHeader> */}
@@ -575,7 +591,7 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
             <GridItem>
               <VStack spacing={4} align="start">
                 <ModalHeader>CHANGE ORDER STATUS</ModalHeader>
-                <Checkbox 
+                {/* <Checkbox 
                   colorScheme="green" 
                   isChecked={selectedStatusValue === "PENDING"}
                   onChange={() => {
@@ -585,7 +601,7 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
                   }}
                 >
                   PENDING
-                </Checkbox>
+                </Checkbox> */}
                 <Checkbox 
                   colorScheme="green" 
                   isChecked={selectedStatusValue === "COMPLETED"}
@@ -597,7 +613,7 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
                 >
                   COMPLETED
                 </Checkbox>
-                <Checkbox 
+                {/* <Checkbox 
                   colorScheme="green" 
                   isChecked={selectedStatusValue === "FAILED"}
                   onChange={() => {
@@ -607,7 +623,7 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
                   }}
                 >
                   FAILED
-                </Checkbox>
+                </Checkbox> */}
               </VStack>
               {touched.status && errors.status && (
                 <Text color="red.500" fontSize="sm">{errors.status}</Text>
@@ -615,7 +631,7 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
             </GridItem>
 
             {/* Comment Checkboxes */}
-            <GridItem mt={4}>
+            {/* <GridItem mt={4}>
               <VStack spacing={4} align="start">
                 <ModalHeader>REASON FOR ORDER STATUS</ModalHeader>
                 <Checkbox 
@@ -666,20 +682,21 @@ ontapBuy_sell === "Buy" ? setCurrentPageBUY :
               {touched.comment && errors.comment && (
                 <Text color="red.500" fontSize="sm">{errors.comment}</Text>
               )}
-            </GridItem>
+            </GridItem> */}
           </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="green" mr={3} type="submit" isDisabled={!isValid || isSubmitting} isLoading={loading || isSubmitting}>
               Submit
             </Button>
-            <Button onClick={onCloseStatus}>Cancel</Button>
+            <Button onClick={()=>{onCloseStatus(),resetSelections()}}>Cancel</Button>
           </ModalFooter>
         </Form>
       )}
     </Formik>
         </ModalContent>
       </Modal>
+      <Decline transactionId={transactionId} declineOpen={declineOpen} declineClose={declineClose}/>
     </>
   );
 }

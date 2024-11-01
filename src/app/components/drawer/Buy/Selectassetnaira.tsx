@@ -311,9 +311,7 @@ export default function Selectnaira({
                   fontWeight={"600"}
                   color={isValid ? "#021D17" : "gray.600"}
                   isDisabled={!isValid || !dirty}
-                  _hover={{
-                    bg: isValid ? "#0CBF94" : "gray.400",
-                  }}
+                  
                   h={["50px", "50px", "44px"]}
                 >
                   Swap

@@ -19,11 +19,13 @@ import {
   Link,
   Spinner,
 } from "@chakra-ui/react";
+import { FaRegEyeSlash } from "react-icons/fa";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/navigation";
 import { AxiosPost } from "@/app/axios/axios";
+import { IoEyeOutline } from "react-icons/io5";
 
 // Validation Schema
 const validationSchema = Yup.object({
@@ -38,11 +40,12 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const router = useRouter();
+  const [show, setShow] = useState(false);
   
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  // const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const initialValues = { email: "", password: "" };
   const url = "admin/login";
-
+  const handleClick = () => setShow(!show);
   const handleSubmit = async (values: any) => {
     if (values) {
       setLoading(true);
@@ -112,21 +115,18 @@ export default function Login() {
                           Password
                         </FormLabel>
                         <InputGroup>
-                          <Field
-                            as={Input}
-                            type={showPassword ? "text" : "password"}
-                            name="password"
-                            placeholder="Enter your password"
-                          />
-                          <InputRightElement>
-                            <IconButton
-                              aria-label={showPassword ? "Hide password" : "Show password"}
-                              icon={showPassword ? <ViewOffIcon /> : <ViewIcon />}
-                              onClick={togglePasswordVisibility}
-                              variant="ghost"
-                            />
-                          </InputRightElement>
-                        </InputGroup>
+                        <Field
+                          as={Input}
+                          type={show ? "text" : "password"}
+                          name="password"
+                          placeholder="Enter your password"
+                        />
+                        <InputRightElement width="4.5rem">
+                          <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
                         <FormErrorMessage>{errors.password}</FormErrorMessage>
                       </FormControl>
                     </GridItem>

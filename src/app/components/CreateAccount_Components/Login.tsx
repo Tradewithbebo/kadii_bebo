@@ -129,7 +129,7 @@ export default function LoginComponent() {
                       fontWeight={"600"}
                       color={"#666666"}
                     >
-                      Login to continue transacting
+                      Login  or Create an Account to continue transacting 
                     </Text>
                   </Box>
                 </GridItem>
@@ -178,26 +178,27 @@ export default function LoginComponent() {
                     <FormLabel fontSize={"16px"} fontWeight={"600"}>
                       Password
                     </FormLabel>
-                    <InputGroup>
+                    {/* <InputGroup>
                       <Field
                         as={Input}
                        h={['50px','50px','44px']}
                         type={show ? "text" : "password"}
                         name="password"
                         placeholder="Enter your password"
-                      />
-                      <InputRightElement width="4.5rem">
-                        <Button
-                          h="1.75rem"
-                          size="sm"
-                          onClick={handleClick}
-                          bg={"transparent"}
-                          _hover={{ background: "transparent" }}
-                        >
-                          {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
+                      /> */}
+                       <InputGroup>
+                        <Field
+                          as={Input}
+                          type={show ? "text" : "password"}
+                          name="password"
+                          placeholder="Enter your password"
+                        />
+                        <InputRightElement width="4.5rem">
+                          <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
                     <FormErrorMessage>{errors.password}</FormErrorMessage>
                     <Link href="/createAccount/EntermailForgotpass">
                       <FormHelperText

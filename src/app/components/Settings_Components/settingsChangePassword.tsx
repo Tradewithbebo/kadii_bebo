@@ -21,11 +21,13 @@ import {
   InputRightElement,
   FormErrorMessage,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
+import { AxiosAuthPost } from "@/app/axios/axios";
 
 const PasswordSchema = Yup.object().shape({
   oldPassword: Yup.string().required("Old password is required"),
@@ -53,11 +55,43 @@ export default function SettingsChangePassword({
   onClose,
 }: Edith_profile) {
   const [show, setShow] = useState(false);
+  const [loading,setloading]=useState(false)
   const handleClick = () => setShow(!show);
-
-  const handleSubmit = (values: any) => {
-    // Handle form submission
-    console.log("Form values", values);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const toast=useToast()
+const url='auth/change-password'
+  const handleSubmit = async(values: any) => {
+    setloading(true)
+   try {
+    const res= await AxiosAuthPost(url,values) 
+   setloading(false)
+      if (res && res.data) {
+        toast({
+          title: "Success",
+          description: "password successfully changed",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+          position: "top-left",
+        });
+      }
+    
+   } catch (err: any) {
+    setloading(false);
+    let message = "Check your Network and try again.";
+    if (err.response && err.response.data && err.response.data.message) {
+      message = err.response.data.message;
+    }
+    setErrorMessage(message);
+    toast({
+      title: "Error",
+      description: message,
+      status: "error",
+      duration: 2000,
+      isClosable: true,
+      position: "bottom-left",
+    });
+  }
   };
 
   return (
@@ -152,8 +186,8 @@ export default function SettingsChangePassword({
                   </GridItem>
 
                   <GridItem w={"full"}>
-                    <Button type="submit" bg={"#0CBF94"} w={"full"}>
-                      Update profile
+                    <Button  h={["50px", "50px", "44px"]} type="submit" bg={"#0CBF94"} w={"full"} isLoading={loading}>
+                      Update password
                     </Button>
                   </GridItem>
                 </SimpleGrid>

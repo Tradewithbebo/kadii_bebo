@@ -153,25 +153,18 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                       Create password
                     </FormLabel>
                     <InputGroup>
-                      <Field
-                        h={['50px','50px','44px']}
-                        as={Input}
-                        type={show ? "text" : "password"}
-                        name="password"
-                        placeholder="Enter your password"
-                      />
-                      <InputRightElement width="4.5rem">
-                        <Button
-                          h="1.75rem"
-                          size="sm"
-                          onClick={handleClick}
-                          bg={"transparent"}
-                          _hover={{ background: "transparent" }}
-                        >
-                          {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
+                        <Field
+                          as={Input}
+                          type={show ? "text" : "password"}
+                          name="password"
+                          placeholder="Enter your password"
+                        />
+                        <InputRightElement width="4.5rem">
+                          <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
                     <FormErrorMessage>{errors.password}</FormErrorMessage>
                   </FormControl>
                 </GridItem>
@@ -185,25 +178,18 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                       Confirm password
                     </FormLabel>
                     <InputGroup>
-                      <Field
-                        h={['50px','50px','44px']}
-                        as={Input}
-                        type={show ? "text" : "password"}
-                        name="confirmPassword"
-                        placeholder="Confirm your password"
-                      />
-                      <InputRightElement width="4.5rem">
-                        <Button
-                          h="1.75rem"
-                          size="sm"
-                          onClick={handleClick}
-                          bg={"transparent"}
-                          _hover={{ background: "transparent" }}
-                        >
-                          {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
-                        </Button>
-                      </InputRightElement>
-                    </InputGroup>
+                        <Field
+                          as={Input}
+                          type={show ? "text" : "password"}
+                          name="confirmPassword"
+                          placeholder="Enter your password"
+                        />
+                        <InputRightElement width="4.5rem">
+                          <Button h="1.75rem" size="sm" onClick={handleClick}>
+                            {show ? <FaRegEyeSlash /> : <IoEyeOutline />}
+                          </Button>
+                        </InputRightElement>
+                      </InputGroup>
                     <FormErrorMessage>
                       {errors.confirmPassword}
                     </FormErrorMessage>

@@ -36,7 +36,7 @@ const handleNetworkError = (err: any, setErrorMessage: (msg: string) => void) =>
 // Main AdminContext Component
 export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   // States
-  const [buy_sell_all_state, setbuy_sell_all_state] = useState("SELL")
+  const [buy_sell_all_state, setbuy_sell_all_state] = useState("ALL")
   const [adminId, setAdminId] = useState("");
   const [usersId, setUsersId] = useState("");
   const [LoadingAdminuser, setLoadingAdminuser] = useState(false);
