@@ -488,7 +488,7 @@ export function BuyCrypto() {
         w={["80dvw", "450px", "668px"]}
         columns={[1, 1, 3]}
         spacingY={["5px", "5px", "20px"]}
-        
+        bg={'white'}
       >
         <GridItem
           colSpan={[1, 1, 3]}
