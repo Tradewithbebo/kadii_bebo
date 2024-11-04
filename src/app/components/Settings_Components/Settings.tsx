@@ -163,7 +163,7 @@ export default function Settings() {
                     {/* profile display */}
                     <SimpleGrid
                       px={["10px", "19px", "24px"]}
-                      w={["335px", "450px", "668px"]}
+                      w={["80dvw", "450px", "668px"]}
                       spacingY={["10px", "10px", "20px"]}
                       columns={[1, 1, 3]}
                       pb={"15px"}
@@ -245,7 +245,7 @@ export default function Settings() {
                     </SimpleGrid>
                     <SimpleGrid
                       px={["10px", "19px", "24px"]}
-                      w={["335px", "450px", "668px"]}
+                      w={["80dvw", "450px", "668px"]}
                       spacingY={["20px", "20px", "25px"]}
                       columns={[1, 1, 3]}
                       // maxHeight="400px" // Set the maximum height
@@ -467,9 +467,9 @@ export default function Settings() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
+              <SimpleGrid column={1} w={["87dvw", "465px", "692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
-                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
+                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs" h={"50px"}>
                     <Text
                       color={"#021D17"}
                       fontWeight={"600"}

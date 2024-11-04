@@ -141,7 +141,7 @@ export default function Transactions() {
                       w={["335px", "450px", "668px"]}
                       spacingY={["20px", "20px", "20px"]}
                       columns={1}
-                      // h={["60dvh", "65dvh"]}
+                      h={["60dvh", "65dvh"]}
                       // maxHeight="400px" // Set the maximum height
                       overflowY="auto" // Enable vertical scrolling
                     >
@@ -154,7 +154,7 @@ export default function Transactions() {
                           </Box>
                           <HStack
                             w={{ base: "90%", md: "95%" }}
-                            justifyContent="space-between"
+                            // justifyContent="space-between"
                           >
                             <Box w="50%">
                               <VStack w="full" align="start">
@@ -204,7 +204,7 @@ export default function Transactions() {
                           </HStack>
                         </HStack>
                       </Box>
-                      {/* <Box w="full">
+                      <Box w="full">
                         <HStack w="full" spacing={4}>
                           <Box w={{ base: "10%", md: "5%" }}>
                             <Box bg="blue" p="8px" rounded="50%">
@@ -213,7 +213,7 @@ export default function Transactions() {
                           </Box>
                           <HStack
                             w={{ base: "90%", md: "95%" }}
-                            justifyContent="space-between"
+                            // justifyContent="space-between"
                           >
                             <Box w="50%">
                               <VStack w="full" align="start">
@@ -262,7 +262,7 @@ export default function Transactions() {
                             </Box>
                           </HStack>
                         </HStack>
-                      </Box> */}
+                      </Box>
                     
                       <Box></Box>
                       <Box></Box>

@@ -7,12 +7,13 @@ import navItemsM from './navItemMobile';
 export default function Footer() {
   return (
     <HStack
-      gap={['50px', '40px', '80px']} // Adjusting gap for mobile, tablet, and desktop
-      justifyContent={'center'}
+      // gap={[ '80px']} // Adjusting gap for mobile, tablet, and desktop
+      justifyContent={'space-between'}
       display={'flex'}
       py={['10px', '15px', '20px']} // Padding for mobile, tablet, and desktop
-     
+     w={'100dvw'}
       alignItems={'center'}
+      px={'30px'}
     >
       {navItemsM.map((item) => (
         <NavLinkMobile key={item.title} items={item} />

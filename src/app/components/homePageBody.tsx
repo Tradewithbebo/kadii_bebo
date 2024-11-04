@@ -95,7 +95,7 @@ export default function HomePageBody() {
                 </Box>
               </Box>
               {/* bottom part */}
-              <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
+              <SimpleGrid column={1} w={["87dvw", "465px", "692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
                   <Button
                     bg={"#FFFFFF"}
