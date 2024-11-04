@@ -204,7 +204,7 @@ export default function Transactions() {
                           </HStack>
                         </HStack>
                       </Box>
-                      <Box w="full">
+                      {/* <Box w="full">
                         <HStack w="full" spacing={4}>
                           <Box w={{ base: "10%", md: "5%" }}>
                             <Box bg="blue" p="8px" rounded="50%">
@@ -262,7 +262,7 @@ export default function Transactions() {
                             </Box>
                           </HStack>
                         </HStack>
-                      </Box>
+                      </Box> */}
                     
                       <Box></Box>
                       <Box></Box>
