@@ -31,8 +31,8 @@ const navItems = [
     },
     {
       title: " Transactions",
-      path:   '',
-      icon: <FaFolderMinuss path={undefined} />
+      path:   '/Transactions',
+      icon: <FaFolderMinuss path={'/Transactions'} />
      
     },
     {

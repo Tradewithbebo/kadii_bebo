@@ -49,13 +49,11 @@ export function NavLinkMobile({ items }: { items: navitem }) {
   return (
     <Link href={items.path} 
     _hover={{
-        // bg: pathname?"":'#099137',
         transform: "scale(1.1)",
         paddingRight:"10px",
         paddingLeft:"5px",
         borderRadius:'5px'
       }}
-      //bg={pathname ? "#099137" : ""}
       >
     <VStack gap={''}>
     <Box>
