@@ -134,7 +134,7 @@ export function SellCrypto() {
   return (
     <SimpleGrid
       px={["10px", "19px", "119px"]}
-      w={["80dvw", "450px", "668px"]}
+      w={["335px", "450px", "668px"]}
       spacingY={["5px", "5px", "20px"]}
       columns={[1, 1, 3]}
     >
@@ -485,10 +485,9 @@ export function BuyCrypto() {
     <>
       <SimpleGrid
         px={["10px", "19px", "119px"]}
-        w={["80dvw", "450px", "668px"]}
+        w={["335px", "450px", "668px"]}
         columns={[1, 1, 3]}
         spacingY={["5px", "5px", "20px"]}
-        bg={'white'}
       >
         <GridItem
           colSpan={[1, 1, 3]}

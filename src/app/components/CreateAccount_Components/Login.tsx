@@ -192,6 +192,7 @@ export default function LoginComponent() {
                           type={show ? "text" : "password"}
                           name="password"
                           placeholder="Enter your password"
+                          h={['50px','50px','44px']}
                         />
                         <InputRightElement width="4.5rem">
                           <Button h="1.75rem" size="sm" onClick={handleClick}>

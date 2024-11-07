@@ -154,6 +154,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                     </FormLabel>
                     <InputGroup>
                         <Field
+                        h={['50px','50px','44px']}
                           as={Input}
                           type={show ? "text" : "password"}
                           name="password"
@@ -179,6 +180,7 @@ export default function PersonalDetails({ email,setStep }: { email: any,setStep:
                     </FormLabel>
                     <InputGroup>
                         <Field
+                        h={['50px','50px','44px']}
                           as={Input}
                           type={show ? "text" : "password"}
                           name="confirmPassword"

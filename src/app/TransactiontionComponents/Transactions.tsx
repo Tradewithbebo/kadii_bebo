@@ -34,45 +34,129 @@ import { MdDeleteOutline } from "react-icons/md";
 import NavbarTwo from "@/app/navbar/navbarTwo";
 import { AxiosGet } from "../axios/axios";
 import Footer from "../navbar/footer";
-import IfNotransaction from "./IfNotransaction";
 import { TransmitSqaure2 } from "iconsax-react";
+import TrxDetails from "./modalBYId";
 
 // import NavbarTwo from "../navbar/navbarTwo";
 // import Footer from "../navbar/footer";
 // import Edithprofile_Drawer from "../components/Settings_Components/Edithprofile_Drawer";
-interface user {
-  firstName: any;
-  lastName: any;
-  email: any;
-}
+
 export default function Transactions() {
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
-      case "Success":
+      case "completed":
         return { bg: "#C7EED5", color: "#2F7F37" };
-      case "Pending":
+      case "pending":
         return { bg: "#FCF2C1", color: "#B59803" };
-      case "Failed":
+      case "failed":
         return { bg: "#FF48341A", color: "#FF4834" };
       default:
         return { bg: "transparent", color: "#000000" };
     }
   };
-  const url = "auth/me";
-  const [userDetails, setUserDetails] = useState<user>();
+
+  interface Transaction {
+    [key: string]: any;
+  }
+  // <div>
+  // <button onClick={handlePreviousPage} disabled={pages === 1}>
+  //   Previous
+  // </button>
+  // <span>
+  //   Page {pages} of {totalPages}
+  // </span>
+  // <button onClick={handleNextPage} disabled={pages === totalPages}>
+  //   Next
+  // </button>
+  // </div>
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isMounted, setIsMounted] = useState(false);
+  function formatDate(dateString: any) {
+    const date = new Date(dateString);
+
+    // Get month names and suffix for the day
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const month = months[date.getMonth()];
+    const day = date.getDate();
+    const year = date.getFullYear();
+
+    // Determine the day suffix
+    const daySuffix = (day: any) => {
+      if (day === 1 || day === 21 || day === 31) return "st";
+      if (day === 2 || day === 22) return "nd";
+      if (day === 3 || day === 23) return "rd";
+      return "th";
+    };
+
+    // Format time in 12-hour format with AM/PM
+    let hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const ampm = hours >= 12 ? "pm" : "am";
+    hours = hours % 12 || 12; // Convert to 12-hour format, making '0' show as '12'
+
+    return `${month} ${day}${daySuffix(
+      day
+    )}, ${year} at ${hours}:${minutes}${ampm}`;
+  }
+  function formatToNaira(amount: any) {
+    return new Intl.NumberFormat("en-NG", {
+      style: "currency",
+      currency: "NGN",
+    }).format(amount);
+  }
+
+  // const TransactionsComponent = () => {
+  const [pages, setPages] = useState<number>(1);
+
+  const [userDetails, setUserDetails] = useState<Transaction[]>([]);
+  const [totalPages, setTotalPages] = useState<number>(1);
+const[ transactionId, setTransactionId]=useState(null)
+  const url = `transactions/user?limit=10&page=${pages}`;
+
   const fetchUserDetails = async () => {
     try {
       const res = await AxiosGet(url);
-      if (res) {
-        setUserDetails(res.data);
+
+      if (res.data) {
+        console.log("userDetails", userDetails);
+        setUserDetails(res.data.items);
+        setTotalPages(res.data.meta.totalPages); // Set total pages from response meta
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+
   useEffect(() => {
     fetchUserDetails();
-  });
+  }, [pages, totalPages]);
+
+  const handleNextPage = () => {
+    if (pages < totalPages) setPages(pages + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (pages > 1) setPages(pages - 1);
+  };
+  const handleclick = async(id:any) => {
+   
+     await setIsMounted(true)
+ onOpen()
+  };
   return (
     <>
       <Box w={"full"} position="fixed" top="0" zIndex="1000" bg={"#fafafa"}>
@@ -139,136 +223,100 @@ export default function Transactions() {
                       pt={"44px"}
                       px={["10px", "19px", "24px"]}
                       w={["335px", "450px", "668px"]}
-                      spacingY={["20px", "20px", "20px"]}
+                      spacingY={["30px", "30px", "30px"]}
                       columns={1}
                       h={["60dvh", "65dvh"]}
                       // maxHeight="400px" // Set the maximum height
                       overflowY="auto" // Enable vertical scrolling
                     >
-                      <Box w="full">
-                        <HStack w="full" spacing={4}>
-                          <Box w={{ base: "10%", md: "5%" }}>
-                            <Box bg="blue" p="8px" rounded="50%">
-                            <TransmitSqaure2 size="16" color="#FF8A65"/>
+                      {userDetails?.map((Trx: any, index: any) => (
+                        <Box
+                          w="full"
+                          onClick={()=>{handleclick(Trx._id)
+                            setTransactionId(Trx._id)}}
+                          cursor={"pointer"}
+                          key={index}
+                        >
+                          <HStack w="full" spacing={4}>
+                            <Box w={{ base: "10%", md: "5%" }}>
+                              <Center
+                                bg={getStatusStyle(Trx.status).bg}
+                                p="8px"
+                                rounded="50%"
+                              >
+                                <TransmitSqaure2
+                                  size="16"
+                                  color={getStatusStyle(Trx.status).color}
+                                />
+                              </Center>
                             </Box>
-                          </Box>
-                          <HStack
-                            w={{ base: "90%", md: "95%" }}
-                            // justifyContent="space-between"
-                          >
-                            <Box w="50%">
-                              <VStack w="full" align="start">
-                                <Box w="full">
-                                  <Text
-                                    color="#021D17"
-                                    fontSize={{ base: "14px", md: "16px" }}
-                                    fontWeight="600"
+                            <HStack
+                              w={{ base: "90%", md: "95%" }}
+                              // justifyContent="space-between"
+                            >
+                              <Box w="50%">
+                                <VStack w="full" align="start">
+                                  <Box w="full">
+                                    <Text
+                                      color="#021D17"
+                                      fontSize={{ base: "14px", md: "16px" }}
+                                      fontWeight="600"
+                                    >
+                                      {Trx.type.charAt(0).toUpperCase() +
+                                        Trx.type.slice(1).toLowerCase() +
+                                        " Crypto"}
+                                    </Text>
+                                  </Box>
+                                  <Box w="full">
+                                    <Text
+                                      color="#808080"
+                                      fontSize={{ base: "12px", md: "16px" }}
+                                      fontWeight="400"
+                                    >
+                                      {formatDate(Trx.createdAt)}
+                                    </Text>
+                                  </Box>
+                                </VStack>
+                              </Box>
+                              <Box w="50%">
+                                <VStack w="full" align="end">
+                                  <Box w="full" textAlign="right">
+                                    <Text
+                                      color="#021D17"
+                                      fontSize={{ base: "14px", md: "16px" }}
+                                      fontWeight="500"
+                                    >
+                                      {formatToNaira(Trx.amountNaira)}
+                                    </Text>
+                                  </Box>
+                                  <Box
+                                    w={"full"}
+                                    justifyContent={"flex-end"}
+                                    display={"flex"}
                                   >
-                                    Sell crypto
-                                  </Text>
-                                </Box>
-                                <Box w="full">
-                                  <Text
-                                    color="#808080"
-                                    fontSize={{ base: "12px", md: "16px" }}
-                                    fontWeight="400"
-                                  >
-                                    Jan 20th, 2024 at 10:00am
-                                  </Text>
-                                </Box>
-                              </VStack>
-                            </Box>
-                            <Box w="50%">
-                              <VStack w="full" align="end">
-                                <Box w="full" textAlign="right">
-                                  <Text
-                                    color="#021D17"
-                                    fontSize={{ base: "14px", md: "16px" }}
-                                    fontWeight="500"
-                                  >
-                                    ₦100,000,000.00
-                                  </Text>
-                                </Box>
-                                <Box w="full" textAlign="right">
-                                  <Text
-                                   fontStyle="italic"
-                                    fontWeight="300"
-                                    fontSize={{ base: "13px", md: "14px" }}
-                                    color={'green'}
-                                  >
-                                    Success
-                                  </Text>
-                                </Box>
-                              </VStack>
-                            </Box>
+                                    <Box
+                                      p={"5px"}
+                                      fontSize={"14px"}
+                                      fontWeight={"400"}
+                                      w={"fit-content"}
+                                      bg={getStatusStyle(Trx.status).bg}
+                                      color={getStatusStyle(Trx.status).color}
+                                      rounded={"10px"}
+                                    >
+                                      {Trx.status.toLowerCase()}
+                                    </Box>
+                                  </Box>
+                                </VStack>
+                              </Box>
+                            </HStack>
                           </HStack>
-                        </HStack>
-                      </Box>
-                      <Box w="full">
-                        <HStack w="full" spacing={4}>
-                          <Box w={{ base: "10%", md: "5%" }}>
-                            <Box bg="blue" p="8px" rounded="50%">
-                            <TransmitSqaure2 size="16" color="#FF8A65"/>
-                            </Box>
-                          </Box>
-                          <HStack
-                            w={{ base: "90%", md: "95%" }}
-                            // justifyContent="space-between"
-                          >
-                            <Box w="50%">
-                              <VStack w="full" align="start">
-                                <Box w="full">
-                                  <Text
-                                    color="#021D17"
-                                    fontSize={{ base: "14px", md: "16px" }}
-                                    fontWeight="600"
-                                  >
-                                    Sell crypto
-                                  </Text>
-                                </Box>
-                                <Box w="full">
-                                  <Text
-                                    color="#808080"
-                                    fontSize={{ base: "12px", md: "16px" }}
-                                    fontWeight="400"
-                                  >
-                                    Jan 20th, 2024 at 10:00am
-                                  </Text>
-                                </Box>
-                              </VStack>
-                            </Box>
-                            <Box w="50%">
-                              <VStack w="full" align="end">
-                                <Box w="full" textAlign="right">
-                                  <Text
-                                    color="#021D17"
-                                    fontSize={{ base: "14px", md: "16px" }}
-                                    fontWeight="500"
-                                  >
-                                    ₦100,000,000.00
-                                  </Text>
-                                </Box>
-                                <Box w="full" textAlign="right">
-                                  <Text
-                                   fontStyle="italic"
-                                    fontWeight="300"
-                                    fontSize={{ base: "12px", md: "14px" }}
-                                    color={'green'}
-                                  >
-                                    Success
-                                  </Text>
-                                </Box>
-                              </VStack>
-                            </Box>
-                          </HStack>
-                        </HStack>
-                      </Box>
-                    
-                      <Box></Box>
-                      <Box></Box>
-                      <Box></Box>
+                        </Box>
+                      ))}
+                      <TrxDetails
+                        isOpen={isOpen}
+                        onOpen={onOpen}
+                        onClose={onClose} TrxnId={transactionId} isMounted={isMounted} setIsMounted={setIsMounted}                      />
                     </SimpleGrid>
-                    {/* <IfNotransaction/> */}
                   </Box>
                 </Box>
               </Box>

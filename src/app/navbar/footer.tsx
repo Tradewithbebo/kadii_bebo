@@ -13,7 +13,7 @@ export default function Footer() {
       py={['10px', '15px', '20px']} // Padding for mobile, tablet, and desktop
      w={'100dvw'}
       alignItems={'center'}
-      px={'30px'}
+      px={'35px'}
     >
       {navItemsM.map((item) => (
         <NavLinkMobile key={item.title} items={item} />

@@ -23,13 +23,13 @@ export default function NavLink({ items }: { items: navitem }) {
         paddingLeft:"5px",
         borderRadius:'5px'
       }}
-      //bg={pathname ? "#099137" : ""}
+      //bg={pathname ?"#0CBF94": ""}
       >
     <HStack gap={"8px"}>
     <Box>
       {items.icon}
     </Box>
-    <Text  fontSize={"18px"} fontWeight={"600"} color={pathname ? "#099137" :"#999999"}>
+    <Text  fontSize={"18px"} fontWeight={"600"} color={pathname ?"#0CBF94":"#999999"}>
       {items.title}
     </Text>
   </HStack>
@@ -49,17 +49,19 @@ export function NavLinkMobile({ items }: { items: navitem }) {
   return (
     <Link href={items.path} 
     _hover={{
+        // bg: pathname?"":'#099137',
         transform: "scale(1.1)",
         paddingRight:"10px",
         paddingLeft:"5px",
         borderRadius:'5px'
       }}
+      //bg={pathname ?"#0CBF94": ""}
       >
     <VStack gap={''}>
     <Box>
       {items.icon}
     </Box>
-    <Text  fontSize={"16px"} fontWeight={"600"} color={pathname ? "#099137" :"#999999"}>
+    <Text  fontSize={"16px"} fontWeight={"600"} color={pathname ?"#0CBF94":"#999999"}>
       {items.title}
     </Text>
   </VStack>
