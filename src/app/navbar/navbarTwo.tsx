@@ -6,10 +6,14 @@ import { FaBell } from "react-icons/fa6";
 import React from "react";
 import navItems from "./navitem";
 import NavLink from "./navLink";
+import { useAdminContext } from "../Admin/Admincontext";
+import { useCryptoContext } from "../components/drawer/Buy/usecontextbuy";
 
 export default function NavbarTwo() {
+ const {userProfile, setUserProfile
+} = useCryptoContext();
   return (
-   <Box  >
+   <Box>
      <Flex px={["20px","72px"]}
        pt={['30px','28px']}
        pb={['30px','24px']}
@@ -43,7 +47,7 @@ export default function NavbarTwo() {
     boxSize={['35px','30px']}
     rounded={'50%'}
     objectFit='cover'
-    src='https://bit.ly/dan-abramov'
+    src={userProfile.image||'https://bit.ly/dan-abramov'}
     alt='Dan Abramov'
   />  
             </Box>

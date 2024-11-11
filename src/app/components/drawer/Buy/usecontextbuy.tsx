@@ -6,6 +6,7 @@ const CryptoContext = createContext<any>(null);
 
 export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   // State variables shared across components
+  const [userProfile, setUserProfile] = useState("")
   const [Conversion, setConversion] = useState<number | null>(null);
   const [Conversion2, setConversion2] = useState<number | null>(null);
   const [sellConversion2, setsellConversion2] = useState<number | null>(null);
@@ -124,6 +125,12 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
     image?: string; // Optional if you have an image property
   };
 
+  type UsersProfile = {
+   
+    // menu: JSX.Element;
+    image?: string; // Optional if you have an image property
+  };
+
   const getnetwork = async () => {
     try {
       const res = await AxiosGet(url);
@@ -157,6 +164,26 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   };
   
 
+  const getUserProfile = async () => {
+    const url0='auth/me'
+    try {
+
+      const res = await AxiosGet(url0);
+      if (res) {
+      
+        setUserProfile(res.data);
+        setErrorMessage(""); // Clear error message on success
+        return true;
+      }
+    } catch (err: any) {
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      setErrorMessage(message);
+    }
+    return false;
+  };
   useEffect(() => {
     let timeoutId: NodeJS.Timeout | undefined = undefined;
   
@@ -172,6 +199,7 @@ export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   
     fetchData(); // Initial call
     fetchUserData();
+    getUserProfile()
     return () => {
       if (timeoutId) {
         clearTimeout(timeoutId); // Clear the timeout if it exists
@@ -207,7 +235,7 @@ useEffect(() => {
         sellWetrade,
         setsellWetrade,
         // selectedNetwork,
-        // selectedSellNetwork, 
+        // selectedSellNetwork,
         // setSelectedSellNetwork,
         Refreshingprice,
         setmenucurrent_price,
@@ -262,7 +290,8 @@ useEffect(() => {
         transactionId,
         settransactionid,
         networks,
-        
+        userProfile,
+        setUserProfile,
       }}
     >
       {children}

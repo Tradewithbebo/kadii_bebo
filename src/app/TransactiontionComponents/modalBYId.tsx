@@ -339,7 +339,7 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
                   color={"#808080"}
                   cursor={"pointer"}>
                 {Transaction?.type === "BUY" ? "" :   <Text textAlign={'right'} w={'full'}>
-                {Transaction?.bank?.bankName}</Text>}
+                {Transaction?.bank?.bankName || 'Not Available'}</Text>}
               </Text>
             </GridItem>
             <GridItem colSpan={1}>
@@ -355,7 +355,7 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
                   color={"#808080"}
                   cursor={"pointer"}>
                 {Transaction?.type === "BUY" ? "" : <Text textAlign={'right'} w={'full'}>
-                { Transaction?.bank?.accountName }</Text>}
+                { Transaction?.bank?.accountName|| 'Not Available' }</Text>}
               </Text>
             </GridItem>
             <GridItem colSpan={1} >
@@ -381,10 +381,10 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
                     {Transaction?.bank?.bankName}</Text> */}
                    
                     <Text textAlign={'right'} w={'full'}>
-                    {Transaction?.bank?.accountNumber} </Text></HStack></>}
+                    {Transaction?.bank?.accountNumber || 'Not Available'} </Text></HStack></>}
                 </Text>
                 <Box
-                  onClick={() => handleCopy( Transaction?.bank?.accountNumber)}
+                  onClick={() => handleCopy( Transaction?.bank?.accountNumber || 'Not Available')}
                   cursor={"pointer"}
                 >
                   <IoCopyOutline color="#0CBF94" />

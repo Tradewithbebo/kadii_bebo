@@ -48,10 +48,10 @@ export default function Home() {
   return (
     <>
       <NavbarTwo />
-      <CryptoProvider>
+      
         <Fade direction="up" triggerOnce>  <HomePageBody /></Fade>
       
-      </CryptoProvider>
+      {/* </CryptoProvider> */}
     </>
   );
 }
