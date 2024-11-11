@@ -23,6 +23,7 @@ import {
   VStack,
   useToast,
   HStack,
+  Spinner,
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
@@ -38,11 +39,12 @@ interface trxdetails {
   TrxnId:any;
   isMounted:any;
   setIsMounted:any;
+  Loading:any
 }
 interface Transaction {
     [key: string]: any;
   }
-export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,setIsMounted }: trxdetails) {
+export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,setIsMounted,Loading }: trxdetails) {
   // const displayWalletAddress =
   // walletAddress.length > 5
   //   ? `${walletAddress.slice(0, 5)}...`
@@ -219,7 +221,12 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
         </DrawerHeader>
 
        <DrawerBody >
-        
+       {Loading ? (
+            <Box w={"full"} h={"100vh"} display="flex" justifyContent="center" alignItems="center">
+              <Spinner size="lg" />
+            </Box>
+          ) : (
+         <>
           <Box w={"full"}>
             <Text fontSize={"18px"} fontWeight={"600"}>
             {Transaction?.type.charAt(0).toUpperCase() +
@@ -280,14 +287,80 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
               justifyContent={"flex-end"}
               display={"flex"}
             >
-              <Text fontSize={"16px"} fontWeight={"400"} color={"#808080"}>
+              <Text fontSize={"16px"} fontWeight={"400"} color={"#808080"} textAlign={'right'}>
               {formatDate(Transaction?.createdAt)}
               </Text>
             </GridItem>
             
+
+            {Transaction?.type === "BUY" ? (<>
+            
+              <GridItem colSpan={1} >
+              <Text fontSize="16px" fontWeight="600">
+                Tx Wallet address
+              </Text>
+            </GridItem>
+            <GridItem
+              colSpan={1}
+              w={"full"}
+              justifyContent={"flex-end"}
+              display={"flex"}
+            >
+              <HStack>
+                <Text
+                  fontSize={"16px"}
+                  fontWeight={"400"}
+                  color={"#808080"}
+                  cursor={"pointer"}
+                >
+                  { Transaction?.walletAddress.slice(0, 12)+"...."}
+                </Text>
+                <Box
+                  onClick={() => handleCopy( Transaction?.bank?.accountNumber)}
+                  cursor={"pointer"}
+                >
+                  <IoCopyOutline color="#0CBF94" />
+                </Box>
+              </HStack>
+            </GridItem>
+            
+            </>) : (<>
+            
+              <GridItem colSpan={1}>
+              <Text fontSize="16px" fontWeight="600">
+                {Transaction?.type === "BUY" ? "" : "Tx Bank Name"}
+              </Text>
+            </GridItem>
+            <GridItem colSpan={1}   w={"full"}
+              justifyContent={"flex-end"}
+              display={"flex"}>
+              <Text  fontSize={"16px"}
+                  fontWeight={"400"}
+                  color={"#808080"}
+                  cursor={"pointer"}>
+                {Transaction?.type === "BUY" ? "" :   <Text textAlign={'right'} w={'full'}>
+                {Transaction?.bank?.bankName}</Text>}
+              </Text>
+            </GridItem>
             <GridItem colSpan={1}>
               <Text fontSize="16px" fontWeight="600">
-                {Transaction?.type === "BUY" ? "Tx Wallet address" : "Tx Account"}
+                {Transaction?.type === "BUY" ? "" : "Tx Account Name"}
+              </Text>
+            </GridItem>
+            <GridItem colSpan={1}    w={"full"}
+              justifyContent={"flex-end"}
+              display={"flex"}>
+              <Text   fontSize={"16px"}
+                  fontWeight={"400"}
+                  color={"#808080"}
+                  cursor={"pointer"}>
+                {Transaction?.type === "BUY" ? "" : <Text textAlign={'right'} w={'full'}>
+                { Transaction?.bank?.accountName }</Text>}
+              </Text>
+            </GridItem>
+            <GridItem colSpan={1} >
+              <Text fontSize="16px" fontWeight="600">
+                {Transaction?.type === "BUY" ? "Tx Wallet address" : "Tx Account Number"}
               </Text>
             </GridItem>
             <GridItem
@@ -303,44 +376,22 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
                   color={"#808080"}
                   cursor={"pointer"}
                 >
-                  {Transaction?.type === "BUY" ? Transaction?.walletAddress.slice(0, 12)+"....":Transaction?.accountNumber}
+                  {Transaction?.type === "BUY" ? Transaction?.walletAddress.slice(0, 12)+"....":<><HStack w={'full'} >
+                    {/* <Text textAlign={'right'} w={'full'}>
+                    {Transaction?.bank?.bankName}</Text> */}
+                   
+                    <Text textAlign={'right'} w={'full'}>
+                    {Transaction?.bank?.accountNumber} </Text></HStack></>}
                 </Text>
                 <Box
-                  onClick={() => handleCopy("0xy832bjbfbfvxtyuv...")}
+                  onClick={() => handleCopy( Transaction?.bank?.accountNumber)}
                   cursor={"pointer"}
                 >
                   <IoCopyOutline color="#0CBF94" />
                 </Box>
               </HStack>
-            </GridItem>
-            <GridItem colSpan={1}>
-              <Text fontSize={"16px"} fontWeight={"600"}>
-               Tx Account
-              </Text>
-            </GridItem>
-            <GridItem
-              colSpan={1}
-              w={"full"}
-              justifyContent={"flex-end"}
-              display={"flex"}
-            >
-              <HStack>
-                <Text
-                  fontSize={"16px"}
-                  fontWeight={"400"}
-                  color={"#808080"}
-                  cursor={"pointer"}
-                >
-                  0xy832bjbfbfvxt...
-                </Text>
-                <Box
-                  onClick={() => handleCopy("0xy832bjbfbfvxtyuv...")}
-                  cursor={"pointer"}
-                >
-                  <IoCopyOutline color="#0CBF94" />
-                </Box>
-              </HStack>
-            </GridItem>
+            </GridItem></>)}
+
             <GridItem colSpan={1}>
               <Text fontSize={"16px"} fontWeight={"600"}>
                 TxID
@@ -369,8 +420,8 @@ export default function TrxDetails({ isOpen, onOpen, onClose,TrxnId,isMounted,se
                 </Box>
               </HStack>
             </GridItem>
-          </SimpleGrid>
-       
+          </SimpleGrid></>
+       )}
 
         </DrawerBody>
 

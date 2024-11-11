@@ -72,6 +72,7 @@ export default function Transactions() {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isMounted, setIsMounted] = useState(false);
+  const [loading, setLoading] = useState(false); // Added loading state
   function formatDate(dateString: any) {
     const date = new Date(dateString);
 
@@ -124,7 +125,7 @@ export default function Transactions() {
 
   const [userDetails, setUserDetails] = useState<Transaction[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
-const[ transactionId, setTransactionId]=useState(null)
+  const [transactionId, setTransactionId] = useState(null);
   const url = `transactions/user?limit=10&page=${pages}`;
 
   const fetchUserDetails = async () => {
@@ -152,11 +153,18 @@ const[ transactionId, setTransactionId]=useState(null)
   const handlePreviousPage = () => {
     if (pages > 1) setPages(pages - 1);
   };
-  const handleclick = async(id:any) => {
-   
-     await setIsMounted(true)
- onOpen()
+  const handleclick = (id: any) => {
+    setTransactionId(id); // First, set the transactionId
+    setLoading(true); // Set loading to true when the modal opens
+    setIsMounted(true); // Set the mounted state if necessary
+    onOpen(); // Open the modal
+
+    // Set a timeout to stop loading after 2 seconds
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
   };
+
   return (
     <>
       <Box w={"full"} position="fixed" top="0" zIndex="1000" bg={"#fafafa"}>
@@ -232,8 +240,10 @@ const[ transactionId, setTransactionId]=useState(null)
                       {userDetails?.map((Trx: any, index: any) => (
                         <Box
                           w="full"
-                          onClick={()=>{handleclick(Trx._id)
-                            setTransactionId(Trx._id)}}
+                          onMouseEnter={() => setTransactionId(Trx._id)}
+                          onClick={() => {
+                            handleclick(Trx._id);
+                          }}
                           cursor={"pointer"}
                           key={index}
                         >
@@ -315,7 +325,12 @@ const[ transactionId, setTransactionId]=useState(null)
                       <TrxDetails
                         isOpen={isOpen}
                         onOpen={onOpen}
-                        onClose={onClose} TrxnId={transactionId} isMounted={isMounted} setIsMounted={setIsMounted}                      />
+                        onClose={onClose}
+                        TrxnId={transactionId}
+                        isMounted={isMounted}
+                        setIsMounted={setIsMounted}
+                        Loading={loading}
+                      />
                     </SimpleGrid>
                   </Box>
                 </Box>
