@@ -53,7 +53,7 @@ export default function SendMoney({
      settransactionid,
    } = useCryptoContext();
   const [loading, setLoading] = useState(false);
-  const [loading2, setLoading2] = useState(false);
+  // const [loading2, setLoading2] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const id=transactionId
@@ -280,6 +280,7 @@ export default function SendMoney({
                   fontWeight="600"
                   color="#021D17"
                   h={['50px','50px','44px']}
+                  isLoading={loading}
                 >
                   I have paid
                 </Button>

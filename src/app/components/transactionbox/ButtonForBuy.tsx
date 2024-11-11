@@ -28,8 +28,7 @@ export  function ButtonForsell({onOpen}:{onOpen:any}) {
         w={"100%"}
         color={"#021D17"}
         h={["50px", "50px", "44px"]}
-      >
-        Get bank account details
+      >Get wallet address
       </Button>
     </div>
   );

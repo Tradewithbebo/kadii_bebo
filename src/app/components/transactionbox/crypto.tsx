@@ -690,8 +690,8 @@ export function BuyCrypto() {
                   fontSize={["12px", "14px"]}
                   color={"#808080"}
                 >
-                  To sell your crypto, click on the green button below to
-                  generate a wallet address to send your crypto.
+                  To buy crypto. click on the green button below to generate a
+                  bank account to transfer funds to.
                 </Text>
               </Box>
             </HStack>

@@ -433,18 +433,21 @@ export default function Settings() {
                         isOpen={isopenDelete}
                         leastDestructiveRef={cancelRef}
                         onClose={oncloseDelete}
-                        size={["sm", "sm", "md"]}
+                        size={"sm"}
                         isCentered
                       >
                         <AlertDialogOverlay>
                           <AlertDialogContent>
-                            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+                            <AlertDialogHeader fontSize="sm" fontWeight="bold">
                               Delete Account
                             </AlertDialogHeader>
 
-                            <AlertDialogBody>
-                              Are you sure you want to delete your account? This
-                              action cannot be reversed.
+                            <AlertDialogBody w={'full'} display={'flex'} justifyContent={'center'}>
+                              <Text w={"70%"} textAlign={"center"}>
+                                {" "}
+                                Are you sure you want to delete your account?
+                                This action cannot be reversed.
+                              </Text>
                             </AlertDialogBody>
 
                             <AlertDialogFooter>
@@ -469,7 +472,13 @@ export default function Settings() {
               {/* bottom part */}
               <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
                 <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
-                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs" h={'50px'}>
+                  <Button
+                    bg={"#FFFFFF"}
+                    w={"100%"}
+                    py={"18px"}
+                    boxShadow="xs"
+                    h={"50px"}
+                  >
                     <Text
                       color={"#021D17"}
                       fontWeight={"600"}
