@@ -45,6 +45,7 @@ interface user {
   firstName: any;
   lastName: any;
   email: any;
+  username:any
 }
 export default function Settings() {
   const {
@@ -190,7 +191,14 @@ export default function Settings() {
                                     fontWeight={"600"}
                                     color={"#021D17"}
                                   >
-                                    {userDetails?.firstName
+                                    {userDetails?.username
+                                      ? userDetails.username.length > 12
+                                        ? `${userDetails.username.slice(
+                                            0,
+                                            13
+                                          )}...`
+                                        : userDetails.username
+                                      : userDetails?.firstName
                                       ? userDetails.firstName.length > 12
                                         ? `${capitalizeFirstLetter(
                                             userDetails.firstName
@@ -209,8 +217,8 @@ export default function Settings() {
                                     color={"#808080"}
                                   >
                                     {userDetails?.email &&
-                                    userDetails.email > 12
-                                      ? `userDetails?.email.slice(0,13)...`
+                                    userDetails.email.length > 12
+                                      ? `${userDetails.email.slice(0, 13)}...`
                                       : userDetails?.email}
                                   </Text>
                                 </Box>
@@ -442,7 +450,11 @@ export default function Settings() {
                               Delete Account
                             </AlertDialogHeader>
 
-                            <AlertDialogBody w={'full'} display={'flex'} justifyContent={'center'}>
+                            <AlertDialogBody
+                              w={"full"}
+                              display={"flex"}
+                              justifyContent={"center"}
+                            >
                               <Text w={"70%"} textAlign={"center"}>
                                 {" "}
                                 Are you sure you want to delete your account?

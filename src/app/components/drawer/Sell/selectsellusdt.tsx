@@ -116,36 +116,36 @@ const url = "wallet/assets";
     }
   };
   
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
-    let intervalId: NodeJS.Timeout | undefined;
+  // useEffect(() => {
+  //   let timeoutId: NodeJS.Timeout | undefined;
+  //   let intervalId: NodeJS.Timeout | undefined;
   
-    const fetchData = async () => {
-      if (sellRate !== 50) {
-        const success = await getUpdatedPrice(sellRate);
+  //   const fetchData = async () => {
+  //     if (sellRate !== 50) {
+  //       const success = await getUpdatedPrice(sellRate);
         
-        if (!success) {
-          // Retry after 2 seconds if the fetch failed
-          timeoutId = setTimeout(fetchData, 2000);
-        }
-      }
-    };
+  //       if (!success) {
+  //         // Retry after 2 seconds if the fetch failed
+  //         timeoutId = setTimeout(fetchData, 2000);
+  //       }
+  //     }
+  //   };
   
-    if (sellRate  !== 50) {
-      fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
+  //   if (sellRate  !== 50) {
+  //     fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
   
-      intervalId = setInterval(() => {
-        fetchData();  // Fetch the updated price every 3 seconds
-      }, 3000);  // Set a more reasonable interval (e.g., 3 seconds)
-    }
+  //     intervalId = setInterval(() => {
+  //       fetchData();  // Fetch the updated price every 3 seconds
+  //     }, 1800000); 
+  //   }
   
     // Cleanup both interval and timeout when component unmounts or when selectedsellNetwork changes
-    return () => {
-      if (intervalId) clearInterval(intervalId); // Cleanup interval
-      if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
-    };
+  //   return () => {
+  //     if (intervalId) clearInterval(intervalId); // Cleanup interval
+  //     if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
+  //   };
   
-  }, [sellRate]);
+  // }, [sellRate]);
   // Re-run when selectedsellNetwork changes
   
   return (

@@ -140,36 +140,36 @@ export default function GeneralFormPage({
     }
   };
   
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout | undefined;
-    let intervalId: NodeJS.Timeout | undefined;
+  // useEffect(() => {
+  //   let timeoutId: NodeJS.Timeout | undefined;
+  //   let intervalId: NodeJS.Timeout | undefined;
   
-    const fetchData = async () => {
-      if (toprice && currentsName !== "") {
-        const success = await getUpdatedPrice();
+  //   const fetchData = async () => {
+  //     if (toprice && currentsName !== "") {
+  //       const success = await getUpdatedPrice();
         
-        if (!success) {
-          // Retry after 2 seconds if the fetch failed
-          timeoutId = setTimeout(fetchData, 2000);
-        }
-      }
-    };
+  //       if (!success) {
+  //         // Retry after 2 seconds if the fetch failed
+  //         timeoutId = setTimeout(fetchData, 300000);
+  //       }
+  //     }
+  //   };
   
-    if (toprice && currentsName !== "") {
-      fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
+  //   if (toprice && currentsName !== "") {
+  //     fetchData(); // Trigger fetch immediately when selectedsellNetwork is set
   
-      intervalId = setInterval(() => {
-        fetchData();  // Fetch the updated price every 3 seconds
-      }, 3000);  // Set a more reasonable interval (e.g., 3 seconds)
-    }
+  //     intervalId = setInterval(() => {
+  //       fetchData();  // Fetch the updated price every 3 seconds
+  //     }, 300000);  // Set a more reasonable interval (e.g., 3 seconds)
+  //   }
   
-    // Cleanup both interval and timeout when component unmounts or when selectedsellNetwork changes
-    return () => {
-      if (intervalId) clearInterval(intervalId); // Cleanup interval
-      if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
-    };
+  //   // Cleanup both interval and timeout when component unmounts or when selectedsellNetwork changes
+  //   return () => {
+  //     if (intervalId) clearInterval(intervalId); // Cleanup interval
+  //     if (timeoutId) clearTimeout(timeoutId);    // Cleanup retry timeout
+  //   };
   
-  }, [toprice]);
+  // }, [toprice]);
   // Re-run when selectedsellNetwork changes
   
 

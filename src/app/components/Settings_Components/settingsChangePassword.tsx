@@ -65,14 +65,14 @@ const url='auth/change-password'
    try {
     const res= await AxiosAuthPost(url,values) 
    setloading(false)
-      if (res && res.data) {
+      if (res) {
         toast({
           title: "Success",
           description: "password successfully changed",
           status: "success",
           duration: 2000,
           isClosable: true,
-          position: "top-left",
+          position: "bottom-left",
         });
       }
     

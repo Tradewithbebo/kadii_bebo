@@ -23,7 +23,7 @@ export default function SuccessBuy() {
     alt='Bebo' />
 </Box></Box>
         </GridItem></Fade>
-        <GridItem rounded={'50%'}> <ConfettiPop /></GridItem>
+       
         <GridItem mb={'24px'} textAlign={'center'} colSpan={1}>
             <Text color={'#021D17'} fontWeight={'600'} fontSize={["32px",'40px']}> 
             Success
@@ -31,7 +31,7 @@ export default function SuccessBuy() {
             </GridItem>
             <GridItem mb={'40px'} textAlign={'center'} colSpan={1}>
             <Text color={'#666666'} fontWeight={'600'} fontSize={["16px",'18px']} >
-            Transaction successfully  initiated
+            Transaction successfully  initiated awaiting confirmation
             </Text>
             </GridItem>
             {/* <GridItem colSpan={1} mt={"4px"}>

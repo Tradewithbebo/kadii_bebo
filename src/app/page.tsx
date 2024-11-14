@@ -49,7 +49,7 @@ export default function Home() {
     <>
       <NavbarTwo />
       
-        <Fade direction="up" triggerOnce>  <HomePageBody /></Fade>
+        <Fade direction="up" triggerOnce> <CryptoProvider> <HomePageBody /></CryptoProvider></Fade>
       
       {/* </CryptoProvider> */}
     </>
