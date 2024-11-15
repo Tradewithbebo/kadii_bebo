@@ -17,6 +17,7 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Spinner,
 } from "@chakra-ui/react";
 import { PiPencilSimpleLine } from "react-icons/pi";
 import { CiLock } from "react-icons/ci";
@@ -45,9 +46,11 @@ interface user {
   firstName: any;
   lastName: any;
   email: any;
-  username:any
+  username:any;
+  image:any
 }
 export default function Settings() {
+  const [loading, setLoading] = useState(true); 
   const {
     isOpen: isopenDelete,
     onOpen: onopenDelete,
@@ -88,12 +91,14 @@ export default function Settings() {
   const [userDetails, setUserDetails] = useState<user>();
   const fetchUserDetails = async () => {
     try {
-      const res = await AxiosGet(url);
+      const res = await AxiosGet("auth/me");
       if (res) {
         setUserDetails(res.data);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false); // Stop loading after fetching data
     }
   };
   useEffect(() => {
@@ -121,6 +126,12 @@ export default function Settings() {
           pb={["30px", "100px"]}
           // w={'full'}
         >
+
+{loading ? ( // Show spinner if loading
+            <Center h="100vh">
+              <Spinner size="xl" />
+            </Center>
+          ) : 
           <Box
             w={"full"}
             height={"full"}
@@ -179,7 +190,7 @@ export default function Settings() {
                               <Image
                                 borderRadius="full"
                                 boxSize="65px"
-                                src="https://bit.ly/dan-abramov"
+                                src={userDetails?.image ??"https://img.icons8.com/office/50/gender-neutral-user.png"}
                                 alt="Dan Abramov"
                                 // flex={1}
                               />
@@ -522,7 +533,7 @@ export default function Settings() {
                 <Footer />
               </Box>
             </VStack>
-          </Box>
+          </Box>}
         </Box>
       </Box>
     </>

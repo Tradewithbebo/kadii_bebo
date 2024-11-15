@@ -42,14 +42,16 @@ export default function Decline({
   const [customComment, setCustomComment] = useState<string>("");
   const url = "transactions/update-status";
   const [loading, setLoading] = useState(false);
-  const resetSelections = () => {
-    setSelectedStatusValue("");
-    setSelectedCommentValue("");
-  };
   const { isOpen: isOpenDecline, onOpen: onOpenDecline, onClose: onCloseDecline } = useDisclosure();
   const toast = useToast();
 
-  const handleConfirmation = async (values: any) => {
+  const resetSelections = () => {
+    setSelectedStatusValue("");
+    setSelectedCommentValue("");
+    setCustomComment("");
+  };
+
+  const handleConfirmation = async (values: any, resetForm: any) => {
     try {
       setLoading(true);
       const res = await AxiosAuthPatch(url, values);
@@ -57,6 +59,7 @@ export default function Decline({
         setLoading(false);
         onOpenDecline();
         declineClose();
+        resetForm(); // Reset Formik form on successful submission
       }
     } catch (err: any) {
       setLoading(false);
@@ -91,12 +94,12 @@ export default function Decline({
               status: "",
               comment: "",
             }}
-            onSubmit={(values) => {
-              handleConfirmation(values);
+            onSubmit={(values, { resetForm }) => {
+              handleConfirmation(values, resetForm); // Pass resetForm to handleConfirmation
               onCloseDecline();
             }}
           >
-            {({ setFieldValue, touched, errors, isValid, isSubmitting }) => (
+            {({ setFieldValue, touched, errors, isValid, isSubmitting, resetForm }) => (
               <Form>
                 <ModalBody>
                   <GridItem>
@@ -222,7 +225,12 @@ export default function Decline({
                   >
                     Submit
                   </Button>
-                  <Button onClick={()=>{declineClose(),resetSelections()}}>Cancel</Button>
+                  <Button onClick={() => {
+                    declineClose();
+                    resetSelections(); // Reset selections on cancel
+                  }}>
+                    Cancel
+                  </Button>
                 </ModalFooter>
               </Form>
             )}

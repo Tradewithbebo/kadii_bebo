@@ -36,6 +36,7 @@ const handleNetworkError = (err: any, setErrorMessage: (msg: string) => void) =>
 // Main AdminContext Component
 export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   // States
+  const [NotificationCount, setNotificationCount] = useState(null)
   const [buy_sell_all_state, setbuy_sell_all_state] = useState("ALL")
   const [adminId, setAdminId] = useState("");
   const [usersId, setUsersId] = useState("");
@@ -313,6 +314,8 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
         settotalPagesBUY,
         buy_sell_all_state,
         setbuy_sell_all_state,
+        NotificationCount,
+        setNotificationCount,
       }}
     >
       {children}

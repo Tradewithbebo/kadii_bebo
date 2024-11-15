@@ -36,6 +36,7 @@ import { AxiosGet } from "../axios/axios";
 import Footer from "../navbar/footer";
 import { TransmitSqaure2 } from "iconsax-react";
 import TrxDetails from "./modalBYId";
+import IfNotransaction from "./IfNotransaction";
 
 // import NavbarTwo from "../navbar/navbarTwo";
 // import Footer from "../navbar/footer";
@@ -227,111 +228,69 @@ export default function Transactions() {
                       </Text>
                     </Box>
 
-                    <SimpleGrid
-                      pt={"44px"}
-                      px={["10px", "19px", "24px"]}
-                      w={["335px", "450px", "668px"]}
-                      spacingY={["30px", "30px", "30px"]}
-                      columns={1}
-                      h={["60dvh", "65dvh"]}
-                      // maxHeight="400px" // Set the maximum height
-                      overflowY="auto" // Enable vertical scrolling
-                    >
-                      {userDetails?.map((Trx: any, index: any) => (
-                        <Box
-                          w="full"
-                          onMouseEnter={() => setTransactionId(Trx._id)}
-                          onClick={() => {
-                            handleclick(Trx._id);
-                          }}
-                          cursor={"pointer"}
-                          key={index}
-                        >
-                          <HStack w="full" spacing={4}>
-                            <Box w={{ base: "10%", md: "5%" }}>
-                              <Center
-                                bg={getStatusStyle(Trx.status).bg}
-                                p="8px"
-                                rounded="50%"
-                              >
-                                <TransmitSqaure2
-                                  size="16"
-                                  color={getStatusStyle(Trx.status).color}
-                                />
-                              </Center>
-                            </Box>
-                            <HStack
-                              w={{ base: "90%", md: "95%" }}
-                              // justifyContent="space-between"
-                            >
-                              <Box w="50%">
-                                <VStack w="full" align="start">
-                                  <Box w="full">
-                                    <Text
-                                      color="#021D17"
-                                      fontSize={{ base: "14px", md: "16px" }}
-                                      fontWeight="600"
-                                    >
-                                      {Trx.type.charAt(0).toUpperCase() +
-                                        Trx.type.slice(1).toLowerCase() +
-                                        " Crypto"}
-                                    </Text>
-                                  </Box>
-                                  <Box w="full">
-                                    <Text
-                                      color="#808080"
-                                      fontSize={{ base: "12px", md: "16px" }}
-                                      fontWeight="400"
-                                    >
-                                      {formatDate(Trx.createdAt)}
-                                    </Text>
-                                  </Box>
-                                </VStack>
-                              </Box>
-                              <Box w="50%">
-                                <VStack w="full" align="end">
-                                  <Box w="full" textAlign="right">
-                                    <Text
-                                      color="#021D17"
-                                      fontSize={{ base: "14px", md: "16px" }}
-                                      fontWeight="500"
-                                    >
-                                      {formatToNaira(Trx.amountNaira)}
-                                    </Text>
-                                  </Box>
-                                  <Box
-                                    w={"full"}
-                                    justifyContent={"flex-end"}
-                                    display={"flex"}
-                                  >
-                                    <Box
-                                      p={"5px"}
-                                      fontSize={"14px"}
-                                      fontWeight={"400"}
-                                      w={"fit-content"}
-                                      bg={getStatusStyle(Trx.status).bg}
-                                      color={getStatusStyle(Trx.status).color}
-                                      rounded={"10px"}
-                                    >
-                                      {Trx.status.toLowerCase()}
-                                    </Box>
-                                  </Box>
-                                </VStack>
-                              </Box>
-                            </HStack>
-                          </HStack>
-                        </Box>
-                      ))}
-                      <TrxDetails
-                        isOpen={isOpen}
-                        onOpen={onOpen}
-                        onClose={onClose}
-                        TrxnId={transactionId}
-                        isMounted={isMounted}
-                        setIsMounted={setIsMounted}
-                        Loading={loading}
-                      />
-                    </SimpleGrid>
+                    {userDetails.length > 0 ? (
+  <SimpleGrid
+    pt="44px"
+    px={["10px", "19px", "24px"]}
+    w={["335px", "450px", "668px"]}
+    spacingY="30px"
+    columns={1}
+    h={["60dvh", "65dvh"]}
+    overflowY="auto"
+  >
+    {userDetails.map((Trx, index) => {
+      const statusStyle = getStatusStyle(Trx.status);
+      return (
+        <Box
+          key={Trx._id || index}
+          w="full"
+          onMouseEnter={() => setTransactionId(Trx._id)}
+          onClick={() => handleclick(Trx._id)}
+          cursor="pointer"
+        >
+          <HStack w="full" spacing={4}>
+            <Box w={{ base: "10%", md: "5%" }}>
+              <Center bg={statusStyle.bg} p="8px" rounded="50%">
+                <TransmitSqaure2 size="16" color={statusStyle.color} />
+              </Center>
+            </Box>
+            <HStack w={{ base: "90%", md: "95%" }}>
+              <Box w="50%">
+                <Text color="#021D17" fontSize={{ base: "14px", md: "16px" }} fontWeight="600">
+                  {`${Trx.type.charAt(0).toUpperCase() + Trx.type.slice(1).toLowerCase()} Crypto`}
+                </Text>
+                <Text color="#808080" fontSize={{ base: "12px", md: "16px" }} fontWeight="400">
+                  {formatDate(Trx.createdAt)}
+                </Text>
+              </Box>
+              <Box w="50%" textAlign="right">
+                <Text color="#021D17" fontSize={{ base: "14px", md: "16px" }} fontWeight="500">
+                  {formatToNaira(Trx.amountNaira)}
+                </Text>
+                <Box p="5px" fontSize="14px" fontWeight="400" w="fit-content" bg={statusStyle.bg} color={statusStyle.color} rounded="10px">
+                  {Trx.status.toLowerCase()}
+                </Box>
+              </Box>
+            </HStack>
+          </HStack>
+        </Box>
+      );
+    })}
+
+    <TrxDetails
+      isOpen={isOpen}
+      onOpen={onOpen}
+      onClose={onClose}
+      TrxnId={transactionId}
+      isMounted={isMounted}
+      setIsMounted={setIsMounted}
+      Loading={loading}
+    />
+  </SimpleGrid>
+) : (
+  <IfNotransaction />
+)}
+
                   </Box>
                 </Box>
               </Box>

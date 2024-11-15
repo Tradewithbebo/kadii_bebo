@@ -16,9 +16,11 @@ import {
 } from "@chakra-ui/react";
 import { GoDotFill } from "react-icons/go";
 import { IoIosCheckmarkCircle } from "react-icons/io"; // Example alternate icon
-import { AxiosGet } from "../axios/axios";
+// import { AxiosGet } from "../axios/axios";
 import Notifications from "./notification";
-import { useCryptoContext } from "../components/drawer/Buy/usecontextbuy";
+import { AxiosGet } from "@/app/axios/axios";
+import { useAdminContext } from "../Admincontext";
+// import { useCryptoContext } from "../components/drawer/Buy/usecontextbuy";
 
 type Modalopenin = {
   isOpen: any;
@@ -38,7 +40,7 @@ interface Notification {
 export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin) {
  const { NotificationCount,
     setNotificationCount
-  } = useCryptoContext();
+  } = useAdminContext();
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
       case 'transaction completed':

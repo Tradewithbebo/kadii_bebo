@@ -6,6 +6,7 @@ const CryptoContext = createContext<any>(null);
 
 export const CryptoProvider = ({ children }: { children: React.ReactNode }) => {
   // State variables shared across components
+  const [NotificationCount, setNotificationCount] = useState(null)
   const [userProfile, setUserProfile] = useState("")
   const [Conversion, setConversion] = useState<number | null>(null);
   const [Conversion2, setConversion2] = useState<number | null>(null);
@@ -292,6 +293,8 @@ useEffect(() => {
         networks,
         userProfile,
         setUserProfile,
+        NotificationCount,
+         setNotificationCount
       }}
     >
       {children}

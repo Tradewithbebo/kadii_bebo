@@ -8,7 +8,8 @@ import {
   ModalBody,
   Spinner,
 } from '@chakra-ui/react';
-import { AxiosAuthPatch } from '../axios/axios';
+import { AxiosAuthPatch } from '@/app/axios/axios';
+// import { AxiosAuthPatch } from '../axios/axios';
 
 interface Notification {
   title: string;
