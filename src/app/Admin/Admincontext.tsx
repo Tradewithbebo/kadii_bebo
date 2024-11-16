@@ -239,7 +239,7 @@ export const AdminContext = ({ children }: { children: React.ReactNode }) => {
   
     // Clear the interval when the component unmounts or currentPage changes
     return () => clearInterval(intervalId);
-  }, [currentPage,currentPageBUY,currentPageSELL]);
+  }, [currentPage,currentPageBUY,currentPageSELL,totalItemsBUY,totalItemsSELL,transaction]);
   
   useEffect(() => {
     const fetchData = async () => {

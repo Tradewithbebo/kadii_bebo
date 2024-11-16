@@ -281,83 +281,83 @@ let bank = ontapBuy_sell === "Sell" ? bankSELL : bankBUY;
   });
 
   let header = ontapBuy_sell === "Sell" ? headers_For_Sell : headers_For_Buy;
-  if (Loadingtr) {
-    return (
-      <Box>
-        <HStack
-          gap={["15px", "40px"]}
-          display={"flex"}
-          justifyContent={"center"}
-        >
-          <Fade key={key} cascade damping={0.1}>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              B
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              E
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              B
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              O
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              .
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              .
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              .
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              .
-            </Text>
-            <Text
-              fontSize={["20px", "60px"]}
-              fontWeight={"700"}
-              color={"#0AA07C"}
-            >
-              .
-            </Text>
-          </Fade>
-        </HStack>
-      </Box>
-    );
-  }
+  // if (Loadingtr) {
+  //   return (
+  //     <Box>
+  //       <HStack
+  //         gap={["15px", "40px"]}
+  //         display={"flex"}
+  //         justifyContent={"center"}
+  //       >
+  //         <Fade key={key} cascade damping={0.1}>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             B
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             E
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             B
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             O
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             .
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             .
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             .
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             .
+  //           </Text>
+  //           <Text
+  //             fontSize={["20px", "60px"]}
+  //             fontWeight={"700"}
+  //             color={"#0AA07C"}
+  //           >
+  //             .
+  //           </Text>
+  //         </Fade>
+  //       </HStack>
+  //     </Box>
+  //   );
+  // }
   return (
     <Box w={'full'}>
       <OrderTable

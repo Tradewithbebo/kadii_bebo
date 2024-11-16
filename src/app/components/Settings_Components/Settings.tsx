@@ -128,7 +128,7 @@ export default function Settings() {
         >
 
 {loading ? ( // Show spinner if loading
-            <Center h="100vh">
+            <Center h="50vh">
               <Spinner size="xl" />
             </Center>
           ) : 
