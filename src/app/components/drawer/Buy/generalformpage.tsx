@@ -355,21 +355,18 @@ export default function GeneralFormPage({
             <>
               <ConfirmBuyOrder
                 setStep={setStep}
-                Amount={
-                  Currency
-                    ? new Intl.NumberFormat("en-NG", {
-                        // style: 'currency',
-                        // currency: 'NGN',
-                      }).format(Number(naira))
-                    : Number(USDT)
-                }
+                Amount={Currency
+                  ? new Intl.NumberFormat("en-NG", {
+                    // style: 'currency',
+                    // currency: 'NGN',
+                  }).format(Number(naira))
+                  : Number(USDT)}
                 conversion={Currency ? Conversion : Conversion2}
                 currency={Currency ? "₦" : Symbols}
                 crypto={Name}
                 loading={loading}
                 sybl={Name}
-                nn={Currency}
-              />
+                nn={Currency} image={currentsImage}              />
               <Box justifyContent={"center"}>
                 <Formik
                   initialValues={initialValues}

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { ConfirmBuy, MarketRate } from "./NotificationBuy";
-import {  Press } from "./generalformpage";
+import { Press } from "./generalformpage";
 
 export default function ConfirmBuyOrder({
   Amount,
@@ -17,16 +17,20 @@ export default function ConfirmBuyOrder({
   currency,
   setStep,
   crypto,
-  loading,sybl,nn
+  loading,
+  sybl,
+  nn,
+  image,
 }: {
   Amount: any;
   conversion: any;
   currency: any;
   setStep: any;
   crypto: any;
-  loading:any;
-  sybl:any
-  nn:any
+  loading: any;
+  sybl: any;
+  nn: any;
+  image: any;
 }) {
   // const handleProceed = () => {
   //   setStep(4);
@@ -51,8 +55,7 @@ export default function ConfirmBuyOrder({
             conversion={conversion}
             currency={currency}
             crypto={crypto}
-            nn={nn}
-          />
+            nn={nn} image={image}          />
         </GridItem>
         <GridItem colSpan={1} mt={"28px"}>
           {/* <Press loading={loading}/> */}

@@ -246,13 +246,14 @@ export function ConfirmBuy({
   conversion,
   currency,
   crypto,
-  nn
+  nn,image
 }: {
   Amount: any;
   conversion: any;
   currency: any;
   crypto: any;
-  nn:any
+  nn:any;
+  image:any
 }) {
   // const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -277,6 +278,10 @@ export function ConfirmBuy({
             justifyContent={"center"}
             w={"full"}
           >
+           <HStack h={'full'}>
+           <Box boxSize='28px' >
+  <Image src={image} alt='Dan Abramov' />
+</Box><Box>
             <Text
               fontWeight={"600"}
               fontSize={"24px"}
@@ -284,8 +289,9 @@ export function ConfirmBuy({
               textAlign={"center"}
               w={"full"}
             >
-              {currency.toUpperCase()} {Amount}
-            </Text>
+               {Amount}
+            </Text></Box>
+           </HStack>
           </GridItem>
           <GridItem
             colSpan={[1, 3]}

@@ -77,6 +77,14 @@ export default function VerifyMail() {
       setLoading(false)
       if (res) {
         router.push("/createAccount/Login")
+        toast({
+          title: "success",
+          description: 'Account successfully created',
+          status: "success",
+          duration: 4000,
+          isClosable: true,
+          position: "top-left",
+        })
         localStorage.removeItem("email")
       }
     } catch (err: any) {

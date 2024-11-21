@@ -35,26 +35,32 @@ interface Notification {
   _id: any;
 }
 
-export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin) {
- const { NotificationCount,
-    setNotificationCount
-  } = useCryptoContext();
+export default function AllNotification({
+  isOpen,
+  onOpen,
+  onClose,
+}: Modalopenin) {
+  const { NotificationCount, setNotificationCount } = useCryptoContext();
   const getStatusStyle = (status: string) => {
     switch (status.toLowerCase()) {
-      case 'transaction completed':
+      case "transaction completed":
         return { bg: "#C7EED5", color: "#2F7F37" };
-      case 'transaction progress':
+      case "transaction progress":
         return { bg: "#FCF2C1", color: "#B59803" };
-      case 'transaction failed':
+      case "transaction failed":
         return { bg: "#FF48341A", color: "#FF4834" };
       default:
         return { bg: "transparent", color: "#000000" };
     }
   };
-  
+
   const [Notifx, setNotifx] = useState<Notification[]>([]);
   const [readNotifications, setReadNotifications] = useState<number[]>([]);
-  const { isOpen: isOpenNotifx, onOpen: onOpenNotifx, onClose: onCloseNotifx } = useDisclosure();
+  const {
+    isOpen: isOpenNotifx,
+    onOpen: onOpenNotifx,
+    onClose: onCloseNotifx,
+  } = useDisclosure();
   const [Loading, setLoading] = useState(false);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [transactionId, setTransactionId] = useState(null);
@@ -103,7 +109,7 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
 
   useEffect(() => {
     fetchNotifx();
-    setNotificationCount(` ${countReadNotifications()}`)
+    setNotificationCount(` ${countReadNotifications()}`);
   }, [Notifx, isOpenNotifx]);
 
   const handleNotificationClick = (id: any) => {
@@ -113,7 +119,7 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
 
   // Count read notifications
   const countReadNotifications = () => {
-    return Notifx.filter(notification => notification.read === false).length;
+    return Notifx.filter((notification) => notification.read === false).length;
   };
 
   console.log("Read notifications count:", countReadNotifications());
@@ -127,7 +133,12 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
           <DrawerHeader>Notification</DrawerHeader>
 
           <DrawerBody>
-            <Text fontSize={"18px"} fontWeight={"600"} color={"#808080"} pb={"20px"}>
+            <Text
+              fontSize={"18px"}
+              fontWeight={"600"}
+              color={"#808080"}
+              pb={"20px"}
+            >
               Get notified on the new updates
             </Text>
 
@@ -140,8 +151,8 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
                 return (
                   <Button
                     key={index}
-                    mb={'16px'}
-                    w={'fit-content'}
+                    mb={"16px"}
+                    w={"fit-content"}
                     py={"55px"}
                     bg={isRead ? "#F8F8F8" : "#F0F0F0"} // Gray background if read
                     color={isRead ? "black" : "black"}
@@ -149,13 +160,24 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
                     _hover={{ bg: isRead ? "gray.100" : "gray.100" }}
                   >
                     <VStack w={"full"}>
-                      <HStack mb={"10px"} w={"full"} display={"flex"} justifyContent={"space-between"}>
+                      <HStack
+                        mb={"10px"}
+                        w={"full"}
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                      >
                         <HStack w={"full"}>
                           <Box pb={"10px"}>
                             {isRead ? (
-                              <IoIosCheckmarkCircle size={'14px'} color={getStatusStyle(notification.title).color} />
+                              <IoIosCheckmarkCircle
+                                size={"14px"}
+                                color={getStatusStyle(notification.title).color}
+                              />
                             ) : (
-                              <GoDotFill size={'19px'} color={getStatusStyle(notification.title).color} />
+                              <GoDotFill
+                                size={"19px"}
+                                color={getStatusStyle(notification.title).color}
+                              />
                             )}
                           </Box>
                           <Box>
@@ -181,7 +203,6 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
                             display={"flex"}
                             justifyContent={"end"}
                           >
-                    
                             {formatDate(notification.createdAt)}
                           </Text>
                         </Box>
@@ -196,7 +217,11 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
                           overflowWrap="break-word"
                           wordBreak="break-word"
                         >
-                          {notification.content.length > 64 ? `${notification.content.slice(0, 64)}......` : notification.content}
+                          {notification.content.length > 64
+                            ? `${notification.content
+                                .slice(0, 64)
+                                .toLowerCase()}......`
+                            : notification.content.toLowerCase()}
                         </Text>
                       </Box>
                     </VStack>
@@ -213,7 +238,12 @@ export default function AllNotification({ isOpen, onOpen, onClose }: Modalopenin
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <Notifications isOpen={isOpenNotifx} onOpen={onOpenNotifx} onClose={onCloseNotifx} transactionId={transactionId} />
+      <Notifications
+        isOpen={isOpenNotifx}
+        onOpen={onOpenNotifx}
+        onClose={onCloseNotifx}
+        transactionId={transactionId}
+      />
     </>
   );
 }

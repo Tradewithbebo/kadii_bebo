@@ -1,5 +1,7 @@
+// import { useRouter } from "next/navigation";
 
-// export const logout = () => {
+// export const Logout = () => {
+//     const router=useRouter()
 //   localStorage.removeItem("stk-apk");
-//   router.push("/Admin/Login");
+//   router.push("/createAccount/Login");
 // };

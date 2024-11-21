@@ -67,7 +67,7 @@ export default function Notifications({ isOpen, onOpen, onClose, transactionId }
             {loading ? (
               <Spinner size="lg" /> // Display a loading spinner
             ) : (
-              <p>{Notifx?.content || 'No content available.'}</p>
+              <p>{Notifx?.content.toLowerCase()  || 'No content available.'}</p>
             )}
           </ModalBody>
         </ModalContent>

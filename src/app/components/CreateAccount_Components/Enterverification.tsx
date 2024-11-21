@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
   Button,
@@ -42,7 +42,7 @@ export default function EnterVerification({
       setInitialEmail(storedEmail);
     }
   }, []);
-
+  const inputRefs = useRef<(HTMLInputElement | null)[]>([])
   return (
     <Box w={"full"} pb={["192px", "374px"]}>
       <Center>
@@ -82,13 +82,16 @@ export default function EnterVerification({
                 </GridItem>
 
                 <GridItem colSpan={6} width={"full"}>
-                  <HStack gap={["8px", "20px"]}>
+                <HStack gap={["8px", "20px"]}>
                     {Array.from({ length: 6 }).map((_, index) => (
                       <Field key={index} name={`pin[${index}]`}>
                         {({ field }: FieldProps) => (
                           <Input
                             {...field}
                             type="text"
+                            ref={(el) => {
+                              inputRefs.current[index] = el;
+                            }}
                             maxLength={1}
                             value={field.value || ""}
                             onChange={(e) => {
@@ -97,15 +100,30 @@ export default function EnterVerification({
                                 const pinArray = values.pin.slice();
                                 pinArray[index] = value;
                                 setFieldValue("pin", pinArray);
+                                if (value && index < 5) {
+                                  inputRefs.current[index + 1]?.focus();
+                                }
+                                if (value === "" && index > 0) {
+                                  pinArray[index] = value;
+                                  setFieldValue("pin", pinArray);
+                                  inputRefs.current[index - 1]?.focus();
+                                }
                               }
                             }}
                             size="lg"
                             width="50px"
                             height="50px"
                             textAlign="center"
-                            borderColor={errors.pin && touched.pin && errors.pin[index] ? "red.500" : "gray.200"}
+                            borderColor={
+                              errors.pin && touched.pin && errors.pin[index]
+                                ? "red.500"
+                                : "gray.200"
+                            }
                             _focus={{
-                              borderColor: errors.pin && touched.pin && errors.pin[index] ? "red.500" : "blue.500",
+                              borderColor:
+                                errors.pin && touched.pin && errors.pin[index]
+                                  ? "red.500"
+                                  : "blue.500",
                             }}
                           />
                         )}
