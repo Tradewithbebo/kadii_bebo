@@ -7,6 +7,8 @@ import HomePageBody from "./components/homePageBody";
 import { CryptoProvider } from "./components/drawer/Buy/usecontextbuy";
 import { Fade } from "react-awesome-reveal";
 import { AxiosGet } from "./axios/axios";
+import Footer from "./navbar/footer";
+import { Box } from "@chakra-ui/react";
 
 export default function Home() {
   const router = useRouter();
@@ -78,7 +80,19 @@ export default function Home() {
     <>
       <NavbarTwo />
       
-        <Fade direction="up" triggerOnce> <CryptoProvider> <HomePageBody /></CryptoProvider></Fade>
+        <Fade direction="up" triggerOnce> <CryptoProvider> <HomePageBody /></CryptoProvider></Fade> <Box
+                display={{ base: "block", md: "none" }}
+                position="fixed"
+                bottom="0"
+                width="100%"
+                zIndex="10"
+                bg="white"
+                boxShadow="md"
+                justifyContent={"center"}
+                w={"full"}
+              >
+                <Footer />
+              </Box>
       
       {/* </CryptoProvider> */}
     </>

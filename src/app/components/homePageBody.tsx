@@ -121,19 +121,7 @@ export default function HomePageBody() {
                   </Button>
                 </GridItem>
               </SimpleGrid>
-              <Box
-                display={{ base: "block", md: "none" }}
-                position="fixed"
-                bottom="0"
-                width="100%"
-                zIndex="10"
-                bg="white"
-                boxShadow="md"
-                justifyContent={"center"}
-                w={"full"}
-              >
-                <Footer />
-              </Box>
+             
             </VStack>
           </Center>
         </Box>

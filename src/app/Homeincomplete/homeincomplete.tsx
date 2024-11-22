@@ -5,6 +5,8 @@ import NavbarTwo from '../navbar/navbarTwo'
 import HomePageBody from '../incompleteKyc/HomepageForIncompletekyc'
 import { useRouter } from 'next/navigation'
 import { Fade } from 'react-awesome-reveal'
+import Footer from '../navbar/footer'
+import { Box } from '@chakra-ui/react'
 export default function Homeincoplete() {
 
   const router = useRouter();
@@ -30,7 +32,19 @@ export default function Homeincoplete() {
   if (!isMounted) return null; // Prevent rendering on server-side
   return (
     <><NavbarTwo/>
-<Fade direction="up" triggerOnce><HomePageBody/></Fade></>
+<Fade direction="up" triggerOnce><HomePageBody/></Fade> <Box
+        display={{ base: "block", md: "none" }}
+        position="fixed"
+        bottom="0"
+        width="100%"
+        zIndex="10"
+        bg="white"
+        boxShadow="md"
+        justifyContent={'center'}
+        w={'full'}
+      >
+        <Footer />
+      </Box></>
   )
 }
 
