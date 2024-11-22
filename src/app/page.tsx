@@ -12,55 +12,51 @@ export default function Home() {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    Kyccheck()
-  }, []);
+  // useEffect(() => {
+ 
+  // }, []);
   
-  useEffect(() => {
-  
-      try {
-        const auth = localStorage.getItem("stk-apk");
-        if (!auth) {
-          router.replace("/createAccount/Login");
-        }
-      } catch (error) {
-        console.error("Error accessing localStorage:", error);
-      }
-    
-  }, []);
- const  url='auth/me'
+  // Authentication and KYC check function
   const Kyccheck = async () => {
-      
-      try {
-        const res = await AxiosGet(url);
-      
-        if (res) {
-         
-            const kycs = res.data.user.kycStatus;
-            // console.log('kyc',kyc)
-           
-            if (
-              kycs !== "APPROVED"
-            
-            ) {
-              router.push("/HomeincompleteKyc");
-            } else {
-              router.push("/");
-            }
-     
-          }
-        
-      } catch (err: any) {
-        
-        let message = "Check your Network and try again.";
-        if (err.response && err.response.data && err.response.data.message) {
-          message = err.response.data.message;
-        
-       
+    const url = 'auth/me';
+
+    try {
+      const res = await AxiosGet(url);
+
+      if (res && res.data) {
+        const kycs = res.data.kycStatus;
+        console.log('kycs', kycs);
+
+        if (kycs !== "APPROVED") {
+          router.push("/HomeincompleteKyc");
+        } else {
+          router.push("/");
+        }
+      } else {
+        console.error("Failed to fetch KYC status");
       }
+    } catch (err: any) {
+      let message = "Check your Network and try again.";
+      if (err.response && err.response.data && err.response.data.message) {
+        message = err.response.data.message;
+      }
+      console.error(message);
     }
   };
 
+  useEffect(() => {
+   
+    try {
+      const auth = localStorage.getItem("stk-apk");
+      if (!auth) {
+        router.replace("/createAccount/Login");
+      }
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+    }
+    Kyccheck()
+  
+}, []);
   // useEffect(() => {
   //   if (isAuthenticated === false) {
   //     router.replace("/createAccount/Login");

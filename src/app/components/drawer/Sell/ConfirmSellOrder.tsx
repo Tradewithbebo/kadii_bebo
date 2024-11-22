@@ -4,8 +4,10 @@ import {
   FormControl,
   FormErrorMessage,
   GridItem,
+  HStack,
   SimpleGrid,
   Text,
+  Image
 } from "@chakra-ui/react";
 import React from "react";
 import { ConfirmBuy, ConfirmSell } from "../Buy/NotificationBuy";
@@ -64,15 +66,22 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
               justifyContent={"center"}
               w={"full"}
             >
-              <Text
-                fontWeight={"600"}
-                fontSize={"24px"}
-                color={"#021D17"}
-                textAlign={"center"}
-                w={"full"}
-              >
-                {sellsymbol.toUpperCase()} {sellvalueusdt}
-              </Text>
+              <HStack h={"full"}>
+                <Box>
+                  <Text
+                    fontWeight={"600"}
+                    fontSize={"24px"}
+                    color={"#021D17"}
+                    textAlign={"center"}
+                    w={"full"}
+                  >
+                    {sellvalueusdt}
+                  </Text>
+                </Box>
+                <Box boxSize="25px">
+                  <Image src={sellimage} alt="Dan Abramov" />
+                </Box>
+              </HStack>
             </GridItem>
             <GridItem
               colSpan={[1, 3]}
@@ -80,21 +89,19 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
               justifyContent={"center"}
               w={"full"}
             >
-              
-                <Text
-                  fontWeight={"600"}
-                  fontSize={["16px"]}
-                  color="#666666"
-                  textAlign={"center"}
-                  w={"full"}
-                >
-                  You will send {sellvalueusdt} {blockchain} for <br></br>{" "}
-                  {new Intl.NumberFormat("en-NG", {}).format(
-                    Number(sellConversion2)
-                  )}{" "}
-                  naira
-                </Text>
-           
+              <Text
+                fontWeight={"600"}
+                fontSize={["16px"]}
+                color="#666666"
+                textAlign={"center"}
+                w={"full"}
+              >
+                You will send {sellvalueusdt} {blockchain} for <br></br>{" "}
+                {new Intl.NumberFormat("en-NG", {}).format(
+                  Number(sellConversion2)
+                )}{" "}
+                naira
+              </Text>
             </GridItem>
           </SimpleGrid>
         </GridItem>
@@ -103,7 +110,7 @@ export default function ConfirmsellOrder({ setStep }: { setStep: any }) {
             w={"full"}
             h={["50px", "50px", "44px"]}
             bg={"#0CBF94"}
-            onClick={()=>setStep(5)}
+            onClick={() => setStep(5)}
           >
             Proceed
           </Button>

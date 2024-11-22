@@ -279,9 +279,7 @@ export function ConfirmBuy({
             w={"full"}
           >
            <HStack h={'full'}>
-           <Box boxSize='28px' >
-  <Image src={image} alt='Dan Abramov' />
-</Box><Box>
+          <Box>
             <Text
               fontWeight={"600"}
               fontSize={"24px"}
@@ -291,6 +289,9 @@ export function ConfirmBuy({
             >
                {Amount}
             </Text></Box>
+            <Box boxSize='25px' >
+  <Image src={image} alt='Dan Abramov' />
+</Box>
            </HStack>
           </GridItem>
           <GridItem
