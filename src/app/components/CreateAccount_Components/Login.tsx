@@ -174,7 +174,7 @@ const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mof
                           Email
                         </FormLabel>
                       </Box>
-                      <Field as={Input} type="email" name="email" placeholder="Email address" />
+                      <Field as={Input} type="email" name="email" placeholder="Email address" h={['50px','50px','44px']} />
                       <FormErrorMessage>{errors.email}</FormErrorMessage>
                     </FormControl>
                   </GridItem>
@@ -189,6 +189,7 @@ const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mof
                           type={show ? "text" : "password"}
                           name="password"
                           placeholder="Enter your password"
+                          h={['50px','50px','44px']}
                         />
                         <InputRightElement width="4.5rem">
                           <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -214,6 +215,7 @@ const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mof
                       w={"100%"}
                       color={"#021D17"}
                       isDisabled={!isValid || !dirty}
+                      h={['50px','50px','44px']}
                     >
                       Sign in
                     </Button>
