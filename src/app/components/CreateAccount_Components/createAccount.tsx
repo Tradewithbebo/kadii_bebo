@@ -1,23 +1,67 @@
 "use client";
 
-import React from "react";
-import { Box, Center, SimpleGrid, GridItem, Text, Button, Input, FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Center, SimpleGrid, GridItem, Text, Button, Input, FormControl, FormLabel, FormErrorMessage, useToast } from "@chakra-ui/react";
 import { FcGoogle } from "react-icons/fc";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { AxiosPost } from "@/app/axios/axios";
+import { useRouter } from "next/navigation";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 
 const CreateAccountSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
 });
 
 export default function CreateAccount({ setStep, setEmail }:{setStep:any, setEmail:any}) {
+  const toast = useToast();
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const url = "auth/login";
+  const [kyc, setKyc] = useState<string | null>(null);
   const handleProceed = (values:any) => {
     setEmail(values.email);
     setStep(2);
   };
 
+   // Google OAuth handlers
+const handleGoogleAuthSuccess = async (credentialResponse: any) => {
+  console.log("Google Login Success", credentialResponse);
+  try {
+    const res = await AxiosPost("auth/google/callback", { token: credentialResponse.credential });
+    // Handle the response if needed
+    console.log("Google login successful, response:", res);
+  } catch (err) {
+    console.error("Google Registration Error:", err);
+    toast({
+      title: "Error",
+      description: "Google login failed.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-left",
+    });
+  }
+};
+
+const handleGoogleAuthError = () => {
+  toast({
+    title: "Error",
+    description: "Google login failed.",
+    status: "error",
+    duration: 3000,
+    isClosable: true,
+    position: "bottom-left",
+  });
+};
+const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mofa5s0.apps.googleusercontent.com"
+
   return (
+    <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
     <Box w={"full"}>
       <Center pb={["44px", "150px"]}>
         <Formik
@@ -40,11 +84,17 @@ export default function CreateAccount({ setStep, setEmail }:{setStep:any, setEma
                     </Text>
                   </Box>
                 </GridItem>
-                <GridItem colSpan={2}>
-                  <Button w={"full"} fontSize={["16px", "16px"]} fontWeight={"600"}   h={['50px','50px','44px']}>
-                    <FcGoogle size={"22px"} /> &nbsp;&nbsp;Continue with Google
-                  </Button>
-                </GridItem>
+                <GridItem colSpan={2} w={'full'} display={'flex '} justifyContent={'center'}>
+                
+                     <GoogleLogin
+                    text='continue_with'
+                      onSuccess={handleGoogleAuthSuccess}
+                      onError={handleGoogleAuthError}
+                    />
+                  
+                
+                   
+                  </GridItem>
                 <GridItem colSpan={2}>
                   <Text textAlign={"center"} fontSize={"14px"} fontWeight={"500"} color={"#B3B3B3"} my={"4px"}>
                     OR
@@ -84,6 +134,6 @@ export default function CreateAccount({ setStep, setEmail }:{setStep:any, setEma
           )}
         </Formik>
       </Center>
-    </Box>
+    </Box></GoogleOAuthProvider>
   );
 }

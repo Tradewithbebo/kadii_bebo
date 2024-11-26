@@ -1,35 +1,53 @@
 "use client";
-import { Box, VStack, HStack, Image } from "@chakra-ui/react";
+import { Box, Flex, Image } from "@chakra-ui/react";
 import React, { useState } from "react";
-// import GeneralDisplay from "./generalDisplay";
 import Navbar from "../navbar/navbar";
 import { usePathname } from "next/navigation";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [step, setStep] = useState(1);
   const pathname = usePathname();
+  
   return (
-    <>
-      <HStack w={"100%"} overflow={"hidden"}>
-        <Box w={["100%",'100%', "50%"]}>
-          {pathname === "/createAccount/createAccount" ||
-          pathname === "/createAccount/createPin" ||
-          pathname === "/createAccount/verifyMail"
-          ||
-          pathname === "/createAccount/ResetPassword"
-          ||pathname ==='/createAccount/ResetPassword'? (
-            ""
-          ) : (
-            <Navbar setStep={setStep} />
-          )}
-          {children}
+    <Flex 
+      w="100%" 
+      flexDirection={{ base: "column", md: "row" }} // Stack on small screens, row on medium and up
+      overflow="hidden"
+    >
+      {/* Left Section: Navbar and Children */}
+      <Box
+        flex={{ base: "none", md: 1 }} // Take up 100% on base, 50% on md and above
+        px={{ base: 4, md: 8 }} 
+        py={4}
+      >
+        {pathname === "/createAccount/createAccount" ||
+        pathname === "/createAccount/createPin" ||
+        pathname === "/createAccount/verifyMail" ||
+        pathname === "/createAccount/ResetPassword" ||
+        pathname === '/createAccount/ResetPassword' ? (
+          ""
+        ) : (
+          <Navbar setStep={setStep} />
+        )}
+        {children}
+      </Box>
+
+      {/* Right Section: Image */}
+      <Box 
+        flex={{ base: "none", md: 1 }} // Take up 100% on base, 50% on md and above
+        display={{ base: "none", md: "block" }} 
+        height="auto"
+      >
+        <Box maxWidth="100%" height="100%">
+          <Image 
+            src="/image/frame.png" 
+            alt="Bebo" 
+            objectFit="cover" 
+            width="100%" 
+            height="100%"
+          />
         </Box>
-        <Box w={"50%"} display={{ base: "none", md: "block" }}>
-          <Box height="auto" width="690px">
-            <Image objectFit="cover" src="/image/frame.png" alt="Bebo" />
-          </Box>
-        </Box>
-      </HStack>
-    </>
+      </Box>
+    </Flex>
   );
 }

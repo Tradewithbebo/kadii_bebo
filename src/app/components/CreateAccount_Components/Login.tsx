@@ -16,16 +16,16 @@ import {
   InputRightElement,
   Text,
   useToast,
-  Spinner,
 } from "@chakra-ui/react";
+import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google"; // Import GoogleLogin
 import { FaRegEyeSlash } from "react-icons/fa";
 import { IoEyeOutline } from "react-icons/io5";
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import { AxiosPost } from "@/app/axios/axios";
 import Link from "next/link";
+import { FcGoogle } from "react-icons/fc";
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string()
@@ -49,10 +49,10 @@ export default function LoginComponent() {
   const [errorMessage, setErrorMessage] = useState("");
   const url = "auth/login";
   const [kyc, setKyc] = useState<string | null>(null);
+
   const handleSubmit = async (values: any) => {
     if (values) {
       setLoading(true);
-      
       try {
         const res = await AxiosPost(url, values);
         setLoading(false);
@@ -60,26 +60,18 @@ export default function LoginComponent() {
           const { emailVerified } = res.data.user;
 
           if (!emailVerified) {
-            localStorage.removeItem("email"); // Clear any existing email
-            localStorage.setItem("email", values.email); // Store the new email
+            localStorage.removeItem("email");
+            localStorage.setItem("email", values.email);
             router.push("/createAccount/verifyMail");
           } else {
-            localStorage.setItem(
-              "stk-apk",
-              JSON.stringify({ authToken: res.data.accessToken })
-            );
+            localStorage.setItem("stk-apk", JSON.stringify({ authToken: res.data.accessToken }));
             const kycs = res.data.user.kycStatus;
-            // console.log('kyc',kyc)
-           
-            if (
-              kycs !== "APPROVED"
-            
-            ) {
+
+            if (kycs !== "APPROVED") {
               router.push("/HomeincompleteKyc");
             } else {
               router.push("/");
             }
-     
           }
         }
       } catch (err: any) {
@@ -101,97 +93,102 @@ export default function LoginComponent() {
     }
   };
 
+  // Google OAuth handlers
+const handleGoogleAuthSuccess = async (credentialResponse: any) => {
+  console.log("Google Login Success", credentialResponse);
+  try {
+    const res = await AxiosPost("auth/google/callback", { token: credentialResponse.credential });
+    // Handle the response if needed
+    console.log("Google login successful, response:", res);
+  } catch (err) {
+    console.error("Google Registration Error:", err);
+    toast({
+      title: "Error",
+      description: "Google login failed.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "bottom-left",
+    });
+  }
+};
+
+const handleGoogleAuthError = () => {
+  toast({
+    title: "Error",
+    description: "Google login failed.",
+    status: "error",
+    duration: 3000,
+    isClosable: true,
+    position: "bottom-left",
+  });
+};
+const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mofa5s0.apps.googleusercontent.com"
+
   return (
-    <Box w={"full"}>
-      <Center pb={["80px", "203px"]}>
-        <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={LoginSchema}
-          onSubmit={handleSubmit}
-        >
-          {({ errors, touched, isValid, dirty }) => (
-            <Form>
-              <SimpleGrid columns={2} rowGap={"24px"} w={["335px", "400px"]}>
-                <GridItem colSpan={2} mb={"16px"}>
-                  <Box>
-                    <Text
-                      fontSize={["32px", "40px"]}
-                      fontWeight={"600"}
-                      color={""}
-                    >
-                      Login
-                    </Text>
-                  </Box>
-                  <Box>
-                    <Text
-                      fontSize={"14px"}
-                      fontWeight={"600"}
-                      color={"#666666"}
-                    >
-                      Login  or Create an Account to continue transacting 
-                    </Text>
-                  </Box>
-                </GridItem>
-                <GridItem colSpan={2}>
-                  <Button
-                    w={"full"}
-                    fontSize={["16px", "16px"]}
-                    fontWeight={"600"}
-                   h={['50px','50px','44px']}
-                  >
-                    <FcGoogle size={"22px"} /> &nbsp;&nbsp;Continue with google
-                  </Button>
-                </GridItem>
-                <GridItem colSpan={2}>
-                  <Text
-                    textAlign={"center"}
-                    fontSize={"14px"}
-                    fontWeight={"500"}
-                    color={"#B3B3B3"}
-                    my={"4px"}
-                  >
-                    OR
-                  </Text>
-                </GridItem>
-                <GridItem colSpan={2}>
-                  <FormControl isInvalid={!!errors.email && touched.email}>
-                    <Box display="flex" alignItems="center">
-                      <FormLabel fontSize={"16px"} fontWeight={"600"}>
-                        Email
-                      </FormLabel>
+    <GoogleOAuthProvider clientId={VITE_APP_GOOGLE_OAUTH_CLIENT_ID}>
+      <Box w={"full"}>
+        <Center pb={["80px", "203px"]}>
+          <Formik
+            initialValues={{ email: "", password: "" }}
+            validationSchema={LoginSchema}
+            onSubmit={handleSubmit}
+          >
+            {({ errors, touched, isValid, dirty }) => (
+              <Form>
+                <SimpleGrid columns={2} rowGap={"24px"} w={["auto", "400px"]}>
+                  <GridItem colSpan={2} mb={"16px"}>
+                    <Box>
+                      <Text fontSize={["32px", "40px"]} fontWeight={"600"}>
+                        Login
+                      </Text>
                     </Box>
-                    <Field
-                      as={Input}
-                     h={['50px','50px','44px']}
-                      type="email"
-                      name="email"
-                      placeholder="Email address"
+                    <Box>
+                      <Text fontSize={"14px"} fontWeight={"600"} color={"#666666"}>
+                        Login or Create an Account to continue transacting
+                      </Text>
+                    </Box>
+                  </GridItem>
+                  {/* Google Login Button */}
+                  <GridItem colSpan={2} w={'full'} display={'flex '} justifyContent={'center'}>
+                
+                     <GoogleLogin
+                    text='continue_with'
+                      onSuccess={handleGoogleAuthSuccess}
+                      onError={handleGoogleAuthError}
                     />
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                  </FormControl>
-                </GridItem>
-                <GridItem colSpan={2}>
-                  <FormControl
-                    isInvalid={!!errors.password && touched.password}
-                  >
-                    <FormLabel fontSize={"16px"} fontWeight={"600"}>
-                      Password
-                    </FormLabel>
-                    {/* <InputGroup>
-                      <Field
-                        as={Input}
-                       h={['50px','50px','44px']}
-                        type={show ? "text" : "password"}
-                        name="password"
-                        placeholder="Enter your password"
-                      /> */}
-                       <InputGroup>
+                  
+                
+                   
+                  </GridItem>
+                  <GridItem colSpan={2}>
+                    <Text textAlign={"center"} fontSize={"14px"} fontWeight={"500"} color={"#B3B3B3"} my={"4px"}>
+                      OR
+                    </Text>
+                  </GridItem>
+                  {/* Form Fields */}
+                  <GridItem colSpan={2}>
+                    <FormControl isInvalid={!!errors.email && touched.email}>
+                      <Box display="flex" alignItems="center">
+                        <FormLabel fontSize={"16px"} fontWeight={"600"}>
+                          Email
+                        </FormLabel>
+                      </Box>
+                      <Field as={Input} type="email" name="email" placeholder="Email address" />
+                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem colSpan={2}>
+                    <FormControl isInvalid={!!errors.password && touched.password}>
+                      <FormLabel fontSize={"16px"} fontWeight={"600"}>
+                        Password
+                      </FormLabel>
+                      <InputGroup>
                         <Field
                           as={Input}
                           type={show ? "text" : "password"}
                           name="password"
                           placeholder="Enter your password"
-                          h={['50px','50px','44px']}
                         />
                         <InputRightElement width="4.5rem">
                           <Button h="1.75rem" size="sm" onClick={handleClick}>
@@ -199,70 +196,44 @@ export default function LoginComponent() {
                           </Button>
                         </InputRightElement>
                       </InputGroup>
-                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                    <Link href="/createAccount/EntermailForgotpass">
-                      <FormHelperText
-                        textAlign={"right"}
-                        color={"#0CBF94"}
-                        fontSize={"14px"}
-                        fontWeight={"600"}
-                        cursor={"pointer"}
-                      >
-                        Forgot password
-                      </FormHelperText>
-                    </Link>
-                  </FormControl>
-                </GridItem>
-                <GridItem colSpan={2} mt={"4px"}>
-                  <Button
-                    isLoading={loading}
-                    type="submit"
-                    bg="#0CBF94"
-                    fontSize={"16px"}
-                    fontWeight={"600"}
-                    w={"100%"}
-                   h={['50px','50px','44px']}
-                    color={"#021D17"}
-                    isDisabled={!isValid || !dirty}
-                  >
-                    Sign in
-                  </Button>
-                  {errorMessage && (
-                    <Text
-                      color="red.500"
-                      // ml={2}
-                      fontSize="sm"
-                      fontWeight="400"
-                    >
-                      {errorMessage}
-                    </Text>
-                  )}
-                  <Link href={"/createAccount/createAccount"}>
-                    <Text
-                      textAlign={"left"}
-                      fontSize={"14px"}
-                      mt={"16px"}
+                      <FormErrorMessage>{errors.password}</FormErrorMessage>
+                      <Link href="/createAccount/EntermailForgotpass">
+                        <FormHelperText textAlign={"right"} color={"#0CBF94"} fontSize={"14px"} fontWeight={"600"} cursor={"pointer"}>
+                          Forgot password
+                        </FormHelperText>
+                      </Link>
+                    </FormControl>
+                  </GridItem>
+                  <GridItem colSpan={2} mt={"4px"}>
+                    <Button
+                      isLoading={loading}
+                      type="submit"
+                      bg="#0CBF94"
+                      fontSize={"16px"}
                       fontWeight={"600"}
-                      cursor={"pointer"}
+                      w={"100%"}
+                      color={"#021D17"}
+                      isDisabled={!isValid || !dirty}
                     >
-                      Don’t have an account?{" "}
-                      <span style={{ color: "#0CBF94" }}>Create account</span>
-                    </Text>
-                  </Link>
-                </GridItem>
-              </SimpleGrid>
-            </Form>
-          )}
-        </Formik>
-      </Center>
-      {/* <Button
-        onClick={() => {
-          localStorage.removeItem("stk-apk");
-          router.push("/createAccount/Login");
-        }}
-      >
-        Logout
-      </Button> */}
-    </Box>
+                      Sign in
+                    </Button>
+                    {errorMessage && (
+                      <Text color="red.500" fontSize="sm" fontWeight="400">
+                        {errorMessage}
+                      </Text>
+                    )}
+                    <Link href={"/createAccount/createAccount"}>
+                      <Text textAlign={"left"} fontSize={"14px"} mt={"16px"} fontWeight={"600"} cursor={"pointer"}>
+                        Don’t have an account? <span style={{ color: "#0CBF94" }}>Create account</span>
+                      </Text>
+                    </Link>
+                  </GridItem>
+                </SimpleGrid>
+              </Form>
+            )}
+          </Formik>
+        </Center>
+      </Box>
+    </GoogleOAuthProvider>
   );
 }
