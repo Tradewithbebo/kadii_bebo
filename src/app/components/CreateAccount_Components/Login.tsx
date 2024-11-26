@@ -150,17 +150,30 @@ const VITE_APP_GOOGLE_OAUTH_CLIENT_ID="366772287562-p2i9tr851aerrl89u9an2s6k9mof
                     </Box>
                   </GridItem>
                   {/* Google Login Button */}
-                  <GridItem colSpan={2} w={'full'} display={'flex '} justifyContent={'center'}>
-                
-                     <GoogleLogin
-                    text='continue_with'
-                      onSuccess={handleGoogleAuthSuccess}
-                      onError={handleGoogleAuthError}
-                    />
-                  
-                
-                   
-                  </GridItem>
+                  <GridItem colSpan={2} w="full" display="flex" justifyContent="center">
+  <Box
+    display="flex"
+    alignItems="center"
+    justifyContent="center"
+    w='fit-content'
+    px={['4px','4px','2px']}
+    h={['50px','50px','44px']}
+    border="1px solid"
+    borderColor="#ddd"
+    borderRadius="8px"
+    cursor="pointer"
+   
+  >
+    <GoogleLogin
+      text="continue_with"
+      onSuccess={handleGoogleAuthSuccess}
+      onError={handleGoogleAuthError}
+      useOneTap
+      shape="rectangular"
+    />
+  </Box>
+</GridItem>
+
                   <GridItem colSpan={2}>
                     <Text textAlign={"center"} fontSize={"14px"} fontWeight={"500"} color={"#B3B3B3"} my={"4px"}>
                       OR
