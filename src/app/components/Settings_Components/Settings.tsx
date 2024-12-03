@@ -40,6 +40,8 @@ import Settingsupdatepin from "./settingsupdatepin";
 import { AxiosGet } from "@/app/axios/axios";
 import Banks from "./Banks";
 import { useRouter } from "next/navigation";
+import Policy from "./Policy";
+import Contact_Us from "./Contact_Us";
 // import NavbarTwo from "../navbar/navbarTwo";
 // import Footer from "../navbar/footer";
 // import Edithprofile_Drawer from "../components/Settings_Components/Edithprofile_Drawer";
@@ -83,6 +85,16 @@ export default function Settings() {
     isOpen: isopenUpdatePin,
     onOpen: onopenUpdatePin,
     onClose: oncloseUpdatePin,
+  } = useDisclosure();
+  const {
+    isOpen: isopenContact,
+    onOpen: onopenContact,
+    onClose: oncloseContact,
+  } = useDisclosure();
+  const {
+    isOpen: isopenPolicy,
+    onOpen: onopenPolicy,
+    onClose: onclosePolicy,
   } = useDisclosure();
   const capitalizeFirstLetter = (name: any) => {
     if (!name) return ""; // Handle undefined or empty values
@@ -398,7 +410,8 @@ export default function Settings() {
                         </GridItem>
                         {/* fightlistsettings */}
                         <GridItem w={"full"} colSpan={[1, 1, 3]}>
-                          <Button w={"full"} py={"35px"}>
+                          <Button w={"full"} py={"35px"}
+                          onClick={() => onopenPolicy()}>
                             <HStack w={"full"}>
                               <HStack w={"full"}>
                                 <Box>
@@ -422,6 +435,7 @@ export default function Settings() {
                               </Box>
                             </HStack>
                           </Button>
+                          <Policy isOpen={isopenPolicy} onClose={onclosePolicy}/>
                         </GridItem>
                         {/* sixtysettingslist */}
                         <GridItem w={"full"} colSpan={[1, 1, 3]}>
@@ -514,6 +528,7 @@ export default function Settings() {
                       py={"18px"}
                       boxShadow="xs"
                       h={"50px"}
+                      onClick={() => onopenContact()}
                     >
                       <Text
                         color={"#021D17"}
@@ -530,7 +545,9 @@ export default function Settings() {
                         Contact support
                       </Text>
                     </Button>
+                  
                   </GridItem>
+                  <Contact_Us isOpen={isopenContact} onClose={oncloseContact}/>
                 </SimpleGrid>
                 <Box
                   display={{ base: "block", md: "none" }}

@@ -37,6 +37,7 @@ import Footer from "../navbar/footer";
 import { TransmitSqaure2 } from "iconsax-react";
 import TrxDetails from "./modalBYId";
 import IfNotransaction from "./IfNotransaction";
+import Contact_Us from "../components/Settings_Components/Contact_Us";
 
 // import NavbarTwo from "../navbar/navbarTwo";
 // import Footer from "../navbar/footer";
@@ -127,6 +128,11 @@ export default function Transactions() {
   const [userDetails, setUserDetails] = useState<Transaction[]>([]);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [transactionId, setTransactionId] = useState(null);
+  const {
+    isOpen: isopenContact,
+    onOpen: onopenContact,
+    onClose: oncloseContact,
+  } = useDisclosure();
   const url = `transactions/user?limit=10&page=${pages}`;
 
   const fetchUserDetails = async () => {
@@ -296,25 +302,34 @@ export default function Transactions() {
               </Box>
               {/* bottom part */}
               <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
-                <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
-                  <Button bg={"#FFFFFF"} w={"100%"} py={"18px"} boxShadow="xs">
-                    <Text
-                      color={"#021D17"}
-                      fontWeight={"600"}
-                      fontSize={"16px"}
+                  <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
+                    <Button
+                      bg={"#FFFFFF"}
+                      w={"100%"}
+                      py={"18px"}
+                      boxShadow="xs"
+                      h={"50px"}
+                      onClick={() => onopenContact()}
                     >
-                      Need help? &nbsp;
-                    </Text>
-                    <Text
-                      color={"#0CBF94"}
-                      fontWeight={"600"}
-                      fontSize={"16px"}
-                    >
-                      Contact support
-                    </Text>
-                  </Button>
-                </GridItem>
-              </SimpleGrid>
+                      <Text
+                        color={"#021D17"}
+                        fontWeight={"600"}
+                        fontSize={"16px"}
+                      >
+                        Need help? &nbsp;
+                      </Text>
+                      <Text
+                        color={"#0CBF94"}
+                        fontWeight={"600"}
+                        fontSize={"16px"}
+                      >
+                        Contact support
+                      </Text>
+                    </Button>
+                  
+                  </GridItem>
+                  <Contact_Us isOpen={isopenContact} onClose={oncloseContact}/>
+                </SimpleGrid>
               <Box
                 display={{ base: "block", md: "none" }}
                 position="fixed"

@@ -11,6 +11,7 @@ import {
   Image,
   SimpleGrid,
   GridItem,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { BsChevronDown } from "react-icons/bs";
@@ -24,10 +25,16 @@ import Footer from "../navbar/footer";
 import navItems from "../navbar/navitem";
 import NavLink from "../navbar/navLink";
 import { BuyCrypto, SellCrypto } from "./transactionbox/crypto";
+import Contact_Us from "./Settings_Components/Contact_Us";
 
 export default function HomePageBody() {
   const [Buy, setBuy] = useState(true);
   const [Sell, setSell] = useState(false);
+  const {
+    isOpen: isopenContact,
+    onOpen: onopenContact,
+    onClose: oncloseContact,
+  } = useDisclosure();
   const handleTogglesell = () => {
     setBuy(false);
     setSell(true); // Toggle between Sell and Buy
@@ -96,31 +103,34 @@ export default function HomePageBody() {
               </Box>
               {/* bottom part */}
               <SimpleGrid column={1} w={["350px", "465px", "692px"]}>
-                <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
-                  <Button
-                    bg={"#FFFFFF"}
-                    w={"100%"}
-                    py={"18px"}
-                    boxShadow="xs"
-                    h={"50px"}
-                  >
-                    <Text
-                      color={"#021D17"}
-                      fontWeight={"600"}
-                      fontSize={"16px"}
+                  <GridItem colSpan={1} w={"full"} mb={["36px", "0px"]}>
+                    <Button
+                      bg={"#FFFFFF"}
+                      w={"100%"}
+                      py={"18px"}
+                      boxShadow="xs"
+                      h={"50px"}
+                      onClick={() => onopenContact()}
                     >
-                      Need help? &nbsp;
-                    </Text>
-                    <Text
-                      color={"#0CBF94"}
-                      fontWeight={"600"}
-                      fontSize={"16px"}
-                    >
-                      Contact support
-                    </Text>
-                  </Button>
-                </GridItem>
-              </SimpleGrid>
+                      <Text
+                        color={"#021D17"}
+                        fontWeight={"600"}
+                        fontSize={"16px"}
+                      >
+                        Need help? &nbsp;
+                      </Text>
+                      <Text
+                        color={"#0CBF94"}
+                        fontWeight={"600"}
+                        fontSize={"16px"}
+                      >
+                        Contact support
+                      </Text>
+                    </Button>
+                  
+                  </GridItem>
+                  <Contact_Us isOpen={isopenContact} onClose={oncloseContact}/>
+                </SimpleGrid>
              
             </VStack>
           </Center>
